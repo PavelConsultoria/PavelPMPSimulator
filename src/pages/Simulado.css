@@ -1,0 +1,312 @@
+.simuladoPage {
+    min-height: 100vh;
+    background: #eef3f9;
+    font-family: "Segoe UI", sans-serif;
+    padding: 30px;
+}
+
+.headerSimulado {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 25px 35px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,.08);
+}
+
+.headerSimulado h1 {
+    margin: 0;
+    color: #1d3557;
+    font-size: 30px;
+}
+
+.headerSimulado span {
+    color: #6c757d;
+    font-size: 15px;
+}
+
+.cronometro {
+    background: #0d6efd;
+    color: #fff;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.barra {
+    width: 100%;
+    height: 12px;
+    background: #dce6f5;
+    border-radius: 10px;
+    margin: 25px 0;
+    overflow: hidden;
+}
+
+.barraInterna {
+    height: 100%;
+    background: linear-gradient(90deg,#0d6efd,#4dabff);
+    transition: .3s;
+}
+
+.conteudoSimulado {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 25px;
+}
+
+.questaoCard {
+    background: #fff;
+    border-radius: 18px;
+    padding: 35px;
+    box-shadow: 0 8px 20px rgba(0,0,0,.08);
+}
+
+.cabecalhoQuestao {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.cabecalhoQuestao h2 {
+    margin: 0;
+    color: #1d3557;
+}
+
+.btnRevisao {
+    border: none;
+    background: #f1f4f8;
+    color: #444;
+    padding: 10px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: .2s;
+    font-weight: 600;
+}
+
+.btnRevisao:hover {
+    background: #ffe28a;
+}
+
+.btnRevisao.ativo {
+    background: #ffc107;
+    color: #222;
+}
+
+.enunciado {
+    font-size: 18px;
+    line-height: 1.7;
+    color: #2d3748;
+    margin-bottom: 35px;
+}
+
+.alternativas {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.alternativa {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 18px;
+    border: 2px solid #dce3ec;
+    border-radius: 14px;
+    background: #fff;
+    cursor: pointer;
+    transition: .25s;
+    text-align: left;
+    font-size: 16px;
+}
+
+.alternativa:hover {
+    border-color: #0d6efd;
+    transform: translateY(-2px);
+}
+
+.alternativa.selecionada {
+    border-color: #0d6efd;
+    background: #edf5ff;
+}
+
+.letra {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #0d6efd;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.textoAlternativa {
+    flex: 1;
+    line-height: 1.5;
+}
+
+.acoes {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+}
+
+.btnAnterior,
+.btnProxima {
+    border: none;
+    padding: 16px 30px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: .25s;
+}
+
+.btnAnterior {
+    background: #e9ecef;
+}
+
+.btnAnterior:hover:not(:disabled) {
+    background: #d6dce2;
+}
+
+.btnAnterior:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+}
+
+.btnProxima {
+    background: #0d6efd;
+    color: white;
+}
+
+.btnProxima:hover {
+    background: #0b5ed7;
+}
+
+.painelDireito {
+    background: #fff;
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 8px 20px rgba(0,0,0,.08);
+    display: flex;
+    flex-direction: column;
+}
+
+.painelDireito h3 {
+    margin-top: 0;
+    color: #1d3557;
+}
+
+.gradeQuestoes {
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    gap: 10px;
+    margin-top: 15px;
+    margin-bottom: 25px;
+    max-height: 540px;
+    overflow-y: auto;
+}
+
+.numeroQuestao {
+    height: 42px;
+    border: none;
+    border-radius: 10px;
+    background: #edf1f6;
+    cursor: pointer;
+    font-weight: bold;
+    transition: .2s;
+}
+
+.numeroQuestao:hover {
+    background: #dce6f8;
+}
+
+.numeroQuestao.atual {
+    background: #0d6efd;
+    color: white;
+}
+
+.numeroQuestao.respondida {
+    background: #28a745;
+    color: white;
+}
+
+.numeroQuestao.revisao {
+    outline: 3px solid #ffc107;
+}
+
+.btnFinalizar {
+    margin-top: auto;
+    width: 100%;
+    border: none;
+    padding: 18px;
+    border-radius: 12px;
+    background: #dc3545;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.btnFinalizar:hover {
+    background: #bb2d3b;
+}
+
+@media (max-width: 1100px) {
+
+    .conteudoSimulado {
+        grid-template-columns: 1fr;
+    }
+
+    .painelDireito {
+        order: -1;
+    }
+
+    .gradeQuestoes {
+        grid-template-columns: repeat(10,1fr);
+        max-height: none;
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .simuladoPage {
+        padding: 15px;
+    }
+
+    .headerSimulado {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+
+    .cabecalhoQuestao {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+    .acoes {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .btnAnterior,
+    .btnProxima {
+        width: 100%;
+    }
+
+    .gradeQuestoes {
+        grid-template-columns: repeat(5,1fr);
+    }
+
+}

@@ -1,0 +1,23 @@
+import "../styles/header.css";
+
+export default function Header() {
+  return (
+    <header className="header">
+
+      <div>
+        <h1>Dashboard</h1>
+        <p>Bem-vinda ao Pavel PMP Simulator®</p>
+      </div>
+
+      <div className="userArea">
+        <div className="avatar">K</div>
+
+        <div>
+          <strong>Karolina</strong>
+          <small>Administrador</small>
+        </div>
+      </div>
+
+    </header>
+  );
+}

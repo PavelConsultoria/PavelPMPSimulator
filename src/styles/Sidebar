@@ -1,0 +1,108 @@
+.sidebar{
+    width:260px;
+    height:100vh;
+
+    position:fixed;
+    left:0;
+    top:0;
+
+    background:#0b1220;
+
+    border-right:1px solid rgba(255,255,255,.08);
+
+    display:flex;
+    flex-direction:column;
+
+    padding:30px 20px;
+}
+
+.logoArea{
+
+    display:flex;
+    align-items:center;
+    gap:15px;
+
+    margin-bottom:50px;
+}
+
+.logoIcon{
+
+    width:52px;
+    height:52px;
+
+    border-radius:14px;
+
+    background:linear-gradient(135deg,#24d366,#0aa84f);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:white;
+
+    font-size:22px;
+
+    font-weight:bold;
+}
+
+.logoArea h2{
+
+    color:white;
+
+    margin:0;
+
+    font-size:26px;
+
+    letter-spacing:2px;
+}
+
+.logoArea span{
+
+    color:#63d98c;
+
+    font-size:13px;
+}
+
+.sidebar nav{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+}
+
+.sidebar nav a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    text-decoration:none;
+
+    color:#bfc7d5;
+
+    padding:14px 18px;
+
+    border-radius:14px;
+
+    transition:.25s;
+}
+
+.sidebar nav a:hover{
+
+    background:#1a2435;
+
+    color:white;
+}
+
+.sidebar nav a.active{
+
+    background:linear-gradient(90deg,#1db954,#149647);
+
+    color:white;
+
+    font-weight:600;
+}

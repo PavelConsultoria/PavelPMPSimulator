@@ -1,0 +1,79 @@
+.header{
+
+    margin-left:260px;
+
+    height:90px;
+
+    background:#111827;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:0 40px;
+
+}
+
+.header h1{
+
+    margin:0;
+
+    color:white;
+
+    font-size:30px;
+}
+
+.header p{
+
+    margin-top:5px;
+
+    color:#9ca3af;
+}
+
+.userArea{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+}
+
+.avatar{
+
+    width:48px;
+
+    height:48px;
+
+    border-radius:50%;
+
+    background:linear-gradient(135deg,#24d366,#149647);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    color:white;
+
+    font-weight:bold;
+
+    font-size:20px;
+}
+
+.userArea strong{
+
+    display:block;
+
+    color:white;
+}
+
+.userArea small{
+
+    color:#9ca3af;
+}

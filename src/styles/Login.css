@@ -1,0 +1,138 @@
+.loginPage {
+  min-height: 100vh;
+  background: #000000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Segoe UI", sans-serif;
+}
+
+
+.loginCard {
+
+  width: 520px;
+
+  background: #1e293b;
+
+  padding: 50px;
+
+  border-radius: 22px;
+
+  box-shadow: 0 25px 60px rgba(0,0,0,0.55);
+
+  text-align: center;
+
+}
+
+
+.loginLogo {
+
+  width: 160px;
+
+  margin-bottom: 25px;
+
+}
+
+
+.loginCard h1 {
+
+  color: #ffffff;
+
+  font-size: 30px;
+
+  margin: 10px 0;
+
+}
+
+
+.loginSubtitulo {
+
+  color: #94a3b8;
+
+  font-size: 16px;
+
+  margin-bottom: 35px;
+
+}
+
+
+.loginCard input {
+
+  width: 100%;
+
+  padding: 15px;
+
+  margin-bottom: 18px;
+
+  border-radius: 10px;
+
+  border: 1px solid #334155;
+
+  background: #0f172a;
+
+  color: white;
+
+  font-size: 16px;
+
+  box-sizing: border-box;
+
+}
+
+
+.loginCard input::placeholder {
+
+  color: #64748b;
+
+}
+
+
+.loginCard input:focus {
+
+  outline: none;
+
+  border-color: #16a34a;
+
+}
+
+
+.btnEntrar {
+
+  width: 100%;
+
+  padding: 16px;
+
+  margin-top: 10px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #16a34a;
+
+  color: white;
+
+  font-size: 18px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+}
+
+
+.btnEntrar:hover {
+
+  background: #15803d;
+
+}
+
+
+.rodape {
+
+  margin-top: 35px;
+
+  color: #94a3b8;
+
+  font-size: 14px;
+
+}
