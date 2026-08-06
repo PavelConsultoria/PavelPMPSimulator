@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import "./novoSimulado.css";
+import "./NovoSimulado.css";
 
 export default function NovoSimulado() {
   const navigate = useNavigate();
@@ -23,9 +23,9 @@ export default function NovoSimulado() {
   }
 
   return (
-    <div className="novoSimuladoPage">
+    <div className="NovoSimuladoPage">
 
-      <div className="novoSimuladoCard">
+      <div className="NovoSimuladoCard">
 
         <div className="topo">
 

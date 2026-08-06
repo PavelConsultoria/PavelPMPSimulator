@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./simulado.css";
+import "./Simulado.css";
 
 export default function Simulado() {
   const navigate = useNavigate();
