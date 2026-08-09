@@ -6,6 +6,7 @@ import NovoSimulado from "./pages/NovoSimulado";
 import Simulado from "./pages/Simulado";
 import BancoQuestoes from "./pages/BancoQuestoes";
 import Estatisticas from "./pages/Estatisticas";
+import Desempenho from "./pages/Desempenho";
 
 export default function App() {
   return (
@@ -25,6 +26,8 @@ export default function App() {
         <Route path="/banco-questoes" element={<BancoQuestoes />} />
 
         <Route path="/estatisticas" element={<Estatisticas />} />
+
+        <Route path="/desempenho" element={<Desempenho />} />
 
       </Routes>
     </BrowserRouter>
