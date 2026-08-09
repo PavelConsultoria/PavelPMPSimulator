@@ -132,6 +132,7 @@ export default function BancoQuestoes() {
             }}
           >
             <div style={{ color: "#aaa" }}>Questões disponíveis</div>
+
             <strong
               style={{
                 display: "block",
@@ -154,6 +155,7 @@ export default function BancoQuestoes() {
             }}
           >
             <div style={{ color: "#aaa" }}>Exibidas</div>
+
             <strong
               style={{
                 display: "block",
@@ -176,6 +178,7 @@ export default function BancoQuestoes() {
             }}
           >
             <div style={{ color: "#aaa" }}>PMBOK</div>
+
             <strong
               style={{
                 display: "block",
@@ -266,6 +269,28 @@ export default function BancoQuestoes() {
               <option>Média</option>
               <option>Difícil</option>
             </select>
+          </div>
+
+          {/* LEGENDA */}
+          <div
+            style={{
+              marginTop: "18px",
+              paddingTop: "14px",
+              borderTop: "1px solid #2f2f2f",
+              color: "#999",
+              fontSize: "13px",
+              lineHeight: "1.7",
+            }}
+          >
+            <strong style={{ color: "#bbb" }}>Legenda:</strong>{" "}
+            <span>
+              <strong style={{ color: "#aaa" }}>Área</strong> — Pessoas,
+              Processo ou Negócio
+            </span>{" "}
+            <span style={{ marginLeft: "18px" }}>
+              <strong style={{ color: "#aaa" }}>Dificuldade</strong> — Fácil,
+              Média ou Difícil
+            </span>
           </div>
         </div>
 
