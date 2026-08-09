@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Simulado.css";
+import questoes from "../data/questoes";
 
 export default function Simulado() {
   const navigate = useNavigate();
 
-  const TOTAL_QUESTOES = 180;
+  const TOTAL_QUESTOES = questoes.length;
   const TEMPO_TOTAL = 230 * 60;
 
   const [tempoRestante, setTempoRestante] = useState(TEMPO_TOTAL);
@@ -13,17 +14,8 @@ export default function Simulado() {
   const [respostas, setRespostas] = useState({});
   const [marcadas, setMarcadas] = useState([]);
 
-  const questao = {
-    id: 1,
-    enunciado:
-      "A project manager is leading a predictive project. During execution, a key stakeholder requests a major change that will significantly impact scope, cost and schedule. What should the project manager do FIRST?",
-    alternativas: [
-      "Approve the change immediately to satisfy the stakeholder.",
-      "Submit the change through the Integrated Change Control process.",
-      "Update the project schedule before evaluating impacts.",
-      "Reject the request because the baseline has already been approved."
-    ]
-  };
+  // Questão atualmente exibida
+  const questao = questoes[questaoAtual - 1];
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -87,13 +79,12 @@ export default function Simulado() {
   }
 
   const progresso = (questaoAtual / TOTAL_QUESTOES) * 100;
-    return (
+
+  return (
     <div className="simuladoPage">
-
       <header className="headerSimulado">
-
         <div>
-          <h1>PAVEL PMP Simulator</h1>
+          <h1>VERSÃO DE DEMONSTRAÇÃO</h1>
           <span>
             Questão {questaoAtual} de {TOTAL_QUESTOES}
           </span>
@@ -102,7 +93,6 @@ export default function Simulado() {
         <div className="cronometro">
           ⏱ {formatarTempo(tempoRestante)}
         </div>
-
       </header>
 
       <div className="barra">
@@ -113,11 +103,8 @@ export default function Simulado() {
       </div>
 
       <div className="conteudoSimulado">
-
         <div className="questaoCard">
-
           <div className="cabecalhoQuestao">
-
             <h2>
               Questão {questaoAtual}
             </h2>
@@ -132,7 +119,6 @@ export default function Simulado() {
             >
               ⭐ Marcar para Revisão
             </button>
-
           </div>
 
           <p className="enunciado">
@@ -140,9 +126,7 @@ export default function Simulado() {
           </p>
 
           <div className="alternativas">
-
             {questao.alternativas.map((alt, indice) => (
-
               <button
                 key={indice}
                 className={
@@ -152,7 +136,6 @@ export default function Simulado() {
                 }
                 onClick={() => selecionarResposta(indice)}
               >
-
                 <span className="letra">
                   {String.fromCharCode(65 + indice)}
                 </span>
@@ -160,15 +143,11 @@ export default function Simulado() {
                 <span className="textoAlternativa">
                   {alt}
                 </span>
-
               </button>
-
             ))}
-
           </div>
 
           <div className="acoes">
-
             <button
               className="btnAnterior"
               onClick={anterior}
@@ -178,37 +157,57 @@ export default function Simulado() {
             </button>
 
             <button
-              className="btnProxima"
-              onClick={proxima}
+              className="btnMenuPrincipal"
+              onClick={() => navigate("/dashboard")}
             >
-              Próxima ▶
+              Voltar à Tela Principal
             </button>
 
-          </div>
+            {questaoAtual < TOTAL_QUESTOES ? (
+              <button
+                className="btnProxima"
+                onClick={proxima}
+              >
+                Próxima ▶
+              </button>
+            ) : (
+              <button
+                className="btnProxima"
+                onClick={() =>
+                  alert(`🎉 Parabéns!
 
+Você concluiu a Versão de Demonstração.
+
+Em breve você será direcionado para conhecer a versão completa.`)
+                }
+              >
+                🏁 Encerrar Demonstração
+              </button>
+            )}
+          </div>
         </div>
 
         <aside className="painelDireito">
-
           <h3>Navegação</h3>
 
           <div className="gradeQuestoes">
-
             {Array.from(
               { length: TOTAL_QUESTOES },
               (_, i) => i + 1
             ).map((numero) => {
-
               let classe = "numeroQuestao";
 
-              if (numero === questaoAtual)
+              if (numero === questaoAtual) {
                 classe += " atual";
+              }
 
-              if (respostas[numero] !== undefined)
+              if (respostas[numero] !== undefined) {
                 classe += " respondida";
+              }
 
-              if (marcadas.includes(numero))
+              if (marcadas.includes(numero)) {
                 classe += " revisao";
+              }
 
               return (
                 <button
@@ -220,7 +219,6 @@ export default function Simulado() {
                 </button>
               );
             })}
-
           </div>
 
           <button
@@ -229,11 +227,8 @@ export default function Simulado() {
           >
             Finalizar Simulado
           </button>
-
         </aside>
-
       </div>
-
     </div>
   );
 }

@@ -1,41 +1,45 @@
-export const questoes = [
+const questoes = [
   {
     id: 1,
-    enunciado: "Você é gerente de um projeto de implantação de um novo sistema corporativo. A equipe é composta por profissionais experientes, porém distribuídos em quatro países. Nas últimas semanas, o número de conflitos aumentou e os membros passaram a evitar reuniões de alinhamento. O patrocinador demonstra preocupação com a queda na produtividade, mas não deseja interferir diretamente na equipe.",
-    alternativas: {
-      A: "Solicitar ao patrocinador que converse individualmente com os membros da equipe.",
-      B: "Identificar as causas dos conflitos e facilitar uma conversa entre os envolvidos.",
-      C: "Atualizar o registro de riscos e aguardar a próxima reunião de status.",
-      D: "Substituir os membros que apresentam maior resistência às decisões."
-    },
-    correta: "B",
-    dificuldade: "Média",
-    dominio: 2
+    enunciado:
+      "A project manager is leading a predictive project. During execution, a key stakeholder requests a major change that will significantly impact scope, cost and schedule. What should the project manager do FIRST?",
+    alternativas: [
+      "Approve the change immediately to satisfy the stakeholder.",
+      "Submit the change through the Integrated Change Control process.",
+      "Update the project schedule before evaluating impacts.",
+      "Reject the request because the baseline has already been approved."
+    ],
+    correta: 1,
+    dominio: "People"
   },
+
   {
     id: 2,
-    enunciado: "Durante a execução de uma obra industrial, um fornecedor informa que haverá atraso de duas semanas na entrega de um equipamento crítico para o caminho crítico do cronograma. Qual deve ser a MELHOR ação do gerente de projetos?",
-    alternativas: {
-      A: "Atualizar imediatamente a data final do projeto.",
-      B: "Avaliar o impacto do atraso e analisar alternativas antes de decidir.",
-      C: "Aplicar multa contratual imediatamente ao fornecedor.",
-      D: "Solicitar horas extras para todas as equipes do projeto."
-    },
-    correta: "B",
-    dificuldade: "Média",
-    dominio: 2
+    enunciado:
+      "Which document formally authorizes the existence of a project?",
+    alternativas: [
+      "Project Charter",
+      "Project Management Plan",
+      "Requirements Documentation",
+      "Risk Register"
+    ],
+    correta: 0,
+    dominio: "Process"
   },
+
   {
     id: 3,
-    enunciado: "Uma nova legislação ambiental entra em vigor durante o desenvolvimento de um produto. Embora ainda não seja obrigatória para projetos em andamento, o cliente manifesta interesse em adequar o produto às novas exigências. O gerente de projetos deve:",
-    alternativas: {
-      A: "Ignorar a legislação até que ela se torne obrigatória.",
-      B: "Avaliar o impacto da mudança junto às partes interessadas e apoiar uma decisão baseada em valor.",
-      C: "Informar que alterações regulatórias não podem ser consideradas durante o projeto.",
-      D: "Encerrar o projeto e iniciar outro conforme a nova legislação."
-    },
-    correta: "B",
-    dificuldade: "Média",
-    dominio: 3
+    enunciado:
+      "What is the main purpose of a Lessons Learned Register?",
+    alternativas: [
+      "Store project costs",
+      "Record knowledge gained during the project",
+      "Track project schedule",
+      "Control procurement"
+    ],
+    correta: 1,
+    dominio: "Business"
   }
 ];
+
+export default questoes;

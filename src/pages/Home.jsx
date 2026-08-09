@@ -1,12 +1,19 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/home.css";
 import logo from "../assets/images/logo.png";
 
 export default function Home() {
 
   const usuario = localStorage.getItem("usuario") || "Usuário";
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("usuario");
+    navigate("/");
+  };
 
   return (
+
     <div className="home-container">
 
       <aside className="sidebar">
@@ -17,22 +24,11 @@ export default function Home() {
 
         <nav>
 
-          <Link to="/" className="menu active">
+          <Link to="/dashboard" className="menu active">
             🏠
             <span>Início</span>
           </Link>
-
-          <Link to="/novo-simulado" className="menu">
-            🎯
-            <span>Novo Simulado</span>
-          </Link>
-
-          <Link to="/banco-questoes" className="menu">
-            📚
-            <span>Banco de Questões</span>
-          </Link>
-
-          <Link to="/estatisticas" className="menu">
+<Link to="/estatisticas" className="menu">
             📊
             <span>Estatísticas</span>
           </Link>
@@ -61,6 +57,15 @@ export default function Home() {
             ❓
             <span>Ajuda</span>
           </Link>
+
+          <button
+            type="button"
+            className="btnSair"
+            onClick={handleLogout}
+          >
+            ⎋
+            <span>Sair</span>
+          </button>
 
         </nav>
 
@@ -129,7 +134,7 @@ export default function Home() {
 
           <div className="kpi-card">
             <span className="kpi-title">Questões</span>
-            <h2>500</h2>
+            <h2>3</h2>
           </div>
 
           <div className="kpi-card">
@@ -187,39 +192,16 @@ export default function Home() {
           </div>
 
         </section>
-
-        <section className="quick-actions">
-
-          <Link to="/novo-simulado">
-            <button className="action-button">
-              Novo Simulado
-            </button>
-          </Link>
-
-          <Link to="/banco-questoes">
-            <button className="action-button">
-              Banco de Questões
-            </button>
-          </Link>
-
-          <Link to="/estatisticas">
-            <button className="action-button">
-              Estatísticas
-            </button>
-          </Link>
-
-        </section>
-
-        <footer className="footer">
+<footer className="footer">
 
           <div className="footer-item">
-            <strong>500</strong>
+            <strong>3</strong>
             <span>Questões</span>
           </div>
 
           <div className="footer-item">
             <strong>PMBOK®</strong>
-            <span>7ª Edição</span>
+            <span>8ª Edição</span>
           </div>
 
           <div className="footer-item">
