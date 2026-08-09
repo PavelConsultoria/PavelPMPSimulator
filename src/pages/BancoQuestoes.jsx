@@ -274,23 +274,29 @@ export default function BancoQuestoes() {
           {/* LEGENDA */}
           <div
             style={{
-              marginTop: "18px",
-              paddingTop: "14px",
-              borderTop: "1px solid #2f2f2f",
+              display: "grid",
+              gridTemplateColumns: "2fr 1fr 1fr",
+              gap: "15px",
+              marginTop: "10px",
+              padding: "0",
               color: "#999",
               fontSize: "13px",
-              lineHeight: "1.7",
+              lineHeight: "1.5",
             }}
           >
-            <strong style={{ color: "#bbb" }}>Legenda:</strong>{" "}
-            <span>
-              <strong style={{ color: "#aaa" }}>Área</strong> — Pessoas,
-              Processo ou Negócio
-            </span>{" "}
-            <span style={{ marginLeft: "18px" }}>
-              <strong style={{ color: "#aaa" }}>Dificuldade</strong> — Fácil,
-              Média ou Difícil
-            </span>
+            <div></div>
+
+            <div style={{ textAlign: "center" }}>
+              <strong style={{ color: "#bbb" }}>Área:</strong>
+              <br />
+              Pessoas, Processo ou Negócio
+            </div>
+
+            <div style={{ textAlign: "center" }}>
+              <strong style={{ color: "#bbb" }}>Dificuldade:</strong>
+              <br />
+              Fácil, Média ou Difícil
+            </div>
           </div>
         </div>
 
