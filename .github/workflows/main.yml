@@ -3,7 +3,7 @@ name: Deploy Pavel PMP Simulator
 on:
   push:
     branches:
-      - master
+      - main
   workflow_dispatch:
 
 permissions:
