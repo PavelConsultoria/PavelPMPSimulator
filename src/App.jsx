@@ -4,23 +4,24 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import NovoSimulado from "./pages/NovoSimulado";
 import Simulado from "./pages/Simulado";
+import BancoQuestoes from "./pages/BancoQuestoes";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
 
-        {/* Tela inicial */}
         <Route path="/" element={<Login />} />
 
-        {/* Dashboard */}
-        <Route path="/dashboard" element={<Home />} />
-
         <Route path="/login" element={<Login />} />
+
+        <Route path="/dashboard" element={<Home />} />
 
         <Route path="/novo-simulado" element={<NovoSimulado />} />
 
         <Route path="/simulado" element={<Simulado />} />
+
+        <Route path="/banco-questoes" element={<BancoQuestoes />} />
 
       </Routes>
     </BrowserRouter>
