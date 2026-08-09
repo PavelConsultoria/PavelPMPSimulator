@@ -5,16 +5,17 @@ import questoes from "../data/questoes";
 
 export default function Simulado() {
   const navigate = useNavigate();
+  const [mostrarContato, setMostrarContato] = useState(false);
 
-  const TOTAL_QUESTOES = questoes.length;
+  const TOTAL_QUESTOES = 3;
   const TEMPO_TOTAL = 230 * 60;
 
   const [tempoRestante, setTempoRestante] = useState(TEMPO_TOTAL);
   const [questaoAtual, setQuestaoAtual] = useState(1);
   const [respostas, setRespostas] = useState({});
   const [marcadas, setMarcadas] = useState([]);
+  const [mostrarMensagem, setMostrarMensagem] = useState(false);
 
-  // Questão atualmente exibida
   const questao = questoes[questaoAtual - 1];
 
   useEffect(() => {
@@ -24,6 +25,7 @@ export default function Simulado() {
           clearInterval(timer);
           return 0;
         }
+
         return valor - 1;
       });
     }, 1000);
@@ -50,6 +52,10 @@ export default function Simulado() {
       ...respostas,
       [questaoAtual]: indice,
     });
+
+    if (questaoAtual === 3) {
+      setMostrarMensagem(true);
+    }
   }
 
   function marcarRevisao() {
@@ -61,20 +67,24 @@ export default function Simulado() {
   }
 
   function proxima() {
-    if (questaoAtual < TOTAL_QUESTOES) {
+    if (
+      questaoAtual < TOTAL_QUESTOES &&
+      respostas[questaoAtual] !== undefined
+    ) {
       setQuestaoAtual(questaoAtual + 1);
     }
   }
 
   function anterior() {
     if (questaoAtual > 1) {
+      setMostrarMensagem(false);
       setQuestaoAtual(questaoAtual - 1);
     }
   }
 
   function finalizar() {
     if (window.confirm("Deseja realmente finalizar o simulado?")) {
-      navigate("/");
+      navigate("/dashboard");
     }
   }
 
@@ -85,6 +95,7 @@ export default function Simulado() {
       <header className="headerSimulado">
         <div>
           <h1>VERSÃO DE DEMONSTRAÇÃO</h1>
+
           <span>
             Questão {questaoAtual} de {TOTAL_QUESTOES}
           </span>
@@ -104,6 +115,7 @@ export default function Simulado() {
 
       <div className="conteudoSimulado">
         <div className="questaoCard">
+
           <div className="cabecalhoQuestao">
             <h2>
               Questão {questaoAtual}
@@ -148,6 +160,7 @@ export default function Simulado() {
           </div>
 
           <div className="acoes">
+
             <button
               className="btnAnterior"
               onClick={anterior}
@@ -167,23 +180,12 @@ export default function Simulado() {
               <button
                 className="btnProxima"
                 onClick={proxima}
+                disabled={respostas[questaoAtual] === undefined}
               >
                 Próxima ▶
               </button>
-            ) : (
-              <button
-                className="btnProxima"
-                onClick={() =>
-                  alert(`🎉 Parabéns!
+            ) : null}
 
-Você concluiu a Versão de Demonstração.
-
-Em breve você será direcionado para conhecer a versão completa.`)
-                }
-              >
-                🏁 Encerrar Demonstração
-              </button>
-            )}
           </div>
         </div>
 
@@ -195,6 +197,7 @@ Em breve você será direcionado para conhecer a versão completa.`)
               { length: TOTAL_QUESTOES },
               (_, i) => i + 1
             ).map((numero) => {
+
               let classe = "numeroQuestao";
 
               if (numero === questaoAtual) {
@@ -213,7 +216,10 @@ Em breve você será direcionado para conhecer a versão completa.`)
                 <button
                   key={numero}
                   className={classe}
-                  onClick={() => setQuestaoAtual(numero)}
+                  onClick={() => {
+                    setMostrarMensagem(false);
+                    setQuestaoAtual(numero);
+                  }}
                 >
                   {numero}
                 </button>
@@ -225,10 +231,230 @@ Em breve você será direcionado para conhecer a versão completa.`)
             className="btnFinalizar"
             onClick={finalizar}
           >
-            Finalizar Simulado
+            Finalizar Demonstração
           </button>
         </aside>
       </div>
+
+      {mostrarMensagem && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.82)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 9999,
+            padding: "20px",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "#1f2937",
+              border: "1px solid #374151",
+              borderRadius: "16px",
+              padding: "40px",
+              maxWidth: "700px",
+              width: "100%",
+              textAlign: "center",
+              boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
+            }}
+          >
+            <div
+              style={{
+                fontSize: "48px",
+                marginBottom: "15px",
+              }}
+            >
+              🎯
+            </div>
+
+            <h2
+              style={{
+                color: "#22c55e",
+                fontSize: "28px",
+                marginBottom: "20px",
+              }}
+            >
+              Você concluiu a demonstração!
+            </h2>
+
+            <p
+              style={{
+                color: "#fff",
+                fontSize: "18px",
+                lineHeight: "1.7",
+                marginBottom: "15px",
+              }}
+            >
+              Estas 3 questões foram apenas uma amostra do
+              <strong> Simulador® Pavel PMP</strong>.
+            </p>
+
+            <p
+              style={{
+                color: "#ddd",
+                fontSize: "17px",
+                lineHeight: "1.7",
+                marginBottom: "15px",
+              }}
+            >
+              Na versão completa, você terá acesso ao banco de
+              questões para continuar sua preparação para a
+              certificação PMP, com questões organizadas por
+              <strong> área, processo e nível de dificuldade</strong>.
+            </p>
+
+            <p
+              style={{
+                color: "#22c55e",
+                fontSize: "19px",
+                fontWeight: "bold",
+                lineHeight: "1.5",
+                marginBottom: "25px",
+              }}
+            >
+              🚀 Continue sua preparação e avance rumo à
+              certificação PMP!
+            </p>
+
+            <button
+              style={{
+                backgroundColor: "#22c55e",
+                color: "#000",
+                border: "none",
+                borderRadius: "8px",
+                padding: "14px 28px",
+                fontSize: "17px",
+                fontWeight: "bold",
+                cursor: "pointer",
+                marginBottom: "12px",
+              }}
+             onClick={() => setMostrarContato(true)}
+            >
+              QUERO CONHECER A VERSÃO COMPLETA
+            </button>
+
+            <br />
+
+            <button
+              style={{
+                backgroundColor: "transparent",
+                color: "#aaa",
+                border: "none",
+                padding: "10px 20px",
+                fontSize: "15px",
+                cursor: "pointer",
+              }}
+              onClick={() => setMostrarMensagem(false)}
+            >
+              Continuar
+            </button>
+          </div>
+        </div>
+      )}
+      {mostrarContato && (
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: "rgba(0, 0, 0, 0.85)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 10000,
+        padding: "20px",
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: "#1f2937",
+          border: "1px solid #374151",
+          borderRadius: "16px",
+          padding: "40px",
+          maxWidth: "600px",
+          width: "100%",
+          textAlign: "center",
+          boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
+        }}
+      >
+        <h2
+          style={{
+            color: "#22c55e",
+            fontSize: "28px",
+            marginBottom: "25px",
+          }}
+        >
+          Pavel Consultoria
+        </h2>
+
+        <p
+          style={{
+            color: "#fff",
+            fontSize: "20px",
+            fontWeight: "bold",
+            marginBottom: "8px",
+          }}
+        >
+          Karolina Poznyakov, MSc
+        </p>
+
+        <p
+          style={{
+            color: "#ddd",
+            fontSize: "18px",
+            marginBottom: "30px",
+          }}
+        >
+          📱 WhatsApp: (21) 99571-6270
+        </p>
+
+        <a
+          href="https://wa.me/5521995716270"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: "inline-block",
+            backgroundColor: "#22c55e",
+            color: "#000",
+            textDecoration: "none",
+            borderRadius: "8px",
+            padding: "14px 28px",
+            fontSize: "17px",
+            fontWeight: "bold",
+            marginBottom: "20px",
+          }}
+        >
+          FALAR PELO WHATSAPP
+        </a>
+
+        <br />
+
+        <button
+          onClick={() => navigate("/dashboard")}
+          style={{
+            backgroundColor: "#374151",
+            color: "#fff",
+            border: "none",
+            borderRadius: "8px",
+            padding: "12px 24px",
+            fontSize: "15px",
+            cursor: "pointer",
+          }}
+        >
+          VOLTAR À TELA PRINCIPAL
+        </button>
+      </div>
+    </div>
+  )}
+
     </div>
   );
 }
