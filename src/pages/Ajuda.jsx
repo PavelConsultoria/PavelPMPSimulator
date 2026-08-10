@@ -64,7 +64,9 @@ export default function Ajuda() {
         <header className="topbar">
           <div>
             <h1>Simulador® PMP</h1>
-            <p>Plataforma completa para preparação da certificação PMP®</p>
+            <p>
+              Plataforma completa para preparação da certificação PMP®
+            </p>
           </div>
         </header>
 
@@ -74,6 +76,8 @@ export default function Ajuda() {
             justifyContent: "center",
             alignItems: "center",
             minHeight: "70vh",
+            padding: "20px",
+            boxSizing: "border-box",
           }}
         >
 
@@ -87,6 +91,7 @@ export default function Ajuda() {
               width: "100%",
               textAlign: "center",
               boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
+              boxSizing: "border-box",
             }}
           >
 
@@ -102,7 +107,7 @@ export default function Ajuda() {
 
             <p
               style={{
-                color: "#fff",
+                color: "#ffffff",
                 fontSize: "20px",
                 fontWeight: "bold",
                 marginBottom: "8px",
@@ -113,7 +118,7 @@ export default function Ajuda() {
 
             <p
               style={{
-                color: "#ddd",
+                color: "#dddddd",
                 fontSize: "18px",
                 marginBottom: "30px",
               }}
@@ -128,7 +133,7 @@ export default function Ajuda() {
               style={{
                 display: "inline-block",
                 backgroundColor: "#22c55e",
-                color: "#000",
+                color: "#000000",
                 textDecoration: "none",
                 borderRadius: "8px",
                 padding: "14px 28px",
@@ -143,10 +148,11 @@ export default function Ajuda() {
             <br />
 
             <button
+              type="button"
               onClick={() => navigate("/dashboard")}
               style={{
                 backgroundColor: "#374151",
-                color: "#fff",
+                color: "#ffffff",
                 border: "none",
                 borderRadius: "8px",
                 padding: "12px 24px",
