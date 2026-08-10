@@ -28,19 +28,10 @@ export default function Home() {
             🏠
             <span>Início</span>
           </Link>
-<Link to="/estatisticas" className="menu">
-            📊
-            <span>Estatísticas</span>
-          </Link>
 
           <Link to="/favoritas" className="menu">
             ⭐
             <span>Favoritas</span>
-          </Link>
-
-          <Link to="/desempenho" className="menu">
-            📈
-            <span>Desempenho</span>
           </Link>
 
           <Link to="/relatorios" className="menu">
