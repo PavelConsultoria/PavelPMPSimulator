@@ -85,17 +85,7 @@ export default function Relatorios() {
             }}
           >
 
-            <h2
-              style={{
-                color: "#fff",
-                fontSize: "34px",
-                marginBottom: "8px",
-              }}
-            >
-              📄 Relatórios
-            </h2>
-
-            <p
+           <p
               style={{
                 color: "#9ca3af",
                 fontSize: "16px",
