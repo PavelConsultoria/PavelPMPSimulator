@@ -85,16 +85,6 @@ export default function Relatorios() {
             }}
           >
 
-           <p
-              style={{
-                color: "#9ca3af",
-                fontSize: "16px",
-                marginBottom: "45px",
-              }}
-            >
-              Consulte seus resultados e acompanhe seu histórico nos simulados.
-            </p>
-
             <div
               style={{
                 backgroundColor: "#1f2937",
