@@ -8,6 +8,9 @@ import BancoQuestoes from "./pages/BancoQuestoes";
 import Estatisticas from "./pages/Estatisticas";
 import Desempenho from "./pages/Desempenho";
 import Relatorios from "./pages/Relatorios";
+import Favoritas from "./pages/Favoritas";
+import Configuracoes from "./pages/Configuracoes";
+import Ajuda from "./pages/Ajuda";
 
 export default function App() {
   return (
@@ -31,6 +34,12 @@ export default function App() {
         <Route path="/desempenho" element={<Desempenho />} />
 
         <Route path="/relatorios" element={<Relatorios />} />
+
+        <Route path="/favoritas" element={<Favoritas />} />
+
+        <Route path="/configuracoes" element={<Configuracoes />} />
+
+        <Route path="/ajuda" element={<Ajuda />} />
 
       </Routes>
     </BrowserRouter>
