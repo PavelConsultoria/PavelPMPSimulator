@@ -90,8 +90,9 @@ export default function Relatorios() {
                 backgroundColor: "#1f2937",
                 border: "1px solid #374151",
                 borderRadius: "16px",
-                padding: "42px 35px",
-                maxWidth: "640px",
+                padding: "40px",
+                maxWidth: "600px",
+                width: "100%",
                 margin: "0 auto",
                 boxShadow: "0 10px 25px rgba(0,0,0,0.25)",
               }}
