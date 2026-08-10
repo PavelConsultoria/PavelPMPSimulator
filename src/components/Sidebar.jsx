@@ -35,11 +35,6 @@ export default function Sidebar() {
           <span>Banco de Questões</span>
         </NavLink>
 
-        <NavLink to="/estatisticas">
-          📈
-          <span>Estatísticas</span>
-        </NavLink>
-
         <NavLink to="/favoritas">
           ⭐
           <span>Favoritas</span>
