@@ -11,7 +11,7 @@ import Relatorios from "./pages/Relatorios";
 
 export default function App() {
   return (
-    <BrowserRouter basename="/PavelPMPsimulator">
+    <BrowserRouter basename="/PavelPMPSimulator">
       <Routes>
 
         <Route path="/" element={<Login />} />
