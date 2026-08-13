@@ -15,9 +15,6 @@ export default function NovoSimulado() {
   const [areaConhecimento, setAreaConhecimento] = useState("Todas");
   const [modoTreinamento, setModoTreinamento] = useState("Todas as questões");
 
-  const nomeUsuario = localStorage.getItem("usuario") || "Usuário";
-  const inicialUsuario = nomeUsuario.trim().charAt(0).toUpperCase() || "U";
-
   function iniciarSimulado() {
     console.log({
       quantidade,
@@ -97,10 +94,10 @@ export default function NovoSimulado() {
 
           <div className="novoSimuladoUser">
             <div>
-              <strong>Olá, {nomeUsuario}!</strong>
+              <strong>Olá, Karol!</strong>
               <span>Preparado para o sucesso?</span>
             </div>
-            <div className="userAvatar">{inicialUsuario}</div>
+            <div className="userAvatar">K</div>
             <span className="userChevron">⌄</span>
           </div>
         </header>
@@ -208,9 +205,8 @@ export default function NovoSimulado() {
                 <option>Apenas Erro</option>
                 <option>Favoritas</option>
                 <option>Revisão</option>
-                <option>Personalizado</option>
               </select>
-              <small>Todas, Apenas Erro, Favoritas,<br />Revisão ou Personalizado.</small>
+              <small>Todas, Apenas Erro, Favoritas<br />ou Revisão.</small>
             </div>
           </div>
 
