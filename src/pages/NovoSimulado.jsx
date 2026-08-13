@@ -14,6 +14,8 @@ export default function NovoSimulado() {
   const [abordagem, setAbordagem] = useState("Todas");
   const [areaConhecimento, setAreaConhecimento] = useState("Todas");
   const [modoTreinamento, setModoTreinamento] = useState("Todas as questões");
+  const nomeUsuario = localStorage.getItem("usuario") || "Usuário";
+  const inicialUsuario = nomeUsuario.trim().charAt(0).toUpperCase() || "U";
 
   function iniciarSimulado() {
     console.log({
@@ -94,10 +96,10 @@ export default function NovoSimulado() {
 
           <div className="novoSimuladoUser">
             <div>
-              <strong>Olá, Karol!</strong>
+              <strong>Olá, {nomeUsuario}!</strong>
               <span>Preparado para o sucesso?</span>
             </div>
-            <div className="userAvatar">K</div>
+            <div className="userAvatar">{inicialUsuario}</div>
             <span className="userChevron">⌄</span>
           </div>
         </header>
