@@ -4,451 +4,294 @@
 
 .novoSimuladoPage {
   min-height: 100vh;
-  background: #05080b;
-  color: #fff;
+  background: #000000;
   font-family: "Segoe UI", Arial, sans-serif;
-  display: flex;
+  color: #ffffff;
+  padding: 0 24px 24px;
 }
 
-.novoSimuladoSidebar {
-  width: 248px;
-  min-height: 100vh;
-  flex: 0 0 248px;
-  background: #060a0e;
-  border-right: 1px solid #27313a;
-  padding: 30px 22px 20px;
-  display: flex;
-  flex-direction: column;
-}
-
-.sidebarLogo {
-  padding: 0 14px 28px;
-}
-
-.sidebarLogo img {
-  width: 142px;
-  height: auto;
-  display: block;
-}
-
-.sidebarLogo span {
-  display: block;
-  margin-top: 2px;
-  font-size: 13px;
-  letter-spacing: 2px;
-  color: #e7ebef;
-}
-
-.sidebarNav {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
-
-.navItem {
+.novoSimuladoContent {
   width: 100%;
-  min-height: 49px;
-  border: 0;
-  border-radius: 10px;
-  background: transparent;
-  color: #f1f3f5;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 0 13px;
-  font-size: 15px;
-  text-align: left;
-  cursor: pointer;
+  max-width: 1180px;
+  margin: 0 auto;
 }
 
-.navItem:hover,
-.navItem.active {
-  background: #121b23;
-}
-
-.navItem.active {
-  color: #22d653;
-  font-weight: 700;
-}
-
-.navIcon {
-  width: 24px;
-  color: #dfe5e9;
-  font-size: 24px;
-  line-height: 1;
-  text-align: center;
-}
-
-.navItem.active .navIcon {
-  color: #22d653;
-}
-
-.sidebarDivider {
-  height: 1px;
-  background: #27313a;
-  margin: 18px 0;
-}
-
-.sidebarPromo {
-  margin-top: auto;
-  min-height: 214px;
-  border: 1px solid #1d9d4a;
-  border-radius: 13px;
-  background: linear-gradient(180deg, rgba(9, 31, 22, 0.7), rgba(5, 16, 12, 0.85));
-  padding: 18px 12px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.promoIcon {
-  color: #22d653;
-  font-size: 34px;
-  margin-bottom: 8px;
-}
-
-.sidebarPromo strong {
-  color: #22d653;
-  font-size: 20px;
-}
-
-.sidebarPromo span {
-  color: #e0e5e8;
-  font-size: 13px;
-  margin-top: 8px;
-}
-
-.promoStars {
-  color: #22d653;
-  font-size: 21px;
-  letter-spacing: 3px;
-  margin-top: 12px;
-}
-
-.novoSimuladoMain {
-  flex: 1;
-  min-width: 0;
-  padding: 0 20px 18px;
-}
-
+/* CABEÇALHO — padrão visual da Tela Principal */
 .novoSimuladoTopbar {
-  min-height: 120px;
-  position: relative;
+  min-height: 96px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  border-bottom: 1px solid #202a33;
+  padding: 16px 8px;
+  border-bottom: 1px solid #1f2937;
+  background: #000000;
 }
 
-.novoSimuladoTitle {
-  text-align: center;
+.novoSimuladoBrand {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.novoSimuladoLogo {
+  width: 92px;
+  height: auto;
+  max-height: 60px;
+  object-fit: contain;
 }
 
 .novoSimuladoTitle h1 {
   margin: 0;
-  color: #fff;
-  font-size: 31px;
+  color: #ffffff;
+  font-size: 30px;
   font-weight: 700;
+  line-height: 1.15;
 }
 
 .novoSimuladoTitle p {
-  margin: 7px 0 0;
-  color: #bcc5ce;
+  margin: 6px 0 0;
+  color: #9ca3af;
   font-size: 15px;
+  line-height: 1.35;
 }
 
-.novoSimuladoUser {
-  position: absolute;
-  right: 4px;
-  top: 29px;
-  display: flex;
-  align-items: center;
-  gap: 13px;
-}
-
-.novoSimuladoUser > div:first-child {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.novoSimuladoUser strong {
-  font-size: 14px;
-}
-
-.novoSimuladoUser span {
-  margin-top: 4px;
-  color: #d0d6db;
-  font-size: 13px;
-}
-
-.userAvatar {
-  width: 58px;
-  height: 58px;
-  border: 1px solid #36414c;
-  border-radius: 50%;
-  background: #111820;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 25px;
-}
-
-.userChevron {
-  color: #fff !important;
-  font-size: 20px !important;
-}
-
+/* CARD PRINCIPAL */
 .novoSimuladoCard {
-  width: 100%;
   margin-top: 18px;
-  background: linear-gradient(180deg, #10171e 0%, #0c1217 100%);
-  border: 1px solid #28333d;
+  background: #171717;
+  border: 1px solid #2a2a2a;
   border-radius: 16px;
-  padding: 22px 20px 17px;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
+  padding: 24px 30px 26px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 
 .secaoCabecalho {
   text-align: center;
 }
 
-.secaoCabecalho h2,
-.resumoTitulo h2 {
+.secaoCabecalho h2 {
   margin: 0;
-  color: #22d653;
+  color: #ffffff;
+  font-size: 21px;
   font-weight: 700;
 }
 
-.secaoCabecalho h2 {
-  font-size: 22px;
-}
-
 .secaoCabecalho p {
-  margin: 6px 0 0;
-  color: #c3cbd2;
+  margin: 5px 0 0;
+  color: #9ca3af;
   font-size: 14px;
 }
 
 .linha {
   height: 1px;
-  background: #27323b;
+  background: #374151;
   margin: 18px 0 20px;
 }
 
+/* CAMPOS */
 .formulario {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  column-gap: 48px;
-  row-gap: 23px;
+  gap: 16px;
 }
 
 .campo {
-  min-width: 0;
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .campo label {
-  min-height: 25px;
   margin-bottom: 7px;
-  color: #f2f4f6;
-  font-size: 15px;
+  color: #d1d5db;
+  font-size: 14px;
   font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.campoIcon {
-  width: 22px;
-  color: #22d653;
-  font-size: 23px;
-  line-height: 1;
-  text-align: center;
 }
 
 .campo select {
   width: 100%;
-  height: 48px;
+  height: 46px;
   padding: 0 14px;
-  border: 1px solid #394650;
+  border: 1px solid #374151;
   border-radius: 10px;
-  background: #141b22;
-  color: #fff;
+  background: #1f2937;
+  color: #ffffff;
   font-size: 15px;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.campo select:hover {
+  border-color: #4b5563;
 }
 
 .campo select:focus {
   outline: none;
-  border-color: #22c55e;
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.13);
+  border-color: #1769e0;
+  box-shadow: 0 0 0 3px rgba(23, 105, 224, 0.18);
 }
 
-.campo small {
-  min-height: 34px;
-  margin: 8px 0 0 10px;
-  color: #aeb8c1;
+
+/* DISTRIBUIÇÃO DOS DOMÍNIOS ECO */
+.dominioDistribuicao {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 2px;
+  color: #9ca3af;
   font-size: 13px;
-  line-height: 1.3;
+  line-height: 1.35;
 }
 
+.dominioDistribuicao span {
+  display: block;
+}
+
+.dominioDistribuicao strong {
+  color: #d1d5db;
+  font-weight: 600;
+}
+
+/* RESUMO */
 .resumo {
-  margin-top: 17px;
-  padding-top: 16px;
-  border-top: 1px solid #27323b;
+  margin-top: 22px;
 }
 
 .resumoTitulo {
   text-align: center;
-  margin-bottom: 13px;
+  margin-bottom: 12px;
 }
 
 .resumoTitulo h2 {
-  font-size: 20px;
+  margin: 0;
+  color: #22c55e;
+  font-size: 19px;
+  font-weight: 700;
 }
 
 .resumoTitulo p {
-  margin: 5px 0 0;
-  color: #c1c8cf;
+  margin: 4px 0 0;
+  color: #9ca3af;
   font-size: 13px;
 }
 
 .cardsResumo {
   display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
 }
 
 .itemResumo {
-  min-height: 116px;
-  padding: 10px 7px;
-  border: 1px solid #2d3943;
-  border-radius: 11px;
-  background: #10171d;
+  min-height: 78px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
+  padding: 12px 16px;
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 12px;
   text-align: center;
 }
 
-.resumoIcon {
-  color: #22d653;
-  font-size: 28px;
-  line-height: 1;
-  margin-bottom: 8px;
-}
-
-.itemResumo > span:not(.resumoIcon) {
-  min-height: 30px;
-  color: #f0f2f4;
-  font-size: 12px;
-  line-height: 1.2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.itemResumo span {
+  margin-bottom: 5px;
+  color: #9ca3af;
+  font-size: 13px;
 }
 
 .itemResumo strong {
-  margin-top: 4px;
-  color: #22d653;
-  font-size: 19px;
-  line-height: 1.15;
-  word-break: break-word;
+  color: #22c55e;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
+/* BOTÕES */
 .botoes {
   display: flex;
-  gap: 13px;
-  margin-top: 19px;
+  align-items: stretch;
+  gap: 14px;
+  margin-top: 22px;
 }
 
 .btnPrimario,
 .btnSecundario {
-  height: 52px;
+  height: 50px;
   border-radius: 10px;
   font-family: inherit;
-  font-size: 16px;
+  font-size: 15px;
   cursor: pointer;
+  transition: 0.2s ease;
 }
 
 .btnPrimario {
   flex: 1;
-  border: 1px solid #22c55e;
-  background: #20c84f;
-  color: #fff;
+  border: 1px solid #1769e0;
+  background: #1769e0;
+  color: #ffffff;
   font-weight: 700;
 }
 
+.btnPrimario:hover {
+  background: #0f5bc8;
+  border-color: #0f5bc8;
+  transform: translateY(-1px);
+}
+
 .btnSecundario {
-  width: 320px;
-  border: 1px solid #2e3a44;
-  background: #111920;
-  color: #e7ebee;
+  width: 150px;
+  border: 1px solid #374151;
+  background: #1f2937;
+  color: #d1d5db;
+  font-weight: 500;
 }
 
-.novoSimuladoFooter {
-  min-height: 39px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 10px 10px 0;
-  color: #aeb7bf;
-  font-size: 12px;
+.btnSecundario:hover {
+  background: #111827;
+  border-color: #4b5563;
 }
 
-@media (max-width: 1200px) {
-  .novoSimuladoSidebar {
-    width: 220px;
-    flex-basis: 220px;
-  }
-
-  .formulario {
-    column-gap: 22px;
-  }
-
-  .cardsResumo {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .novoSimuladoFooter {
-    flex-wrap: wrap;
-  }
-}
-
+/* RESPONSIVO */
 @media (max-width: 900px) {
-  .novoSimuladoSidebar {
-    display: none;
-  }
-
-  .formulario {
+  .formulario,
+  .cardsResumo {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .novoSimuladoUser {
-    display: none;
   }
 }
 
 @media (max-width: 620px) {
-  .novoSimuladoMain {
-    padding: 0 12px 16px;
+  .novoSimuladoPage {
+    padding: 0 14px 20px;
+  }
+
+  .novoSimuladoTopbar {
+    min-height: 88px;
+    padding: 14px 4px;
+  }
+
+  .novoSimuladoBrand {
+    gap: 14px;
+  }
+
+  .novoSimuladoLogo {
+    width: 72px;
+  }
+
+  .novoSimuladoTitle h1 {
+    font-size: 24px;
+  }
+
+  .novoSimuladoTitle p {
+    font-size: 13px;
+  }
+
+  .novoSimuladoCard {
+    margin-top: 14px;
+    padding: 20px 18px 22px;
   }
 
   .formulario,
   .cardsResumo {
     grid-template-columns: 1fr;
-  }
-
-  .novoSimuladoTitle h1 {
-    font-size: 25px;
-  }
-
-  .novoSimuladoTitle p {
-    font-size: 13px;
   }
 
   .botoes {
@@ -457,9 +300,5 @@
 
   .btnSecundario {
     width: 100%;
-  }
-
-  .novoSimuladoFooter {
-    display: none;
   }
 }

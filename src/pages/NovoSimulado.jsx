@@ -131,7 +131,11 @@ export default function NovoSimulado() {
                 <option>Process</option>
                 <option>Business Environment</option>
               </select>
-              <small>People (33%) · Process (41%)<br />Business Environment (26%).</small>
+              <small className="dominioDistribuicao">
+                <span>People <strong>(33%)</strong></span>
+                <span>Process <strong>(41%)</strong></span>
+                <span>Business Environment <strong>(26%)</strong></span>
+              </small>
             </div>
 
             <div className="campo">
@@ -180,8 +184,18 @@ export default function NovoSimulado() {
               <label htmlFor="areaConhecimento"><span className="campoIcon">▢</span>Área de Conhecimento</label>
               <select id="areaConhecimento" value={areaConhecimento} onChange={(e) => setAreaConhecimento(e.target.value)}>
                 <option>Todas</option>
+                <option>Integração</option>
+                <option>Escopo</option>
+                <option>Cronograma</option>
+                <option>Custos</option>
+                <option>Qualidade</option>
+                <option>Recursos</option>
+                <option>Comunicações</option>
+                <option>Riscos</option>
+                <option>Aquisições</option>
+                <option>Stakeholders</option>
               </select>
-              <small>Selecione uma ou mais<br />áreas de conhecimento.</small>
+              <small>Selecione uma área de conhecimento.</small>
             </div>
 
             <div className="campo">
