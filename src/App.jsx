@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -14,7 +14,7 @@ import Ajuda from "./pages/Ajuda";
 
 export default function App() {
   return (
-    <BrowserRouter basename="/PavelPMPSimulator">
+    <HashRouter basename="/PavelPMPSimulator">
       <Routes>
 
         <Route path="/" element={<Login />} />
@@ -42,6 +42,6 @@ export default function App() {
         <Route path="/ajuda" element={<Ajuda />} />
 
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
