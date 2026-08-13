@@ -4,282 +4,451 @@
 
 .novoSimuladoPage {
   min-height: 100vh;
-  background: #000000;
+  background: #05080b;
+  color: #fff;
   font-family: "Segoe UI", Arial, sans-serif;
-  color: #ffffff;
-  padding: 0 24px 24px;
-}
-
-.novoSimuladoContent {
-  width: 100%;
-  max-width: 1180px;
-  margin: 0 auto;
-}
-
-/* CABEÇALHO — padrão visual da Tela Principal */
-.novoSimuladoTopbar {
-  min-height: 96px;
   display: flex;
-  align-items: center;
-  padding: 16px 8px;
-  border-bottom: 1px solid #1f2937;
-  background: #000000;
 }
 
-.novoSimuladoBrand {
-  position: relative;
-  width: 100%;
+.novoSimuladoSidebar {
+  width: 248px;
+  min-height: 100vh;
+  flex: 0 0 248px;
+  background: #060a0e;
+  border-right: 1px solid #27313a;
+  padding: 30px 22px 20px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
 }
 
-.novoSimuladoLogo {
-  width: 92px;
+.sidebarLogo {
+  padding: 0 14px 28px;
+}
+
+.sidebarLogo img {
+  width: 142px;
   height: auto;
-  max-height: 60px;
-  object-fit: contain;
+  display: block;
+}
+
+.sidebarLogo span {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: #e7ebef;
+}
+
+.sidebarNav {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.navItem {
+  width: 100%;
+  min-height: 49px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #f1f3f5;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 13px;
+  font-size: 15px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.navItem:hover,
+.navItem.active {
+  background: #121b23;
+}
+
+.navItem.active {
+  color: #22d653;
+  font-weight: 700;
+}
+
+.navIcon {
+  width: 24px;
+  color: #dfe5e9;
+  font-size: 24px;
+  line-height: 1;
+  text-align: center;
+}
+
+.navItem.active .navIcon {
+  color: #22d653;
+}
+
+.sidebarDivider {
+  height: 1px;
+  background: #27313a;
+  margin: 18px 0;
+}
+
+.sidebarPromo {
+  margin-top: auto;
+  min-height: 214px;
+  border: 1px solid #1d9d4a;
+  border-radius: 13px;
+  background: linear-gradient(180deg, rgba(9, 31, 22, 0.7), rgba(5, 16, 12, 0.85));
+  padding: 18px 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.promoIcon {
+  color: #22d653;
+  font-size: 34px;
+  margin-bottom: 8px;
+}
+
+.sidebarPromo strong {
+  color: #22d653;
+  font-size: 20px;
+}
+
+.sidebarPromo span {
+  color: #e0e5e8;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.promoStars {
+  color: #22d653;
+  font-size: 21px;
+  letter-spacing: 3px;
+  margin-top: 12px;
+}
+
+.novoSimuladoMain {
+  flex: 1;
+  min-width: 0;
+  padding: 0 20px 18px;
+}
+
+.novoSimuladoTopbar {
+  min-height: 120px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #202a33;
 }
 
 .novoSimuladoTitle {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
   text-align: center;
-  white-space: nowrap;
 }
 
 .novoSimuladoTitle h1 {
   margin: 0;
-  color: #ffffff;
-  font-size: 30px;
+  color: #fff;
+  font-size: 31px;
   font-weight: 700;
-  line-height: 1.15;
 }
 
 .novoSimuladoTitle p {
-  margin: 6px 0 0;
-  color: #9ca3af;
+  margin: 7px 0 0;
+  color: #bcc5ce;
   font-size: 15px;
-  line-height: 1.35;
 }
 
-/* CARD PRINCIPAL */
+.novoSimuladoUser {
+  position: absolute;
+  right: 4px;
+  top: 29px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.novoSimuladoUser > div:first-child {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.novoSimuladoUser strong {
+  font-size: 14px;
+}
+
+.novoSimuladoUser span {
+  margin-top: 4px;
+  color: #d0d6db;
+  font-size: 13px;
+}
+
+.userAvatar {
+  width: 58px;
+  height: 58px;
+  border: 1px solid #36414c;
+  border-radius: 50%;
+  background: #111820;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+}
+
+.userChevron {
+  color: #fff !important;
+  font-size: 20px !important;
+}
+
 .novoSimuladoCard {
+  width: 100%;
   margin-top: 18px;
-  background: #171717;
-  border: 1px solid #2a2a2a;
+  background: linear-gradient(180deg, #10171e 0%, #0c1217 100%);
+  border: 1px solid #28333d;
   border-radius: 16px;
-  padding: 24px 30px 26px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  padding: 22px 20px 17px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
 }
 
 .secaoCabecalho {
   text-align: center;
 }
 
-.secaoCabecalho h2 {
+.secaoCabecalho h2,
+.resumoTitulo h2 {
   margin: 0;
-  color: #ffffff;
-  font-size: 21px;
+  color: #22d653;
   font-weight: 700;
 }
 
+.secaoCabecalho h2 {
+  font-size: 22px;
+}
+
 .secaoCabecalho p {
-  margin: 5px 0 0;
-  color: #9ca3af;
+  margin: 6px 0 0;
+  color: #c3cbd2;
   font-size: 14px;
 }
 
 .linha {
   height: 1px;
-  background: #374151;
+  background: #27323b;
   margin: 18px 0 20px;
 }
 
-/* CAMPOS */
 .formulario {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
+  column-gap: 48px;
+  row-gap: 23px;
 }
 
 .campo {
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  min-width: 0;
 }
 
 .campo label {
+  min-height: 25px;
   margin-bottom: 7px;
-  color: #d1d5db;
-  font-size: 14px;
+  color: #f2f4f6;
+  font-size: 15px;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.campoIcon {
+  width: 22px;
+  color: #22d653;
+  font-size: 23px;
+  line-height: 1;
+  text-align: center;
 }
 
 .campo select {
   width: 100%;
-  height: 46px;
+  height: 48px;
   padding: 0 14px;
-  border: 1px solid #374151;
+  border: 1px solid #394650;
   border-radius: 10px;
-  background: #1f2937;
-  color: #ffffff;
+  background: #141b22;
+  color: #fff;
   font-size: 15px;
-  cursor: pointer;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.campo select:hover {
-  border-color: #4b5563;
 }
 
 .campo select:focus {
   outline: none;
-  border-color: #1769e0;
-  box-shadow: 0 0 0 3px rgba(23, 105, 224, 0.18);
+  border-color: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.13);
 }
 
-/* RESUMO */
+.campo small {
+  min-height: 34px;
+  margin: 8px 0 0 10px;
+  color: #aeb8c1;
+  font-size: 13px;
+  line-height: 1.3;
+}
+
 .resumo {
-  margin-top: 22px;
+  margin-top: 17px;
+  padding-top: 16px;
+  border-top: 1px solid #27323b;
 }
 
 .resumoTitulo {
   text-align: center;
-  margin-bottom: 12px;
+  margin-bottom: 13px;
 }
 
 .resumoTitulo h2 {
-  margin: 0;
-  color: #22c55e;
-  font-size: 19px;
-  font-weight: 700;
+  font-size: 20px;
 }
 
 .resumoTitulo p {
-  margin: 4px 0 0;
-  color: #9ca3af;
+  margin: 5px 0 0;
+  color: #c1c8cf;
   font-size: 13px;
 }
 
 .cardsResumo {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 8px;
 }
 
 .itemResumo {
-  min-height: 78px;
+  min-height: 116px;
+  padding: 10px 7px;
+  border: 1px solid #2d3943;
+  border-radius: 11px;
+  background: #10171d;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
-  padding: 12px 16px;
-  background: #1f2937;
-  border: 1px solid #374151;
-  border-radius: 12px;
   text-align: center;
 }
 
-.itemResumo span {
-  margin-bottom: 5px;
-  color: #9ca3af;
-  font-size: 13px;
+.resumoIcon {
+  color: #22d653;
+  font-size: 28px;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.itemResumo > span:not(.resumoIcon) {
+  min-height: 30px;
+  color: #f0f2f4;
+  font-size: 12px;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .itemResumo strong {
-  color: #22c55e;
-  font-size: 21px;
-  font-weight: 700;
-  line-height: 1.2;
+  margin-top: 4px;
+  color: #22d653;
+  font-size: 19px;
+  line-height: 1.15;
+  word-break: break-word;
 }
 
-/* BOTÕES */
 .botoes {
   display: flex;
-  align-items: stretch;
-  gap: 14px;
-  margin-top: 22px;
+  gap: 13px;
+  margin-top: 19px;
 }
 
 .btnPrimario,
 .btnSecundario {
-  height: 50px;
+  height: 52px;
   border-radius: 10px;
   font-family: inherit;
-  font-size: 15px;
+  font-size: 16px;
   cursor: pointer;
-  transition: 0.2s ease;
 }
 
 .btnPrimario {
   flex: 1;
-  border: 1px solid #1769e0;
-  background: #1769e0;
-  color: #ffffff;
+  border: 1px solid #22c55e;
+  background: #20c84f;
+  color: #fff;
   font-weight: 700;
 }
 
-.btnPrimario:hover {
-  background: #0f5bc8;
-  border-color: #0f5bc8;
-  transform: translateY(-1px);
-}
-
 .btnSecundario {
-  width: 150px;
-  border: 1px solid #374151;
-  background: #1f2937;
-  color: #d1d5db;
-  font-weight: 500;
+  width: 320px;
+  border: 1px solid #2e3a44;
+  background: #111920;
+  color: #e7ebee;
 }
 
-.btnSecundario:hover {
-  background: #111827;
-  border-color: #4b5563;
+.novoSimuladoFooter {
+  min-height: 39px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 10px 10px 0;
+  color: #aeb7bf;
+  font-size: 12px;
 }
 
-/* RESPONSIVO */
-@media (max-width: 900px) {
-  .formulario,
+@media (max-width: 1200px) {
+  .novoSimuladoSidebar {
+    width: 220px;
+    flex-basis: 220px;
+  }
+
+  .formulario {
+    column-gap: 22px;
+  }
+
   .cardsResumo {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .novoSimuladoFooter {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 900px) {
+  .novoSimuladoSidebar {
+    display: none;
+  }
+
+  .formulario {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .novoSimuladoUser {
+    display: none;
   }
 }
 
 @media (max-width: 620px) {
-  .novoSimuladoPage {
-    padding: 0 14px 20px;
-  }
-
-  .novoSimuladoTopbar {
-    min-height: 88px;
-    padding: 14px 4px;
-  }
-
-  .novoSimuladoBrand {
-    gap: 14px;
-  }
-
-  .novoSimuladoLogo {
-    width: 72px;
-  }
-
-  .novoSimuladoTitle h1 {
-    font-size: 24px;
-  }
-
-  .novoSimuladoTitle p {
-    font-size: 13px;
-  }
-
-  .novoSimuladoCard {
-    margin-top: 14px;
-    padding: 20px 18px 22px;
+  .novoSimuladoMain {
+    padding: 0 12px 16px;
   }
 
   .formulario,
   .cardsResumo {
     grid-template-columns: 1fr;
+  }
+
+  .novoSimuladoTitle h1 {
+    font-size: 25px;
+  }
+
+  .novoSimuladoTitle p {
+    font-size: 13px;
   }
 
   .botoes {
@@ -288,5 +457,9 @@
 
   .btnSecundario {
     width: 100%;
+  }
+
+  .novoSimuladoFooter {
+    display: none;
   }
 }
