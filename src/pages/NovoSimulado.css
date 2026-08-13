@@ -13,6 +13,7 @@
   display: flex;
   background: #000000;
   color: #ffffff;
+  font-family: "Segoe UI", Arial, sans-serif;
 }
 
 
@@ -21,16 +22,14 @@
    ========================================================= */
 
 .novoSimuladoSidebar {
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 250px;
+  width: 248px;
+  min-height: 100vh;
+  flex: 0 0 248px;
   display: flex;
   flex-direction: column;
   background: #111111;
   border-right: 1px solid #242424;
-  z-index: 100;
+  padding: 30px 22px 20px;
 }
 
 
@@ -39,24 +38,19 @@
    ========================================================= */
 
 .sidebarLogo {
-  height: 110px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  padding: 12px 20px;
-  border-bottom: 1px solid #242424;
+  padding: 0 14px 28px;
 }
 
 .sidebarLogo img {
-  width: 105px;
-  height: 62px;
-  object-fit: contain;
+  width: 142px;
+  height: auto;
+  display: block;
 }
 
 .sidebarLogo span {
-  color: #ffffff;
+  display: block;
+  margin-top: 2px;
+  color: #e7ebef;
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 2px;
@@ -182,10 +176,10 @@
    ========================================================= */
 
 .novoSimuladoMain {
-  width: calc(100% - 250px);
+  flex: 1 1 auto;
+  min-width: 0;
   min-height: 100vh;
-  margin-left: 250px;
-  padding: 0 28px 24px;
+  padding: 0 20px 18px;
   background: #000000;
 }
 
@@ -343,14 +337,16 @@
 
 .campo label {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 6px;
 
+  min-height: 38px;
   margin-bottom: 7px;
 
   color: #d1d5db;
   font-size: 14px;
   font-weight: 600;
+  line-height: 1.35;
 }
 
 .campoIcon {
@@ -570,11 +566,14 @@
 @media (max-width: 1100px) {
   .novoSimuladoSidebar {
     width: 220px;
+    flex-basis: 220px;
   }
 
   .novoSimuladoMain {
-    width: calc(100% - 220px);
-    margin-left: 220px;
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
+    margin-left: 0;
     padding-left: 20px;
     padding-right: 20px;
   }
