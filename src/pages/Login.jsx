@@ -9,26 +9,12 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [nomeExibicao, setNomeExibicao] = useState("");
 
   function entrar() {
+    const nome = nomeExibicao.trim() || "Usuário";
 
-    const nomeUsuario = email
-  ? email
-      .split("@")[0]
-      .replace(".", " ")
-      .split(" ")
-      .map(
-        palavra =>
-          palavra.charAt(0).toUpperCase() +
-          palavra.slice(1)
-      )
-      .join(" ")
-  : "Usuário";
-
-    localStorage.setItem(
-      "usuario",
-      nomeUsuario
-    );
+    localStorage.setItem("usuario", nome);
 
     navigate("/dashboard");
   }
@@ -56,6 +42,15 @@ export default function Login() {
         <p className="loginSubtitulo">
           Plataforma Inteligente para Certificação PMP®
         </p>
+
+        <input
+          type="text"
+          placeholder="Como você quer ser chamado?"
+          value={nomeExibicao}
+          onChange={(e) =>
+            setNomeExibicao(e.target.value)
+          }
+        />
 
 
         <input
