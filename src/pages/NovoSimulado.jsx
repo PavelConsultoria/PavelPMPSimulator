@@ -45,18 +45,22 @@ export default function NovoSimulado() {
             <span className="navIcon">▣</span>
             <span>Novo Simulado</span>
           </button>
+
           <button className="navItem" type="button" onClick={() => navigate("/simulados")}>
             <span className="navIcon">⌁</span>
             <span>Simulados Realizados</span>
           </button>
+
           <button className="navItem" type="button" onClick={() => navigate("/desempenho")}>
             <span className="navIcon">◉</span>
             <span>Desempenho</span>
           </button>
+
           <button className="navItem" type="button" onClick={() => navigate("/favoritas")}>
             <span className="navIcon">☆</span>
             <span>Favoritas</span>
           </button>
+
           <button className="navItem" type="button" onClick={() => navigate("/historico")}>
             <span className="navIcon">↶</span>
             <span>Histórico</span>
@@ -68,11 +72,17 @@ export default function NovoSimulado() {
             <span className="navIcon">⚙</span>
             <span>Configurações</span>
           </button>
+
           <button className="navItem" type="button" onClick={() => navigate("/ajuda")}>
             <span className="navIcon">?</span>
             <span>Ajuda</span>
           </button>
-          <button className="navItem" type="button">
+
+          <button
+            className="navItem"
+            type="button"
+            onClick={() => navigate("/sobre-pavel")}
+          >
             <span className="navIcon">ⓘ</span>
             <span>Sobre o Pavel</span>
           </button>
@@ -114,77 +124,165 @@ export default function NovoSimulado() {
 
           <div className="formulario">
             <div className="campo">
-              <label htmlFor="quantidade"><span className="campoIcon">☷</span>Quantidade de Questões</label>
-              <select id="quantidade" value={quantidade} onChange={(e) => setQuantidade(Number(e.target.value))}>
+              <label htmlFor="quantidade">
+                <span className="campoIcon">☷</span>
+                Quantidade de Questões
+              </label>
+
+              <select
+                id="quantidade"
+                value={quantidade}
+                onChange={(e) => setQuantidade(Number(e.target.value))}
+              >
                 <option value={10}>10</option>
                 <option value={20}>20</option>
                 <option value={50}>50</option>
                 <option value={100}>100</option>
                 <option value={180}>180</option>
               </select>
-              <small>Defina quantas questões deseja<br />no seu simulado.</small>
+
+              <small>
+                Defina quantas questões deseja
+                <br />
+                no seu simulado.
+              </small>
             </div>
 
             <div className="campo">
-              <label htmlFor="dominio"><span className="campoIcon">▱</span>Domínio ECO</label>
-              <select id="dominio" value={dominio} onChange={(e) => setDominio(e.target.value)}>
+              <label htmlFor="dominio">
+                <span className="campoIcon">▱</span>
+                Domínio ECO
+              </label>
+
+              <select
+                id="dominio"
+                value={dominio}
+                onChange={(e) => setDominio(e.target.value)}
+              >
                 <option>Todos</option>
                 <option>People</option>
                 <option>Process</option>
                 <option>Business Environment</option>
               </select>
+
               <small className="dominioDistribuicao">
-                <span>People <strong>(33%)</strong></span>
-                <span>Process <strong>(41%)</strong></span>
-                <span>Business Environment <strong>(26%)</strong></span>
+                <span>
+                  People <strong>(33%)</strong>
+                </span>
+                <span>
+                  Process <strong>(41%)</strong>
+                </span>
+                <span>
+                  Business Environment <strong>(26%)</strong>
+                </span>
               </small>
             </div>
 
             <div className="campo">
-              <label htmlFor="dificuldade"><span className="campoIcon">▥</span>Dificuldade</label>
-              <select id="dificuldade" value={dificuldade} onChange={(e) => setDificuldade(e.target.value)}>
+              <label htmlFor="dificuldade">
+                <span className="campoIcon">▥</span>
+                Dificuldade
+              </label>
+
+              <select
+                id="dificuldade"
+                value={dificuldade}
+                onChange={(e) => setDificuldade(e.target.value)}
+              >
                 <option>Todas</option>
                 <option>Fácil</option>
                 <option>Moderada</option>
                 <option>Difícil</option>
                 <option>Muito Difícil</option>
               </select>
-              <small>Fácil, Moderada, Difícil,<br />Muito Difícil.</small>
+
+              <small>
+                Fácil, Moderada, Difícil,
+                <br />
+                Muito Difícil.
+              </small>
             </div>
 
             <div className="campo">
-              <label htmlFor="modo"><span className="campoIcon">⌑</span>Modo</label>
-              <select id="modo" value={modo} onChange={(e) => setModo(e.target.value)}>
+              <label htmlFor="modo">
+                <span className="campoIcon">⌑</span>
+                Modo
+              </label>
+
+              <select
+                id="modo"
+                value={modo}
+                onChange={(e) => setModo(e.target.value)}
+              >
                 <option>Exame</option>
                 <option>Estudo</option>
               </select>
-              <small>Simulado com tempo e condições<br />semelhantes à prova.</small>
+
+              <small>
+                Simulado com tempo e condições
+                <br />
+                semelhantes à prova.
+              </small>
             </div>
 
             <div className="campo">
-              <label htmlFor="tipoResposta"><span className="campoIcon">▣</span>Tipo de Resposta</label>
-              <select id="tipoResposta" value={tipoResposta} onChange={(e) => setTipoResposta(e.target.value)}>
+              <label htmlFor="tipoResposta">
+                <span className="campoIcon">▣</span>
+                Tipo de Resposta
+              </label>
+
+              <select
+                id="tipoResposta"
+                value={tipoResposta}
+                onChange={(e) => setTipoResposta(e.target.value)}
+              >
                 <option>Todos os tipos</option>
                 <option>Resposta única</option>
                 <option>Multiple-response</option>
               </select>
-              <small>Resposta única ou<br />múltipla (duas respostas).</small>
+
+              <small>
+                Resposta única ou
+                <br />
+                múltipla (duas respostas).
+              </small>
             </div>
 
             <div className="campo">
-              <label htmlFor="abordagem"><span className="campoIcon">↝</span>Abordagem</label>
-              <select id="abordagem" value={abordagem} onChange={(e) => setAbordagem(e.target.value)}>
+              <label htmlFor="abordagem">
+                <span className="campoIcon">↝</span>
+                Abordagem
+              </label>
+
+              <select
+                id="abordagem"
+                value={abordagem}
+                onChange={(e) => setAbordagem(e.target.value)}
+              >
                 <option>Todas</option>
                 <option>Preditiva</option>
                 <option>Adaptativa</option>
                 <option>Híbrida</option>
               </select>
-              <small>Preditiva, Adaptativa<br />e Híbrida.</small>
+
+              <small>
+                Preditiva, Adaptativa
+                <br />
+                e Híbrida.
+              </small>
             </div>
 
             <div className="campo">
-              <label htmlFor="areaConhecimento"><span className="campoIcon">▢</span>Área de Conhecimento</label>
-              <select id="areaConhecimento" value={areaConhecimento} onChange={(e) => setAreaConhecimento(e.target.value)}>
+              <label htmlFor="areaConhecimento">
+                <span className="campoIcon">▢</span>
+                Área de Conhecimento
+              </label>
+
+              <select
+                id="areaConhecimento"
+                value={areaConhecimento}
+                onChange={(e) => setAreaConhecimento(e.target.value)}
+              >
                 <option>Todas</option>
                 <option>Integração</option>
                 <option>Escopo</option>
@@ -197,18 +295,32 @@ export default function NovoSimulado() {
                 <option>Aquisições</option>
                 <option>Stakeholders</option>
               </select>
+
               <small>Selecione uma área de conhecimento.</small>
             </div>
 
             <div className="campo">
-              <label htmlFor="modoTreinamento"><span className="campoIcon">♙</span>Modo de Treinamento</label>
-              <select id="modoTreinamento" value={modoTreinamento} onChange={(e) => setModoTreinamento(e.target.value)}>
+              <label htmlFor="modoTreinamento">
+                <span className="campoIcon">♙</span>
+                Modo de Treinamento
+              </label>
+
+              <select
+                id="modoTreinamento"
+                value={modoTreinamento}
+                onChange={(e) => setModoTreinamento(e.target.value)}
+              >
                 <option>Todas as questões</option>
                 <option>Apenas Erro</option>
                 <option>Favoritas</option>
                 <option>Revisão</option>
               </select>
-              <small>Todas, Apenas Erro, Favoritas<br />ou Revisão.</small>
+
+              <small>
+                Todas, Apenas Erro, Favoritas
+                <br />
+                ou Revisão.
+              </small>
             </div>
           </div>
 
@@ -239,17 +351,28 @@ export default function NovoSimulado() {
           </section>
 
           <div className="botoes">
-            <button type="button" className="btnPrimario" onClick={iniciarSimulado}>
+            <button
+              type="button"
+              className="btnPrimario"
+              onClick={iniciarSimulado}
+            >
               🚀 &nbsp;Iniciar Simulado
             </button>
-            <button type="button" className="btnSecundario" onClick={() => navigate("/")}>
+
+            <button
+              type="button"
+              className="btnSecundario"
+              onClick={() => navigate("/")}
+            >
               ↩ &nbsp;Voltar
             </button>
           </div>
         </section>
 
         <footer className="novoSimuladoFooter">
-          <span>⚒ &nbsp;Baseado no ECO PMP® 2026 e no PMBOK® Guide – 8ª Edição</span>
+          <span>
+            ⚒ &nbsp;Baseado no ECO PMP® 2026 e no PMBOK® Guide – 8ª Edição
+          </span>
           <span>♧ &nbsp;500 questões autorais e sem repetição</span>
           <span>◈ &nbsp;Atualizações constantes conforme ECO 2026</span>
         </footer>
