@@ -14,7 +14,7 @@ import Ajuda from "./pages/Ajuda";
 
 export default function App() {
   return (
-    <HashRouter basename="/PavelPMPSimulator">
+    <HashRouter>
       <Routes>
 
         <Route path="/" element={<Login />} />
