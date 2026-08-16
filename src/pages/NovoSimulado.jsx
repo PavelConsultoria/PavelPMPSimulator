@@ -87,7 +87,6 @@ export default function NovoSimulado() {
         <header className="novoSimuladoTopbar">
           <div className="novoSimuladoTitle">
             <h1>Novo Simulado</h1>
-            <p>Configure o seu exame PMP® exatamente como desejar.</p>
           </div>
 
           <div className="novoSimuladoUser">
@@ -96,7 +95,6 @@ export default function NovoSimulado() {
               <span>Preparado para o sucesso?</span>
             </div>
             <div className="userAvatar">{inicialUsuario}</div>
-            <span className="userChevron">⌄</span>
           </div>
         </header>
 
