@@ -82,8 +82,8 @@
   background: transparent;
   color: #a3a3a3;
 
-  font-family: "Segoe UI", Arial, sans-serif;
-  font-size: 18px;
+  font-family: inherit;
+  font-size: 14px;
   font-weight: 500;
   text-align: left;
 
@@ -194,7 +194,7 @@
 
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 
   padding: 18px 6px;
 
@@ -205,7 +205,7 @@
 .novoSimuladoTitle {
   width: 100%;
   min-width: 0;
-  text-align: center;
+  text-align: left;
 }
 
 .novoSimuladoTitle h1 {
