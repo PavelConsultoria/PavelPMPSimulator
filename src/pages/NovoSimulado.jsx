@@ -68,24 +68,11 @@ export default function NovoSimulado() {
 
           <div className="sidebarDivider" />
 
-          <button className="navItem" type="button" onClick={() => navigate("/configuracoes")}>
-            <span className="navIcon">⚙</span>
-            <span>Configurações</span>
-          </button>
-
           <button className="navItem" type="button" onClick={() => navigate("/ajuda")}>
             <span className="navIcon">?</span>
             <span>Ajuda</span>
           </button>
 
-          <button
-            className="navItem"
-            type="button"
-            onClick={() => navigate("/sobre-pavel")}
-          >
-            <span className="navIcon">ⓘ</span>
-            <span>Sobre o Pavel</span>
-          </button>
         </nav>
 
         <div className="sidebarPromo">

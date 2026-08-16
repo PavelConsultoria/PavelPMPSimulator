@@ -14,7 +14,7 @@ export default function Home() {
 
   return (
 
-    <div className="home-container">
+    <div>
 
       <aside className="sidebar">
 
@@ -29,9 +29,29 @@ export default function Home() {
             <span>Início</span>
           </Link>
 
+          <Link to="/novo-simulado" className="menu">
+            🎯
+            <span>Novo Simulado</span>
+          </Link>
+
+          <Link to="/banco-questoes" className="menu">
+            📚
+            <span>Banco de Questões</span>
+          </Link>
+
+          <Link to="/estatisticas" className="menu">
+            📊
+            <span>Estatísticas</span>
+          </Link>
+
           <Link to="/favoritas" className="menu">
             ⭐
             <span>Favoritas</span>
+          </Link>
+
+          <Link to="/desempenho" className="menu">
+            📈
+            <span>Desempenho</span>
           </Link>
 
           <Link to="/relatorios" className="menu">
@@ -47,6 +67,11 @@ export default function Home() {
           <Link to="/ajuda" className="menu">
             ❓
             <span>Ajuda</span>
+          </Link>
+
+          <Link to="/sobre-pavel" className="menu">
+            ⓘ
+            <span>Sobre a Pavel</span>
           </Link>
 
           <button
@@ -183,7 +208,30 @@ export default function Home() {
           </div>
 
         </section>
-<footer className="footer">
+
+        <section className="quick-actions">
+
+          <Link to="/novo-simulado">
+            <button className="action-button">
+              Novo Simulado
+            </button>
+          </Link>
+
+          <Link to="/banco-questoes">
+            <button className="action-button">
+              Banco de Questões
+            </button>
+          </Link>
+
+          <Link to="/estatisticas">
+            <button className="action-button">
+              Estatísticas
+            </button>
+          </Link>
+
+        </section>
+
+        <footer className="footer">
 
           <div className="footer-item">
             <strong>3</strong>
