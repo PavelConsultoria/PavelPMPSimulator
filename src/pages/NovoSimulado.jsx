@@ -37,7 +37,6 @@ export default function NovoSimulado() {
       <aside className="novoSimuladoSidebar">
         <div className="sidebarLogo">
           <img src={logo} alt="Pavel PMP Simulator" />
-          <span>PMP SIMULATOR</span>
         </div>
 
         <nav className="sidebarNav">
