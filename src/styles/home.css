@@ -26,10 +26,13 @@ a{
 ======================= */
 
 .sidebar{
-    width:220px;
+    width:240px;
+    flex:0 0 240px;
+    min-width:240px;
     background:#000000;
     border-right:1px solid #1f2937;
-    padding:14px 18px;
+    padding:14px 14px;
+    font-family:Arial, Helvetica, sans-serif;
 }
 
 .logo-area{
@@ -60,18 +63,32 @@ a{
 .sidebar nav{
     display:flex;
     flex-direction:column;
-    gap:4px;
+    gap:3px;
+    width:100%;
 }
 
 .menu{
     display:flex;
     align-items:center;
-    gap:10px;
-    padding:8px 12px;
+    width:100%;
+    min-height:42px;
+    gap:12px;
+    padding:8px 10px;
     border-radius:10px;
     cursor:pointer;
     transition:.25s;
-    color:#d1d5db;
+    color:#ffffff;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:18px;
+    line-height:1.2;
+    white-space:normal;
+    text-align:left;
+}
+
+.menu span{
+    flex:1;
+    min-width:0;
+    font:inherit;
 }
 
 .menu:hover{
@@ -82,6 +99,34 @@ a{
     background:#16a34a;
     color:white;
     font-weight:bold;
+}
+
+.btnSair{
+    display:flex;
+    align-items:center;
+    width:100%;
+    min-height:42px;
+    gap:12px;
+    padding:8px 10px;
+    margin:0;
+    border:0;
+    border-radius:10px;
+    cursor:pointer;
+    transition:.25s;
+    color:#ffffff;
+    background:transparent;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:18px;
+    line-height:1.2;
+    text-align:left;
+}
+
+.btnSair span{
+    flex:1;
+}
+
+.btnSair:hover{
+    background:#1f2937;
 }
 
 /* =======================

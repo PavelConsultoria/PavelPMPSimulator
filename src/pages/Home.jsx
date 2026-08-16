@@ -69,6 +69,11 @@ export default function Home() {
             <span>Ajuda</span>
           </Link>
 
+          <Link to="/sobre-pavel" className="menu">
+            ⓘ
+            <span>Sobre a Pavel</span>
+          </Link>
+
           <button
             type="button"
             className="btnSair"
@@ -201,28 +206,6 @@ export default function Home() {
             </div>
 
           </div>
-
-        </section>
-
-        <section className="quick-actions">
-
-          <Link to="/novo-simulado">
-            <button className="action-button">
-              Novo Simulado
-            </button>
-          </Link>
-
-          <Link to="/banco-questoes">
-            <button className="action-button">
-              Banco de Questões
-            </button>
-          </Link>
-
-          <Link to="/estatisticas">
-            <button className="action-button">
-              Estatísticas
-            </button>
-          </Link>
 
         </section>
 
