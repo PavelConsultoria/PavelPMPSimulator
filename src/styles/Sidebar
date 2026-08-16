@@ -1,108 +1,71 @@
-.sidebar{
-    width:260px;
-    height:100vh;
+import { NavLink } from "react-router-dom";
+import "../styles/sidebar.css";
 
-    position:fixed;
-    left:0;
-    top:0;
+export default function Sidebar() {
+  return (
+    <aside className="sidebar">
 
-    background:#0b1220;
+      <div className="logoArea">
+        <div className="logoIcon">PAVEL</div>
+        <div>
+          <span>PMP SIMULATOR</span>
+        </div>
+      </div>
 
-    border-right:1px solid rgba(255,255,255,.08);
+      <nav>
 
-    display:flex;
-    flex-direction:column;
+        <NavLink to="/novo-simulado">
+          <span>▣</span>
+          <span>Novo Simulado</span>
+        </NavLink>
 
-    padding:30px 20px;
-}
+        <NavLink to="/simulados">
+          <span>⌁</span>
+          <span>Simulados Realizados</span>
+        </NavLink>
 
-.logoArea{
+        <NavLink to="/desempenho">
+          <span>◉</span>
+          <span>Desempenho</span>
+        </NavLink>
 
-    display:flex;
-    align-items:center;
-    gap:15px;
+        <NavLink to="/favoritas">
+          <span>☆</span>
+          <span>Favoritas</span>
+        </NavLink>
 
-    margin-bottom:50px;
-}
+        <NavLink to="/historico">
+          <span>↶</span>
+          <span>Histórico</span>
+        </NavLink>
 
-.logoIcon{
+        <div className="sidebarDivider"></div>
 
-    width:52px;
-    height:52px;
+        <NavLink to="/configuracoes">
+          <span>⚙</span>
+          <span>Configurações</span>
+        </NavLink>
 
-    border-radius:14px;
+        <NavLink to="/ajuda">
+          <span>?</span>
+          <span>Ajuda</span>
+        </NavLink>
 
-    background:linear-gradient(135deg,#24d366,#0aa84f);
+        <NavLink to="/sobre">
+          <span>ⓘ</span>
+          <span>Sobre o Pavel</span>
+        </NavLink>
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+      </nav>
 
-    color:white;
+      <div className="sidebarPromo">
+        <div className="promoIcon">♕</div>
+        <strong>500 QUESTÕES</strong>
+        <span>Autorais e sem repetição</span>
+        <span>Alinhadas ao PMP 2026</span>
+        <div className="stars">★ ★ ★ ★ ★</div>
+      </div>
 
-    font-size:22px;
-
-    font-weight:bold;
-}
-
-.logoArea h2{
-
-    color:white;
-
-    margin:0;
-
-    font-size:26px;
-
-    letter-spacing:2px;
-}
-
-.logoArea span{
-
-    color:#63d98c;
-
-    font-size:13px;
-}
-
-.sidebar nav{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:8px;
-}
-
-.sidebar nav a{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:15px;
-
-    text-decoration:none;
-
-    color:#bfc7d5;
-
-    padding:14px 18px;
-
-    border-radius:14px;
-
-    transition:.25s;
-}
-
-.sidebar nav a:hover{
-
-    background:#1a2435;
-
-    color:white;
-}
-
-.sidebar nav a.active{
-
-    background:linear-gradient(90deg,#1db954,#149647);
-
-    color:white;
-
-    font-weight:600;
+    </aside>
+  );
 }

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import "./NovoSimulado.css";
-import logo from "../assets/images/logo.png";
+import "./pages/NovoSimulado.css";
+import logo from "./assets/images/logo.png";
 
 export default function NovoSimulado() {
   const navigate = useNavigate();
