@@ -85,32 +85,6 @@ a{
 }
 
 /* =======================
-   SAIR
-======================= */
-
-.btnSair{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    width:100%;
-    padding:8px 12px;
-    margin:0;
-    border:0;
-    border-radius:10px;
-    cursor:pointer;
-    transition:.25s;
-    color:#d1d5db;
-    background:transparent;
-    font-family:inherit;
-    font-size:inherit;
-    text-align:left;
-}
-
-.btnSair:hover{
-    background:#1f2937;
-}
-
-/* =======================
    CONTEÚDO PRINCIPAL
 ======================= */
 

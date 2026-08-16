@@ -14,7 +14,7 @@ export default function Home() {
 
   return (
 
-    <div>
+    <div className="home-container">
 
       <aside className="sidebar">
 
@@ -67,11 +67,6 @@ export default function Home() {
           <Link to="/ajuda" className="menu">
             ❓
             <span>Ajuda</span>
-          </Link>
-
-          <Link to="/sobre-pavel" className="menu">
-            ⓘ
-            <span>Sobre a Pavel</span>
           </Link>
 
           <button
