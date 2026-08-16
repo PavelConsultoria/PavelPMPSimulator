@@ -4,15 +4,6 @@
     box-sizing:border-box;
 }
 
-html,
-body,
-#root{
-    margin:0;
-    padding:0;
-    width:100%;
-    min-height:100%;
-}
-
 body{
     font-family:Arial, Helvetica, sans-serif;
     background:#000000;
@@ -26,9 +17,7 @@ a{
 
 .home-container{
     display:flex;
-    align-items:flex-start;
     min-height:100vh;
-    width:100%;
     background:#000000;
 }
 
@@ -37,9 +26,7 @@ a{
 ======================= */
 
 .sidebar{
-    flex:0 0 220px;
     width:220px;
-    min-height:100vh;
     background:#000000;
     border-right:1px solid #1f2937;
     padding:14px 18px;
@@ -128,28 +115,8 @@ a{
 ======================= */
 
 .content{
-    flex:1 1 auto;
-    min-width:0;
-    min-height:100vh;
-    width:auto;
-    margin:0;
+    flex:1;
     padding:14px 22px;
-    align-self:flex-start;
-
-    /* Impede qualquer regra global de main de
-       centralizar/empurrar o conteúdo verticalmente. */
-    display:block;
-    position:relative;
-    top:auto;
-    transform:none;
-}
-
-/* Garante que elementos diretos do conteúdo
-   permaneçam no fluxo normal da página. */
-.content > *{
-    position:relative;
-    top:auto;
-    transform:none;
 }
 
 .topbar{
@@ -314,11 +281,25 @@ a{
     background:#22c55e;
 }
 
-.bar1{ height:60%; }
-.bar2{ height:82%; }
-.bar3{ height:45%; }
-.bar4{ height:92%; }
-.bar5{ height:70%; }
+.bar1{
+    height:60%;
+}
+
+.bar2{
+    height:82%;
+}
+
+.bar3{
+    height:45%;
+}
+
+.bar4{
+    height:92%;
+}
+
+.bar5{
+    height:70%;
+}
 
 /* =======================
    ÚLTIMO SIMULADO
@@ -432,16 +413,12 @@ a{
     }
 
     .sidebar{
-        flex:0 0 auto;
         width:100%;
-        min-height:auto;
         border-right:none;
         border-bottom:1px solid #222;
     }
 
     .content{
-        width:100%;
-        min-height:0;
         padding:16px;
     }
 
