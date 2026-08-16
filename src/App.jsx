@@ -11,6 +11,7 @@ import Relatorios from "./pages/Relatorios";
 import Favoritas from "./pages/Favoritas";
 import Configuracoes from "./pages/Configuracoes";
 import Ajuda from "./pages/Ajuda";
+import SobrePavel from "./pages/SobrePavel";
 
 export default function App() {
   return (
@@ -40,6 +41,8 @@ export default function App() {
         <Route path="/configuracoes" element={<Configuracoes />} />
 
         <Route path="/ajuda" element={<Ajuda />} />
+
+        <Route path="/sobre-pavel" element={<SobrePavel />} />
 
       </Routes>
     </HashRouter>
