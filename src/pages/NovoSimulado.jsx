@@ -37,42 +37,54 @@ export default function NovoSimulado() {
       <aside className="novoSimuladoSidebar">
         <div className="sidebarLogo">
           <img src={logo} alt="Pavel PMP Simulator" />
-          <span>PMP SIMULATOR</span>
         </div>
 
         <nav className="sidebarNav">
           <button className="navItem active" type="button">
-            <span className="navIcon">🎯</span>
+            <span className="navIcon">▣</span>
             <span>Novo Simulado</span>
           </button>
 
           <button className="navItem" type="button" onClick={() => navigate("/simulados")}>
-            <span className="navIcon">📊</span>
+            <span className="navIcon">⌁</span>
             <span>Simulados Realizados</span>
           </button>
 
           <button className="navItem" type="button" onClick={() => navigate("/desempenho")}>
-            <span className="navIcon">📈</span>
+            <span className="navIcon">◉</span>
             <span>Desempenho</span>
           </button>
 
           <button className="navItem" type="button" onClick={() => navigate("/favoritas")}>
-            <span className="navIcon">⭐</span>
+            <span className="navIcon">☆</span>
             <span>Favoritas</span>
           </button>
 
           <button className="navItem" type="button" onClick={() => navigate("/historico")}>
-            <span className="navIcon">↩</span>
+            <span className="navIcon">↶</span>
             <span>Histórico</span>
           </button>
 
           <div className="sidebarDivider" />
 
+          <button className="navItem" type="button" onClick={() => navigate("/configuracoes")}>
+            <span className="navIcon">⚙</span>
+            <span>Configurações</span>
+          </button>
+
           <button className="navItem" type="button" onClick={() => navigate("/ajuda")}>
-            <span className="navIcon">❓</span>
+            <span className="navIcon">?</span>
             <span>Ajuda</span>
           </button>
 
+          <button
+            className="navItem"
+            type="button"
+            onClick={() => navigate("/sobre-pavel")}
+          >
+            <span className="navIcon">ⓘ</span>
+            <span>Sobre o Pavel</span>
+          </button>
         </nav>
 
         <div className="sidebarPromo">
