@@ -1,50 +1,138 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./SobrePavel.css";
 
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import NovoSimulado from "./pages/NovoSimulado";
-import Simulado from "./pages/Simulado";
-import BancoQuestoes from "./pages/BancoQuestoes";
-import Estatisticas from "./pages/Estatisticas";
-import Desempenho from "./pages/Desempenho";
-import Relatorios from "./pages/Relatorios";
-import Favoritas from "./pages/Favoritas";
-import Configuracoes from "./pages/Configuracoes";
-import Ajuda from "./pages/Ajuda";
-import SobrePavel from "./pages/SobrePavel";
-
-export default function App() {
+export default function SobrePavel() {
   return (
-    <BrowserRouter basename="/PavelPMPSimulator">
-      <Routes>
+    <main className="sobrePavelPage">
+      <div className="sobrePavelHeader">
+        <h1>Sobre a Pavel</h1>
+        <p>Consultoria, Engenharia, Planejamento e Gestão de Projetos</p>
+      </div>
 
-        <Route path="/" element={<Login />} />
+      <section className="sobrePavelCard">
 
-        <Route path="/login" element={<Login />} />
+        <div className="sobrePavelTitle">
+          <h2>
+            Pavel Poznyakov Consultoria e Projetos de Engenharia Ltda. – ME
+          </h2>
 
-        <Route path="/dashboard" element={<Home />} />
+          <p>
+            Desde 2005, atuando em Engenharia, Planejamento e Gestão de Projetos.
+          </p>
+        </div>
 
-        <Route path="/novo-simulado" element={<NovoSimulado />} />
+        <div className="sobrePavelLine"></div>
 
-        <Route path="/simulado" element={<Simulado />} />
+        <section className="sobrePavelSection">
+          <h3>Sobre a empresa</h3>
 
-        <Route path="/banco-questoes" element={<BancoQuestoes />} />
+          <p>
+            A <strong>Pavel Consultoria</strong>, liderada por{" "}
+            <strong>Karolina Poznyakov (MSc, PMP retired, IPMA-D)</strong>,
+            é uma empresa do Rio de Janeiro especializada em treinamentos
+            de planejamento e controle de projetos, com foco em{" "}
+            <strong>MS Project</strong> e{" "}
+            <strong>Oracle Primavera P6</strong>.
+          </p>
 
-        <Route path="/estatisticas" element={<Estatisticas />} />
+          <p>
+            A empresa oferece treinamentos práticos voltados à aplicação
+            profissional de ferramentas de planejamento, estruturação de
+            cronogramas, análise de caminho crítico, nivelamento de recursos
+            e elaboração de relatórios gerenciais.
+          </p>
+        </section>
 
-        <Route path="/desempenho" element={<Desempenho />} />
+        <div className="sobrePavelGrid">
 
-        <Route path="/relatorios" element={<Relatorios />} />
+          <article>
+            <h3>Consultoria e Treinamentos</h3>
+            <p>
+              Cursos especializados em planejamento e controle de projetos,
+              com aplicação prática em cronogramas profissionais.
+            </p>
+          </article>
 
-        <Route path="/favoritas" element={<Favoritas />} />
+          <article>
+            <h3>MS Project</h3>
+            <p>
+              Treinamento do básico ao avançado, com foco na aplicação
+              prática em cronogramas de projetos.
+            </p>
+          </article>
 
-        <Route path="/configuracoes" element={<Configuracoes />} />
+          <article>
+            <h3>Oracle Primavera P6</h3>
+            <p>
+              Treinamento focado na utilização profissional do Primavera P6
+              para planejamento e controle de projetos.
+            </p>
+          </article>
 
-        <Route path="/ajuda" element={<Ajuda />} />
+          <article>
+            <h3>Formato</h3>
+            <p>
+              Turmas online e ao vivo, com grupos reduzidos de 1 a 6
+              participantes, permitindo acompanhamento próximo e
+              atendimento personalizado.
+            </p>
+          </article>
 
-        <Route path="/sobre-pavel" element={<SobrePavel />} />
+        </div>
 
-      </Routes>
-    </BrowserRouter>
+        <section className="sobrePavelSection">
+          <h3>Experiência profissional</h3>
+
+          <div className="sobrePavelProfissional">
+            <strong>Karolina Poznyakov</strong>
+            <span>MSc • PMP retired • IPMA-D</span>
+          </div>
+
+          <p>
+            Profissional com experiência em planejamento, controle e gestão
+            de projetos, atuando também como instrutora e consultora.
+          </p>
+        </section>
+
+        <section className="sobrePavelDados">
+          <h3>Dados da empresa</h3>
+
+          <div className="sobrePavelDadosGrid">
+
+            <div>
+              <span>CNPJ</span>
+              <strong>07.721.501/0001-06</strong>
+            </div>
+
+            <div>
+              <span>Fundação</span>
+              <strong>21 de novembro de 2005</strong>
+            </div>
+
+            <div>
+              <span>Localização</span>
+              <strong>Rio de Janeiro – RJ</strong>
+            </div>
+
+            <div>
+              <span>Atividade</span>
+              <strong>Serviços de engenharia</strong>
+            </div>
+
+          </div>
+        </section>
+
+        <section className="sobrePavelContato">
+          <h3>Contato</h3>
+          <p>
+            WhatsApp: <strong>(21) 99571-6270</strong>
+          </p>
+        </section>
+
+      </section>
+
+      <footer className="sobrePavelFooter">
+        Pavel Consultoria • Engenharia • Planejamento • Gestão de Projetos
+      </footer>
+    </main>
   );
 }
