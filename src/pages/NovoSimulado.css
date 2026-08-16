@@ -22,14 +22,15 @@
    ========================================================= */
 
 .novoSimuladoSidebar {
-  width: 248px;
+  width: 240px;
   min-height: 100vh;
-  flex: 0 0 248px;
+  flex: 0 0 240px;
   display: flex;
   flex-direction: column;
   background: #111111;
   border-right: 1px solid #242424;
-  padding: 30px 22px 20px;
+  padding: 14px 14px 20px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 
@@ -64,26 +65,28 @@
 .sidebarNav {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  padding: 20px 14px;
+  gap: 3px;
+  padding: 20px 10px;
+  width: 100%;
 }
 
 .navItem {
   width: 100%;
-  min-height: 46px;
+  min-height: 42px;
   display: flex;
   align-items: center;
-  gap: 13px;
-  padding: 0 15px;
+  gap: 12px;
+  padding: 8px 10px;
 
   border: 0;
-  border-radius: 9px;
+  border-radius: 10px;
 
   background: transparent;
-  color: #a3a3a3;
+  color: #ffffff;
 
-  font-family: inherit;
-  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  line-height: 1.2;
   font-weight: 500;
   text-align: left;
 
@@ -95,7 +98,7 @@
 }
 
 .navItem:hover {
-  background: #1c1c1c;
+  background: #1f2937;
   color: #ffffff;
 }
 
