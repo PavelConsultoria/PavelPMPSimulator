@@ -156,7 +156,7 @@
 }
 
 .enunciado {
-    margin: 0 0 20px;
+    margin: 0 0 14px;
     color: #1f2937;
     font-size: 17px;
     line-height: 1.55;
@@ -172,13 +172,13 @@
 .alternativas {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
 }
 
 .alternativa {
     width: 100%;
-    min-height: 62px;
-    padding: 10px 16px;
+    min-height: 54px;
+    padding: 8px 14px;
     border: 2px solid #dbe3ed;
     border-radius: 12px;
     background: #ffffff;
@@ -226,8 +226,8 @@
     justify-content: space-between;
     flex-wrap: wrap;
     align-items: center;
-    gap: 12px;
-    margin-top: 22px;
+    gap: 10px;
+    margin-top: 14px;
     flex-shrink: 0;
 }
 
@@ -240,9 +240,9 @@
 .btnProxima,
 .btnAnalise,
 .btnFinalizar {
-    min-height: 48px;
+    min-height: 42px;
     border-radius: 10px;
-    padding: 10px 16px;
+    padding: 8px 14px;
     font-family: inherit;
     font-size: 15px;
     font-weight: 700;
@@ -363,8 +363,8 @@
 }
 
 .btnFinalizar {
-    padding: 13px 16px;
-    min-height: 48px;
+    padding: 8px 14px;
+    min-height: 42px;
     border: 0;
     border-radius: 10px;
     background: #dc3545;
