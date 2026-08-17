@@ -64,17 +64,17 @@
 .sidebarNav {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 3px;
   padding: 20px 14px;
 }
 
 .navItem {
   width: 100%;
-  min-height: 46px;
+  min-height: 42px;
   display: flex;
   align-items: center;
-  gap: 13px;
-  padding: 0 15px;
+  gap: 12px;
+  padding: 8px 10px;
 
   border: 0;
   border-radius: 9px;
@@ -83,8 +83,8 @@
   color: #a3a3a3;
 
   font-family: inherit;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 18px;
+  font-weight: 400;
   text-align: left;
 
   cursor: pointer;
@@ -102,7 +102,7 @@
 .navItem.active {
   background: #1769e0;
   color: #ffffff;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .navIcon {
@@ -310,7 +310,7 @@
 .secaoCabecalho h2 {
   margin: 0;
   color: #ffffff;
-  font-size: 21px;
+  font-size: 22px;
   font-weight: 700;
 }
 
@@ -435,7 +435,7 @@
 .resumoTitulo h2 {
   margin: 0;
   color: #22c55e;
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 700;
 }
 
