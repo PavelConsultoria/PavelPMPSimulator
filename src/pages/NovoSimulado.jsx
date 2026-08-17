@@ -344,7 +344,7 @@ export default function NovoSimulado() {
               className="btnPrimario"
               onClick={iniciarSimulado}
             >
-              🚀 &nbsp;Iniciar Simulado
+              🚀 &nbsp;{modo === "Estudo" ? "INICIAR ESTUDO" : "INICIAR EXAME"}
             </button>
 
             <button
