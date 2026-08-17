@@ -1,22 +1,44 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Simulado.css";
-import questoes from "../data/questoes";
+import { carregarQuestoesExcel, embaralharQuestoes } from "../data/carregarQuestoesExcel";
 
 export default function Simulado() {
   const navigate = useNavigate();
   const [mostrarContato, setMostrarContato] = useState(false);
 
-  const TOTAL_QUESTOES = 3;
   const TEMPO_TOTAL = 230 * 60;
 
+  const [questoes, setQuestoes] = useState([]);
+  const [erroCarregamento, setErroCarregamento] = useState(null);
   const [tempoRestante, setTempoRestante] = useState(TEMPO_TOTAL);
   const [questaoAtual, setQuestaoAtual] = useState(1);
   const [respostas, setRespostas] = useState({});
   const [marcadas, setMarcadas] = useState([]);
   const [mostrarMensagem, setMostrarMensagem] = useState(false);
 
+  const TOTAL_QUESTOES = questoes.length;
   const questao = questoes[questaoAtual - 1];
+
+  useEffect(() => {
+    let ativo = true;
+
+    carregarQuestoesExcel()
+      .then((questoesCarregadas) => {
+        if (ativo) {
+          setQuestoes(embaralharQuestoes(questoesCarregadas));
+        }
+      })
+      .catch((erro) => {
+        if (ativo) {
+          setErroCarregamento(erro);
+        }
+      });
+
+    return () => {
+      ativo = false;
+    };
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -47,13 +69,50 @@ export default function Simulado() {
     );
   }
 
+  function respostasEstaoCompletas(resposta, questaoRespondida) {
+    return resposta?.length === questaoRespondida.corretas.length;
+  }
+
+  function respostaEstaCorreta(resposta, questaoRespondida) {
+    return (
+      respostasEstaoCompletas(resposta, questaoRespondida) &&
+      resposta.every((indice) => questaoRespondida.corretas.includes(indice))
+    );
+  }
+
+  function calcularAcertos() {
+    return questoes.reduce((total, questaoDoSimulado, indice) => {
+      return respostaEstaCorreta(respostas[indice + 1], questaoDoSimulado)
+        ? total + 1
+        : total;
+    }, 0);
+  }
+
   function selecionarResposta(indice) {
+    const respostasAtuais = respostas[questaoAtual] || [];
+    let novasRespostas;
+
+    if (questao.tipoResposta === "Multiple Response") {
+      if (respostasAtuais.includes(indice)) {
+        novasRespostas = respostasAtuais.filter((resposta) => resposta !== indice);
+      } else if (respostasAtuais.length < questao.corretas.length) {
+        novasRespostas = [...respostasAtuais, indice];
+      } else {
+        novasRespostas = respostasAtuais;
+      }
+    } else {
+      novasRespostas = [indice];
+    }
+
     setRespostas({
       ...respostas,
-      [questaoAtual]: indice,
+      [questaoAtual]: novasRespostas,
     });
 
-    if (questaoAtual === 3) {
+    if (
+      questaoAtual === TOTAL_QUESTOES &&
+      respostasEstaoCompletas(novasRespostas, questao)
+    ) {
       setMostrarMensagem(true);
     }
   }
@@ -69,7 +128,7 @@ export default function Simulado() {
   function proxima() {
     if (
       questaoAtual < TOTAL_QUESTOES &&
-      respostas[questaoAtual] !== undefined
+      respostasEstaoCompletas(respostas[questaoAtual], questao)
     ) {
       setQuestaoAtual(questaoAtual + 1);
     }
@@ -84,11 +143,24 @@ export default function Simulado() {
 
   function finalizar() {
     if (window.confirm("Deseja realmente finalizar o simulado?")) {
+      console.log({
+        acertos: calcularAcertos(),
+        totalQuestoes: TOTAL_QUESTOES,
+      });
       navigate("/dashboard");
     }
   }
 
   const progresso = (questaoAtual / TOTAL_QUESTOES) * 100;
+
+  if (erroCarregamento) {
+    console.error(erroCarregamento);
+    return null;
+  }
+
+  if (!questao) {
+    return null;
+  }
 
   return (
     <div className="simuladoPage">
@@ -142,7 +214,7 @@ export default function Simulado() {
               <button
                 key={indice}
                 className={
-                  respostas[questaoAtual] === indice
+                  respostas[questaoAtual]?.includes(indice)
                     ? "alternativa selecionada"
                     : "alternativa"
                 }
@@ -180,7 +252,7 @@ export default function Simulado() {
               <button
                 className="btnProxima"
                 onClick={proxima}
-                disabled={respostas[questaoAtual] === undefined}
+                disabled={!respostasEstaoCompletas(respostas[questaoAtual], questao)}
               >
                 Próxima ▶
               </button>
