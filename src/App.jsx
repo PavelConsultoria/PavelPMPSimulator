@@ -12,6 +12,7 @@ import Favoritas from "./pages/Favoritas";
 import Configuracoes from "./pages/Configuracoes";
 import Ajuda from "./pages/Ajuda";
 import SobrePavel from "./pages/SobrePavel";
+import RelatorioExame from "./pages/RelatorioExame";
 
 export default function App() {
   return (
@@ -27,6 +28,8 @@ export default function App() {
         <Route path="/novo-simulado" element={<NovoSimulado />} />
 
         <Route path="/simulado" element={<Simulado />} />
+
+        <Route path="/relatorio-exame" element={<RelatorioExame />} />
 
         <Route path="/banco-questoes" element={<BancoQuestoes />} />
 

@@ -1,10 +1,13 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "./NovoSimulado.css";
 import logo from "../assets/images/logo.png";
 
 export default function NovoSimulado() {
   const navigate = useNavigate();
+  const location = useLocation();
+  // ROTINA TEMPORÁRIA: remover após a validação pré-publicação.
+  const rotinaTeste = new URLSearchParams(location.search).get("teste") === "1";
 
   const [quantidade, setQuantidade] = useState(180);
   const [dominio, setDominio] = useState("Todos");
@@ -29,7 +32,7 @@ export default function NovoSimulado() {
       modoTreinamento,
     });
 
-    navigate("/simulado", { state: { quantidade, modo } });
+    navigate("/simulado", { state: { quantidade, modo, rotinaTeste } });
   }
 
   return (

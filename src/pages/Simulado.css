@@ -196,9 +196,14 @@
     margin-top: 22px;
 }
 
+.acoesEstudo {
+    grid-template-columns: 1fr auto auto 1fr;
+}
+
 .btnAnterior,
 .btnMenuPrincipal,
-.btnProxima {
+.btnProxima,
+.btnAnalise {
     min-height: 48px;
     border-radius: 10px;
     padding: 10px 16px;
@@ -246,6 +251,25 @@
 
 .btnProxima:hover {
     background: #0f5ed7;
+}
+
+.btnAnalise {
+    border: 1px solid #1769e8;
+    background: #ffffff;
+    color: #1769e8;
+}
+
+.btnAnalise:hover:not(:disabled) {
+    background: #eef6ff;
+}
+
+.btnAnalise:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.acoesEstudo .btnProxima {
+    grid-column: 4;
 }
 
 .painelDireito {
@@ -369,10 +393,19 @@
         grid-template-columns: 1fr;
     }
 
+    .acoesEstudo {
+        grid-template-columns: 1fr;
+    }
+
     .btnAnterior,
     .btnMenuPrincipal,
-    .btnProxima {
+    .btnProxima,
+    .btnAnalise {
         width: 100%;
         justify-self: stretch;
+    }
+
+    .acoesEstudo .btnProxima {
+        grid-column: auto;
     }
 }

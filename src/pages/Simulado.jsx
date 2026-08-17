@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./Simulado.css";
 import { carregarQuestoesExcel, embaralharQuestoes } from "../data/carregarQuestoesExcel";
+import AnaliseRespostas from "./AnaliseRespostas";
 
 export default function Simulado() {
   const navigate = useNavigate();
@@ -11,6 +12,9 @@ export default function Simulado() {
   const TEMPO_TOTAL = 230 * 60;
   const quantidadeSelecionada = location.state?.quantidade || 180;
   const modoSelecionado = location.state?.modo || "Exame";
+  // ROTINA TEMPORÁRIA: ativada exclusivamente por /novo-simulado?teste=1.
+  const rotinaTeste = location.state?.rotinaTeste === true;
+  const quantidadeEfetiva = rotinaTeste ? 5 : quantidadeSelecionada;
 
   const [questoes, setQuestoes] = useState([]);
   const [erroCarregamento, setErroCarregamento] = useState(null);
@@ -19,6 +23,9 @@ export default function Simulado() {
   const [respostas, setRespostas] = useState({});
   const [marcadas, setMarcadas] = useState([]);
   const [mostrarMensagem, setMostrarMensagem] = useState(false);
+  const [mostrarAnalise, setMostrarAnalise] = useState(false);
+
+  const modoEstudo = modoSelecionado.toLowerCase() === "estudo";
 
   const TOTAL_QUESTOES = questoes.length;
   const questao = questoes[questaoAtual - 1];
@@ -30,7 +37,7 @@ export default function Simulado() {
       .then((questoesCarregadas) => {
         if (ativo) {
           setQuestoes(
-            embaralharQuestoes(questoesCarregadas).slice(0, quantidadeSelecionada)
+            embaralharQuestoes(questoesCarregadas).slice(0, quantidadeEfetiva)
           );
         }
       })
@@ -43,7 +50,7 @@ export default function Simulado() {
     return () => {
       ativo = false;
     };
-  }, [quantidadeSelecionada]);
+  }, [quantidadeEfetiva]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -91,6 +98,20 @@ export default function Simulado() {
         ? total + 1
         : total;
     }, 0);
+  }
+
+  function calcularResultadoExame() {
+    const porDominio = ["People", "Process", "Business Environment"].reduce((resultado, dominio) => {
+      const questoesDominio = questoes.filter((item) => item.dominio === dominio);
+      const acertos = questoesDominio.filter((item) => {
+        const indice = questoes.indexOf(item) + 1;
+        return respostaEstaCorreta(respostas[indice], item);
+      }).length;
+      resultado[dominio] = questoesDominio.length ? Math.round((acertos / questoesDominio.length) * 100) : 0;
+      return resultado;
+    }, {});
+
+    return { percentual: Math.round((calcularAcertos() / TOTAL_QUESTOES) * 100), porDominio };
   }
 
   function selecionarResposta(indice) {
@@ -148,11 +169,11 @@ export default function Simulado() {
 
   function finalizar() {
     if (window.confirm("Deseja realmente finalizar o simulado?")) {
-      console.log({
-        acertos: calcularAcertos(),
-        totalQuestoes: TOTAL_QUESTOES,
-      });
-      navigate("/dashboard");
+      if (modoEstudo) {
+        navigate("/dashboard");
+      } else {
+        navigate("/relatorio-exame", { state: { resultado: calcularResultadoExame() } });
+      }
     }
   }
 
@@ -167,6 +188,22 @@ export default function Simulado() {
     return null;
   }
 
+  if (mostrarAnalise && modoEstudo) {
+    return (
+      <AnaliseRespostas
+        questao={questao}
+        respostaAluno={respostas[questaoAtual]}
+        numero={questaoAtual}
+        total={TOTAL_QUESTOES}
+        onVoltar={() => setMostrarAnalise(false)}
+        onProxima={() => {
+          setMostrarAnalise(false);
+          setQuestaoAtual(questaoAtual + 1);
+        }}
+      />
+    );
+  }
+
   return (
     <div className="simuladoPage">
       <header className="headerSimulado">
@@ -174,6 +211,7 @@ export default function Simulado() {
           <h1>MODO {modoSelecionado.toUpperCase()}</h1>
 
           <span>
+            {rotinaTeste ? "TESTE TEMPORÁRIO — " : ""}
             Questão {questaoAtual} de {TOTAL_QUESTOES}
           </span>
         </div>
@@ -236,7 +274,7 @@ export default function Simulado() {
             ))}
           </div>
 
-          <div className="acoes">
+          <div className={modoEstudo ? "acoes acoesEstudo" : "acoes"}>
 
             <button
               className="btnAnterior"
@@ -252,6 +290,16 @@ export default function Simulado() {
             >
               Voltar à Tela Principal
             </button>
+
+            {modoEstudo && (
+              <button
+                className="btnAnalise"
+                onClick={() => setMostrarAnalise(true)}
+                disabled={!respostasEstaoCompletas(respostas[questaoAtual], questao)}
+              >
+                Análise das Respostas
+              </button>
+            )}
 
             {questaoAtual < TOTAL_QUESTOES ? (
               <button
