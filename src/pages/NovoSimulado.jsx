@@ -347,7 +347,7 @@ export default function NovoSimulado() {
             <button
               type="button"
               className="btnSecundario"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/dashboard")}
             >
               ↩ &nbsp;Voltar
             </button>
