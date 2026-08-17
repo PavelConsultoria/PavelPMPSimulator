@@ -37,7 +37,7 @@ export default function Sidebar() {
 
         <NavLink to="/favoritas">
           ⭐
-          <span>Favoritas</span>
+          <span>Revisão</span>
         </NavLink>
 
         <NavLink to="/configuracoes">

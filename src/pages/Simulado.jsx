@@ -3,6 +3,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "./Simulado.css";
 import { carregarQuestoesExcel, embaralharQuestoes } from "../data/carregarQuestoesExcel";
 import AnaliseRespostas from "./AnaliseRespostas";
+import { carregarRevisao, concluirQuestaoRevisao, LIMITE_REVISAO, salvarRevisao } from "./Favoritas";
+
+const IDS_REVISAO_VAZIOS = [];
 
 export default function Simulado() {
   const navigate = useNavigate();
@@ -12,6 +15,8 @@ export default function Simulado() {
   const TEMPO_TOTAL = 230 * 60;
   const quantidadeSelecionada = location.state?.quantidade || 180;
   const modoSelecionado = location.state?.modo || "Exame";
+  const fluxoRevisao = location.state?.fluxoRevisao === true;
+  const idsRevisao = location.state?.idsRevisao || IDS_REVISAO_VAZIOS;
   // ROTINA TEMPORÁRIA: ativada exclusivamente por /novo-simulado?teste=1.
   const rotinaTeste = location.state?.rotinaTeste === true;
   const quantidadeEfetiva = rotinaTeste ? 5 : quantidadeSelecionada;
@@ -21,14 +26,17 @@ export default function Simulado() {
   const [tempoRestante, setTempoRestante] = useState(TEMPO_TOTAL);
   const [questaoAtual, setQuestaoAtual] = useState(1);
   const [respostas, setRespostas] = useState({});
-  const [marcadas, setMarcadas] = useState([]);
+  const [revisao, setRevisao] = useState(carregarRevisao);
+  const [revisadasNestaSessao, setRevisadasNestaSessao] = useState([]);
   const [mostrarMensagem, setMostrarMensagem] = useState(false);
   const [mostrarAnalise, setMostrarAnalise] = useState(false);
 
   const modoEstudo = modoSelecionado.toLowerCase() === "estudo";
+  const revisaoBloqueada = Boolean(revisao.ciclo?.bloqueado);
 
   const TOTAL_QUESTOES = questoes.length;
   const questao = questoes[questaoAtual - 1];
+  const questaoPendente = revisao.pendentes.includes(questao?.id);
 
   useEffect(() => {
     let ativo = true;
@@ -36,9 +44,12 @@ export default function Simulado() {
     carregarQuestoesExcel()
       .then((questoesCarregadas) => {
         if (ativo) {
-          setQuestoes(
-            embaralharQuestoes(questoesCarregadas).slice(0, quantidadeEfetiva)
-          );
+          if (fluxoRevisao) {
+            const porId = new Map(questoesCarregadas.map((item) => [item.id, item]));
+            setQuestoes(idsRevisao.map((id) => porId.get(id)).filter(Boolean));
+          } else {
+            setQuestoes(embaralharQuestoes(questoesCarregadas).slice(0, quantidadeEfetiva));
+          }
         }
       })
       .catch((erro) => {
@@ -50,7 +61,7 @@ export default function Simulado() {
     return () => {
       ativo = false;
     };
-  }, [quantidadeEfetiva]);
+  }, [fluxoRevisao, idsRevisao, quantidadeEfetiva]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -136,6 +147,16 @@ export default function Simulado() {
     });
 
     if (
+      fluxoRevisao &&
+      respostasEstaoCompletas(novasRespostas, questao) &&
+      !revisadasNestaSessao.includes(questao.id)
+    ) {
+      setRevisao(concluirQuestaoRevisao(questao.id));
+      setRevisadasNestaSessao([...revisadasNestaSessao, questao.id]);
+    }
+
+    if (
+      !fluxoRevisao &&
       questaoAtual === TOTAL_QUESTOES &&
       respostasEstaoCompletas(novasRespostas, questao)
     ) {
@@ -144,11 +165,18 @@ export default function Simulado() {
   }
 
   function marcarRevisao() {
-    if (marcadas.includes(questaoAtual)) {
-      setMarcadas(marcadas.filter((q) => q !== questaoAtual));
-    } else {
-      setMarcadas([...marcadas, questaoAtual]);
-    }
+    if (revisao.pendentes.includes(questao.id)) return;
+    if (revisao.ciclo?.bloqueado || revisao.pendentes.length >= LIMITE_REVISAO) return;
+
+    const pendentes = [...revisao.pendentes, questao.id];
+    const ciclo = pendentes.length === LIMITE_REVISAO
+      ? { totalInicial: LIMITE_REVISAO, revisadas: 0, bloqueado: true }
+      : revisao.ciclo
+        ? { ...revisao.ciclo, totalInicial: revisao.ciclo.totalInicial + 1 }
+        : { totalInicial: pendentes.length, revisadas: 0, bloqueado: false };
+    const atualizado = { pendentes, ciclo };
+    salvarRevisao(atualizado);
+    setRevisao(atualizado);
   }
 
   function proxima() {
@@ -169,7 +197,9 @@ export default function Simulado() {
 
   function finalizar() {
     if (window.confirm("Deseja realmente finalizar o simulado?")) {
-      if (modoEstudo) {
+      if (fluxoRevisao) {
+        navigate("/favoritas");
+      } else if (modoEstudo) {
         navigate("/dashboard");
       } else {
         navigate("/relatorio-exame", { state: { resultado: calcularResultadoExame() } });
@@ -221,6 +251,12 @@ export default function Simulado() {
         </div>
       </header>
 
+      {revisaoBloqueada && !fluxoRevisao && (
+        <p className="mensagemLimiteRevisao">
+          Limite de 180 questões para revisão atingido. Revise algumas questões para liberar novas marcações.
+        </p>
+      )}
+
       <div className="barra">
         <div
           className="barraInterna"
@@ -243,11 +279,12 @@ export default function Simulado() {
 
             <button
               className={
-                marcadas.includes(questaoAtual)
+                questaoPendente
                   ? "btnRevisao ativo"
                   : "btnRevisao"
               }
               onClick={marcarRevisao}
+              disabled={questaoPendente || revisaoBloqueada}
             >
               ⭐ Marcar para Revisão
             </button>
@@ -298,6 +335,14 @@ export default function Simulado() {
               Voltar à Tela Principal
             </button>
 
+            <button
+              className="btnQuestoesRevisadas"
+              onClick={() => navigate("/favoritas")}
+              disabled={revisao.pendentes.length === 0}
+            >
+              Questões Revisadas
+            </button>
+
             {modoEstudo && (
               <button
                 className="btnAnalise"
@@ -322,7 +367,7 @@ export default function Simulado() {
               className="btnFinalizar"
               onClick={finalizar}
             >
-              Finalizar Exame
+              {fluxoRevisao ? "Voltar à Revisão" : "Finalizar Exame"}
             </button>
 
           </div>
@@ -347,7 +392,7 @@ export default function Simulado() {
                 classe += " respondida";
               }
 
-              if (marcadas.includes(numero)) {
+              if (revisao.pendentes.includes(questoes[numero - 1]?.id)) {
                 classe += " revisao";
               }
 

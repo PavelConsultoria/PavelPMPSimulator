@@ -60,7 +60,7 @@ export default function NovoSimulado() {
 
           <button className="navItem" type="button" onClick={() => navigate("/favoritas")}>
             <span className="navIcon">⭐</span>
-            <span>Favoritas</span>
+            <span>Revisão</span>
           </button>
 
           <button className="navItem" type="button" onClick={() => navigate("/historico")}>
@@ -300,12 +300,11 @@ export default function NovoSimulado() {
               >
                 <option>Todas as questões</option>
                 <option>Apenas Erro</option>
-                <option>Favoritas</option>
                 <option>Revisão</option>
               </select>
 
               <small>
-                Todas, Apenas Erro, Favoritas
+                Todas, Apenas Erro, Revisão
                 <br />
                 ou Revisão.
               </small>

@@ -46,7 +46,7 @@ export default function Home() {
 
           <Link to="/favoritas" className="menu">
             ⭐
-            <span>Favoritas</span>
+            <span>Revisão</span>
           </Link>
 
           <Link to="/desempenho" className="menu">

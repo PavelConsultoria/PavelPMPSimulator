@@ -161,6 +161,23 @@
     line-height: 1.55;
 }
 
+.btnRevisao:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.mensagemLimiteRevisao {
+    width: 100%;
+    max-width: 1180px;
+    margin: -8px auto 12px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: #fff4c2;
+    color: #7a5b00;
+    font-size: 14px;
+    font-weight: 600;
+}
+
 .conteudoQuestao {
     flex: 0 0 auto;
     min-height: auto;
@@ -248,6 +265,7 @@
 .btnMenuPrincipal,
 .btnProxima,
 .btnAnalise,
+.btnQuestoesRevisadas,
 .btnFinalizar {
     min-height: 42px;
     border-radius: 10px;
@@ -310,6 +328,21 @@
 .btnAnalise:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+.btnQuestoesRevisadas {
+    border: 1px solid #22c55e;
+    background: #22c55e;
+    color: #ffffff;
+}
+
+.btnQuestoesRevisadas:hover:not(:disabled) {
+    background: #15803d;
+}
+
+.btnQuestoesRevisadas:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
 }
 
 .painelDireito {
@@ -442,6 +475,7 @@
     .btnMenuPrincipal,
     .btnProxima,
     .btnAnalise,
+    .btnQuestoesRevisadas,
     .btnFinalizar {
         width: 100%;
         justify-self: stretch;

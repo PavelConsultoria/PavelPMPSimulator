@@ -28,7 +28,7 @@ export default function Ajuda() {
 
           <Link to="/favoritas" className="menu">
             ⭐
-            <span>Favoritas</span>
+            <span>Revisão</span>
           </Link>
 
           <Link to="/relatorios" className="menu">
