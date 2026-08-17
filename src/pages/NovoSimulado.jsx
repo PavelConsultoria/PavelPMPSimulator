@@ -29,7 +29,7 @@ export default function NovoSimulado() {
       modoTreinamento,
     });
 
-    navigate("/simulado");
+    navigate("/simulado", { state: { quantidade, modo } });
   }
 
   return (

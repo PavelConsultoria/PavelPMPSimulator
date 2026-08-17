@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./Simulado.css";
 import { carregarQuestoesExcel, embaralharQuestoes } from "../data/carregarQuestoesExcel";
 
 export default function Simulado() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [mostrarContato, setMostrarContato] = useState(false);
 
   const TEMPO_TOTAL = 230 * 60;
+  const quantidadeSelecionada = location.state?.quantidade || 180;
+  const modoSelecionado = location.state?.modo || "Exame";
 
   const [questoes, setQuestoes] = useState([]);
   const [erroCarregamento, setErroCarregamento] = useState(null);
@@ -26,7 +29,9 @@ export default function Simulado() {
     carregarQuestoesExcel()
       .then((questoesCarregadas) => {
         if (ativo) {
-          setQuestoes(embaralharQuestoes(questoesCarregadas));
+          setQuestoes(
+            embaralharQuestoes(questoesCarregadas).slice(0, quantidadeSelecionada)
+          );
         }
       })
       .catch((erro) => {
@@ -38,7 +43,7 @@ export default function Simulado() {
     return () => {
       ativo = false;
     };
-  }, []);
+  }, [quantidadeSelecionada]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -166,7 +171,7 @@ export default function Simulado() {
     <div className="simuladoPage">
       <header className="headerSimulado">
         <div>
-          <h1>VERSÃO DE DEMONSTRAÇÃO</h1>
+          <h1>MODO {modoSelecionado.toUpperCase()}</h1>
 
           <span>
             Questão {questaoAtual} de {TOTAL_QUESTOES}
