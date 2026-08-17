@@ -3,11 +3,14 @@
    ========================= */
 
 .simuladoPage {
-    min-height: 100vh;
+    height: 100vh;
     background: #eef3f8;
     color: #1e3a5f;
     padding: 20px 24px 28px;
     font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .simuladoPage *,
@@ -28,6 +31,7 @@
     justify-content: space-between;
     gap: 20px;
     box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+    flex-shrink: 0;
 }
 
 .headerSimulado h1 {
@@ -66,6 +70,7 @@
     background: #dbe7f5;
     border-radius: 999px;
     overflow: hidden;
+    flex-shrink: 0;
 }
 
 .barraInterna {
@@ -83,6 +88,8 @@
     grid-template-columns: minmax(0, 3fr) minmax(260px, 1fr);
     gap: 22px;
     align-items: stretch;
+    flex: 1;
+    min-height: 0;
 }
 
 .questaoCard,
@@ -94,6 +101,9 @@
 
 .questaoCard {
     padding: 24px 28px 22px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
 .cabecalhoQuestao {
@@ -109,6 +119,22 @@
     color: #1e3a5f;
     font-size: 27px;
     font-weight: 800;
+}
+
+.tituloQuestao {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tipoQuestao {
+    border-radius: 10px;
+    background: #edf2f7;
+    color: #1f2937;
+    padding: 7px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
 }
 
 .btnRevisao {
@@ -134,6 +160,13 @@
     color: #1f2937;
     font-size: 17px;
     line-height: 1.55;
+}
+
+.conteudoQuestao {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 4px;
 }
 
 .alternativas {
@@ -189,21 +222,24 @@
 }
 
 .acoes {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
     align-items: center;
     gap: 12px;
     margin-top: 22px;
+    flex-shrink: 0;
 }
 
 .acoesEstudo {
-    grid-template-columns: 1fr auto auto 1fr;
+    justify-content: space-between;
 }
 
 .btnAnterior,
 .btnMenuPrincipal,
 .btnProxima,
-.btnAnalise {
+.btnAnalise,
+.btnFinalizar {
     min-height: 48px;
     border-radius: 10px;
     padding: 10px 16px;
@@ -242,7 +278,6 @@
 }
 
 .btnProxima {
-    justify-self: end;
     border: 1px solid #1769e8;
     background: #1769e8;
     color: #ffffff;
@@ -268,15 +303,11 @@
     cursor: not-allowed;
 }
 
-.acoesEstudo .btnProxima {
-    grid-column: 4;
-}
-
 .painelDireito {
     padding: 24px 22px;
     display: flex;
     flex-direction: column;
-    min-height: 100%;
+    min-height: 0;
 }
 
 .painelDireito h3 {
@@ -287,9 +318,14 @@
 }
 
 .gradeQuestoes {
+    flex: 1;
+    min-height: 0;
     display: grid;
     grid-template-columns: repeat(5, minmax(36px, 1fr));
     gap: 10px;
+    align-content: start;
+    overflow-y: auto;
+    padding-right: 4px;
 }
 
 .numeroQuestao {
@@ -327,8 +363,6 @@
 }
 
 .btnFinalizar {
-    width: 100%;
-    margin-top: auto;
     padding: 13px 16px;
     min-height: 48px;
     border: 0;
@@ -348,7 +382,10 @@
 
 @media (max-width: 900px) {
     .simuladoPage {
+        height: auto;
+        min-height: 100vh;
         padding: 14px;
+        overflow: visible;
     }
 
     .conteudoSimulado {
@@ -359,9 +396,6 @@
         min-height: auto;
     }
 
-    .btnFinalizar {
-        margin-top: 20px;
-    }
 }
 
 @media (max-width: 650px) {
@@ -390,22 +424,15 @@
     }
 
     .acoes {
-        grid-template-columns: 1fr;
-    }
-
-    .acoesEstudo {
-        grid-template-columns: 1fr;
+        flex-direction: column;
     }
 
     .btnAnterior,
     .btnMenuPrincipal,
     .btnProxima,
-    .btnAnalise {
+    .btnAnalise,
+    .btnFinalizar {
         width: 100%;
         justify-self: stretch;
-    }
-
-    .acoesEstudo .btnProxima {
-        grid-column: auto;
     }
 }

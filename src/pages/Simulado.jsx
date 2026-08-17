@@ -232,9 +232,14 @@ export default function Simulado() {
         <div className="questaoCard">
 
           <div className="cabecalhoQuestao">
-            <h2>
-              Questão {questaoAtual}
-            </h2>
+            <div className="tituloQuestao">
+              <h2>
+                Questão {questaoAtual}
+              </h2>
+              <span className="tipoQuestao">
+                {questao.corretas.length > 1 ? "MULTIPLE CHOICE" : "SINGLE CHOICE"}
+              </span>
+            </div>
 
             <button
               className={
@@ -248,11 +253,12 @@ export default function Simulado() {
             </button>
           </div>
 
-          <p className="enunciado">
-            {questao.enunciado}
-          </p>
+          <div className="conteudoQuestao">
+            <p className="enunciado">
+              {questao.enunciado}
+            </p>
 
-          <div className="alternativas">
+            <div className="alternativas">
             {questao.alternativas.map((alt, indice) => (
               <button
                 key={indice}
@@ -272,6 +278,7 @@ export default function Simulado() {
                 </span>
               </button>
             ))}
+            </div>
           </div>
 
           <div className={modoEstudo ? "acoes acoesEstudo" : "acoes"}>
@@ -310,6 +317,13 @@ export default function Simulado() {
                 Próxima ▶
               </button>
             ) : null}
+
+            <button
+              className="btnFinalizar"
+              onClick={finalizar}
+            >
+              Finalizar Exame
+            </button>
 
           </div>
         </div>
@@ -351,13 +365,6 @@ export default function Simulado() {
               );
             })}
           </div>
-
-          <button
-            className="btnFinalizar"
-            onClick={finalizar}
-          >
-            Finalizar Demonstração
-          </button>
         </aside>
       </div>
 
