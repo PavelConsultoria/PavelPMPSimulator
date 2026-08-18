@@ -39,11 +39,6 @@ export default function Home() {
             <span>Banco de Questões</span>
           </Link>
 
-          <Link to="/estatisticas" className="menu">
-            📊
-            <span>Estatísticas</span>
-          </Link>
-
           <Link to="/favoritas" className="menu">
             ⭐
             <span>Revisão</span>
