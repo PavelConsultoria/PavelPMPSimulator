@@ -19,6 +19,15 @@ export default function NovoSimulado() {
   const [modoTreinamento, setModoTreinamento] = useState("Todas as questões");
   const nomeUsuario = localStorage.getItem("usuario") || "Usuário";
   const inicialUsuario = nomeUsuario.trim().charAt(0).toUpperCase() || "U";
+  const modoExame = modo === "Exame";
+
+  function alterarModo(novoModo) {
+    setModo(novoModo);
+
+    if (novoModo === "Exame") {
+      setQuantidade(180);
+    }
+  }
 
   function iniciarSimulado() {
     console.log({
@@ -112,6 +121,28 @@ export default function NovoSimulado() {
 
           <div className="formulario">
             <div className="campo">
+              <label htmlFor="modo">
+                <span className="campoIcon">⌑</span>
+                Modo
+              </label>
+
+              <select
+                id="modo"
+                value={modo}
+                onChange={(e) => alterarModo(e.target.value)}
+              >
+                <option>Exame</option>
+                <option>Estudo</option>
+              </select>
+
+              <small>
+                Simulado com tempo e condições
+                <br />
+                semelhantes à prova.
+              </small>
+            </div>
+
+            <div className="campo">
               <label htmlFor="quantidade">
                 <span className="campoIcon">☷</span>
                 Quantidade de Questões
@@ -121,6 +152,7 @@ export default function NovoSimulado() {
                 id="quantidade"
                 value={quantidade}
                 onChange={(e) => setQuantidade(Number(e.target.value))}
+                disabled={modoExame}
               >
                 <option value={10}>10</option>
                 <option value={20}>20</option>
@@ -146,6 +178,7 @@ export default function NovoSimulado() {
                 id="dominio"
                 value={dominio}
                 onChange={(e) => setDominio(e.target.value)}
+                disabled={modoExame}
               >
                 <option>Todos</option>
                 <option>People</option>
@@ -176,6 +209,7 @@ export default function NovoSimulado() {
                 id="dificuldade"
                 value={dificuldade}
                 onChange={(e) => setDificuldade(e.target.value)}
+                disabled={modoExame}
               >
                 <option>Todas</option>
                 <option>Fácil</option>
@@ -192,28 +226,6 @@ export default function NovoSimulado() {
             </div>
 
             <div className="campo">
-              <label htmlFor="modo">
-                <span className="campoIcon">⌑</span>
-                Modo
-              </label>
-
-              <select
-                id="modo"
-                value={modo}
-                onChange={(e) => setModo(e.target.value)}
-              >
-                <option>Exame</option>
-                <option>Estudo</option>
-              </select>
-
-              <small>
-                Simulado com tempo e condições
-                <br />
-                semelhantes à prova.
-              </small>
-            </div>
-
-            <div className="campo">
               <label htmlFor="tipoResposta">
                 <span className="campoIcon">▣</span>
                 Tipo de Resposta
@@ -223,6 +235,7 @@ export default function NovoSimulado() {
                 id="tipoResposta"
                 value={tipoResposta}
                 onChange={(e) => setTipoResposta(e.target.value)}
+                disabled={modoExame}
               >
                 <option>Todos os tipos</option>
                 <option>Resposta única</option>
@@ -246,6 +259,7 @@ export default function NovoSimulado() {
                 id="abordagem"
                 value={abordagem}
                 onChange={(e) => setAbordagem(e.target.value)}
+                disabled={modoExame}
               >
                 <option>Todas</option>
                 <option>Preditiva</option>
@@ -270,6 +284,7 @@ export default function NovoSimulado() {
                 id="areaConhecimento"
                 value={areaConhecimento}
                 onChange={(e) => setAreaConhecimento(e.target.value)}
+                disabled={modoExame}
               >
                 <option>Todas</option>
                 <option>Integração</option>
@@ -297,6 +312,7 @@ export default function NovoSimulado() {
                 id="modoTreinamento"
                 value={modoTreinamento}
                 onChange={(e) => setModoTreinamento(e.target.value)}
+                disabled={modoExame}
               >
                 <option>Todas as questões</option>
                 <option>Apenas Erro</option>
