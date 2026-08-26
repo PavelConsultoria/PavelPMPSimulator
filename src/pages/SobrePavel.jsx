@@ -1,6 +1,9 @@
 import "./SobrePavel.css";
+import { useNavigate } from "react-router-dom";
+import karolinaPavel from "../assets/images/karolina_pavel.png";
 
 export default function SobrePavel() {
+  const navigate = useNavigate();
   return (
     <main className="sobrePavelPage">
       <div className="sobrePavelHeader">
@@ -9,6 +12,10 @@ export default function SobrePavel() {
       </div>
 
       <section className="sobrePavelCard">
+
+        <div className="sobrePavelImagem">
+          <img src={karolinaPavel} alt="Karolina Poznyakov, Pavel Consultoria" />
+        </div>
 
         <div className="sobrePavelTitle">
           <h2>
@@ -133,6 +140,10 @@ export default function SobrePavel() {
       <footer className="sobrePavelFooter">
         Pavel Consultoria • Engenharia • Planejamento • Gestão de Projetos
       </footer>
+
+      <button type="button" className="sobrePavelVoltar" onClick={() => navigate(-1)}>
+        VOLTAR
+      </button>
     </main>
   );
 }

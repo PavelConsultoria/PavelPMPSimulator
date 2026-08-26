@@ -34,11 +34,6 @@ export default function Home() {
             <span>Novo Simulado</span>
           </Link>
 
-          <Link to="/banco-questoes" className="menu">
-            📚
-            <span>Banco de Questões</span>
-          </Link>
-
           <Link to="/favoritas" className="menu">
             ⭐
             <span>Revisão</span>

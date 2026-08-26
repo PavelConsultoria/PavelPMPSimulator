@@ -151,7 +151,7 @@ export default function NovoSimulado() {
               <select
                 id="quantidade"
                 value={quantidade}
-                onChange={(e) => setQuantidade(Number(e.target.value))}
+                onChange={(e) => setQuantidade(e.target.value === "Case Study" ? "Case Study" : Number(e.target.value))}
                 disabled={modoExame}
               >
                 <option value={10}>10</option>
@@ -159,6 +159,7 @@ export default function NovoSimulado() {
                 <option value={50}>50</option>
                 <option value={100}>100</option>
                 <option value={180}>180</option>
+                <option value="Case Study">Case Study</option>
               </select>
 
               <small>

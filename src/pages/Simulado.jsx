@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./Simulado.css";
-import { carregarQuestoesExcel, embaralharQuestoes } from "../data/carregarQuestoesExcel";
+import { agruparCaseStudies, carregarQuestoesExcel, embaralharQuestoes } from "../data/carregarQuestoesExcel";
 import AnaliseRespostas from "./AnaliseRespostas";
 import { carregarRevisao, concluirQuestaoRevisao, LIMITE_REVISAO, salvarRevisao } from "./Favoritas";
 
@@ -20,6 +20,7 @@ export default function Simulado() {
   // ROTINA TEMPORÁRIA: ativada exclusivamente por /novo-simulado?teste=1.
   const rotinaTeste = location.state?.rotinaTeste === true;
   const quantidadeEfetiva = rotinaTeste ? 5 : quantidadeSelecionada;
+  const estudoCaseStudy = !fluxoRevisao && modoSelecionado === "Estudo" && quantidadeSelecionada === "Case Study";
 
   const [questoes, setQuestoes] = useState([]);
   const [erroCarregamento, setErroCarregamento] = useState(null);
@@ -37,6 +38,7 @@ export default function Simulado() {
   const TOTAL_QUESTOES = questoes.length;
   const questao = questoes[questaoAtual - 1];
   const questaoPendente = revisao.pendentes.includes(questao?.id);
+  const indiceNoCase = questoes.filter((item) => item.caseStudy?.id === questao?.caseStudy?.id).indexOf(questao) + 1;
 
   useEffect(() => {
     let ativo = true;
@@ -47,6 +49,9 @@ export default function Simulado() {
           if (fluxoRevisao) {
             const porId = new Map(questoesCarregadas.map((item) => [item.id, item]));
             setQuestoes(idsRevisao.map((id) => porId.get(id)).filter(Boolean));
+          } else if (estudoCaseStudy) {
+            const casesEmbaralhados = embaralharQuestoes(agruparCaseStudies(questoesCarregadas));
+            setQuestoes(casesEmbaralhados.flatMap((caseStudy) => caseStudy.questoes));
           } else {
             setQuestoes(embaralharQuestoes(questoesCarregadas).slice(0, quantidadeEfetiva));
           }
@@ -61,7 +66,7 @@ export default function Simulado() {
     return () => {
       ativo = false;
     };
-  }, [fluxoRevisao, idsRevisao, quantidadeEfetiva]);
+  }, [fluxoRevisao, idsRevisao, quantidadeEfetiva, estudoCaseStudy]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -238,11 +243,11 @@ export default function Simulado() {
     <div className="simuladoPage">
       <header className="headerSimulado">
         <div>
-          <h1>MODO {modoSelecionado.toUpperCase()}</h1>
+          <h1>{estudoCaseStudy ? "CASE STUDY" : `MODO ${modoSelecionado.toUpperCase()}`}</h1>
 
           <span>
             {rotinaTeste ? "TESTE TEMPORÁRIO — " : ""}
-            Questão {questaoAtual} de {TOTAL_QUESTOES}
+            {estudoCaseStudy ? `Questão ${indiceNoCase} de ${questao.caseStudy.quantidadeQuestoes}` : `Questão ${questaoAtual} de ${TOTAL_QUESTOES}`}
           </span>
         </div>
 
@@ -267,11 +272,19 @@ export default function Simulado() {
       <div className="conteudoSimulado">
         <div className="questaoCard">
 
+          {estudoCaseStudy && (
+            <section className="contextoCaseStudy">
+              <h2>CASE STUDY</h2>
+              <p>{questao.caseStudy.contexto}</p>
+            </section>
+          )}
+
           <div className="cabecalhoQuestao">
             <div className="tituloQuestao">
               <h2>
-                Questão {questaoAtual}
+                {estudoCaseStudy ? `Questão ${indiceNoCase} de ${questao.caseStudy.quantidadeQuestoes}` : `Questão ${questaoAtual}`}
               </h2>
+              {questao.caseStudy && !estudoCaseStudy && <span className="identificacaoCaseStudy">CASE STUDY</span>}
               <span className="tipoQuestao">
                 {questao.corretas.length > 1 ? "MULTIPLE CHOICE" : "SINGLE CHOICE"}
               </span>

@@ -33,6 +33,19 @@
   border-radius: 14px;
 }
 
+.sobrePavelImagem {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.sobrePavelImagem img {
+  display: block;
+  width: min(100%, 360px);
+  height: auto;
+  border-radius: 50%;
+}
+
 .sobrePavelTitle {
   text-align: center;
 }
@@ -165,6 +178,22 @@
   text-align: center;
   color: #6b7280;
   font-size: 11px;
+}
+
+.sobrePavelVoltar {
+  display: block;
+  margin: 18px auto 0;
+  padding: 11px 26px;
+  border: 0;
+  border-radius: 8px;
+  background: #22c55e;
+  color: #0b1510;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.sobrePavelVoltar:hover {
+  background: #16a34a;
 }
 
 @media (max-width: 700px) {
