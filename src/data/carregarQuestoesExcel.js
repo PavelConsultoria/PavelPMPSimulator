@@ -14,9 +14,14 @@ function normalizarRespostasCorretas(respostaCorreta) {
   return letras.map((letra) => INDICE_POR_ALTERNATIVA[letra]);
 }
 
+function obterValorPorPrefixo(linha, prefixo) {
+  const campo = Object.keys(linha).find((nome) => nome.startsWith(prefixo));
+  return campo ? linha[campo] : undefined;
+}
+
 function validarQuestao(linha) {
   const camposObrigatorios = [
-    "IDQuestão",
+    "IDQuest",
     "Enunciado",
     "AlternativaA",
     "AlternativaB",
@@ -27,7 +32,10 @@ function validarQuestao(linha) {
   ];
 
   const campoAusente = camposObrigatorios.find(
-    (campo) => linha[campo] === undefined || linha[campo] === null || linha[campo] === ""
+    (campo) => {
+      const valor = obterValorPorPrefixo(linha, campo);
+      return valor === undefined || valor === null || valor === "";
+    }
   );
 
   if (campoAusente) {
@@ -43,7 +51,7 @@ function validarQuestao(linha) {
 }
 
 function extrairIdCase(enunciado) {
-  return String(enunciado || "").match(/^CASE STUDY\s+(CS\d+)\s+—/i)?.[1] || null;
+  return String(enunciado || "").match(/^CASE STUDY\s+(CS\d+)(?:\s|$)/i)?.[1] || null;
 }
 
 function converterQuestao(linha, casesPorId) {
@@ -51,17 +59,18 @@ function converterQuestao(linha, casesPorId) {
 
   const caseId = extrairIdCase(linha.Enunciado);
   const caseStudy = caseId ? casesPorId.get(caseId) : null;
+  const idQuestao = obterValorPorPrefixo(linha, "IDQuest");
 
   if (caseId && !caseStudy) {
     throw new Error(`A questão ${linha.IDQuestão} referencia o Case Study ${caseId}, mas o contexto não foi encontrado.`);
   }
 
   const enunciado = caseStudy
-    ? String(linha.Enunciado).replace(/^CASE STUDY\s+CS\d+\s+—[^\r\n]*(?:\r?\n){2}Contexto:\s*[\s\S]*?(?:\r?\n){2}(?=Situação:)/i, "")
+    ? String(linha.Enunciado).replace(/^CASE STUDY\s+CS\d+[^\r\n]*(?:\r?\n){2}Contexto:\s*[\s\S]*?(?:\r?\n){2}(?=Situa)/i, "")
     : linha.Enunciado;
 
   return {
-    id: linha.IDQuestão,
+    id: idQuestao,
     enunciado,
     alternativas: [
       linha.AlternativaA,
@@ -71,8 +80,8 @@ function converterQuestao(linha, casesPorId) {
     ],
     corretas: normalizarRespostasCorretas(linha.RespostaCorreta),
     tipoResposta: linha.TipoResposta,
-    instrucao: linha.Instrução,
-    explicacao: linha.Explicação,
+    instrucao: obterValorPorPrefixo(linha, "Instru"),
+    explicacao: obterValorPorPrefixo(linha, "Explica"),
     justificativas: [
       linha.JustificativaA,
       linha.JustificativaB,
@@ -86,11 +95,11 @@ function converterQuestao(linha, casesPorId) {
     tema: linha.Tema,
     abordagem: linha.Abordagem,
     fonte: linha.Fonte,
-    comoPMIPensa: linha.ComoPMIPensa,
+    comoPMIPensa: obterValorPorPrefixo(linha, "Como"),
     status: linha.Status,
     pegadinha: linha.Pegadinha,
     palavrasChave: linha["Palavra chave"],
-    tempoQuestao: linha["Tempo de questão"],
+    tempoQuestao: obterValorPorPrefixo(linha, "Tempo de quest"),
     caseStudy,
   };
 }
@@ -107,7 +116,7 @@ function carregarCases(planilha) {
   return new Map(cases.map((caseStudy) => [caseStudy.IDCase, {
     id: caseStudy.IDCase,
     contexto: caseStudy.Contexto,
-    quantidadeQuestoes: caseStudy["Quantidade de Questões"],
+    quantidadeQuestoes: obterValorPorPrefixo(caseStudy, "Quantidade de Quest"),
   }]));
 }
 
@@ -120,7 +129,8 @@ export async function carregarQuestoesExcel() {
 
   const arquivo = await resposta.arrayBuffer();
   const planilha = XLSX.read(arquivo, { type: "array" });
-  const abaQuestoes = planilha.Sheets.Questões;
+  const nomeAbaQuestoes = planilha.SheetNames.find((nome) => nome.startsWith("Quest"));
+  const abaQuestoes = planilha.Sheets[nomeAbaQuestoes];
 
   if (!abaQuestoes) {
     throw new Error("A aba Questões não foi encontrada no banco de dados.");
