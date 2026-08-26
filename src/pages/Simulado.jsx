@@ -216,11 +216,24 @@ export default function Simulado() {
 
   if (erroCarregamento) {
     console.error(erroCarregamento);
-    return null;
+    return (
+      <div className="simuladoPage">
+        <main className="questaoCard" style={{ maxWidth: "720px", margin: "80px auto" }}>
+          <h1>Não foi possível carregar o simulado.</h1>
+          <p>Tente atualizar a página. Se o problema persistir, volte à tela principal e inicie o simulado novamente.</p>
+        </main>
+      </div>
+    );
   }
 
   if (!questao) {
-    return null;
+    return (
+      <div className="simuladoPage">
+        <main className="questaoCard" style={{ maxWidth: "720px", margin: "80px auto" }}>
+          <p>Carregando simulado...</p>
+        </main>
+      </div>
+    );
   }
 
   if (mostrarAnalise && modoEstudo) {
