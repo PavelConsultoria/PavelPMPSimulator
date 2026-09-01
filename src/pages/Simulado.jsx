@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./Simulado.css";
-import { agruparCaseStudies, carregarQuestoesExcel, embaralharQuestoes } from "../data/carregarQuestoesExcel";
+import { agruparCaseStudies, carregarQuestoesExcel, embaralharAlternativas, embaralharQuestoes } from "../data/carregarQuestoesExcel";
 import AnaliseRespostas from "./AnaliseRespostas";
 import { carregarRevisao, concluirQuestaoRevisao, LIMITE_REVISAO, salvarRevisao } from "./Favoritas";
 
@@ -26,11 +26,13 @@ export default function Simulado() {
   const [erroCarregamento, setErroCarregamento] = useState(null);
   const [tempoRestante, setTempoRestante] = useState(TEMPO_TOTAL);
   const [questaoAtual, setQuestaoAtual] = useState(1);
+  const [maiorQuestaoAcessada, setMaiorQuestaoAcessada] = useState(1);
   const [respostas, setRespostas] = useState({});
   const [revisao, setRevisao] = useState(carregarRevisao);
   const [revisadasNestaSessao, setRevisadasNestaSessao] = useState([]);
   const [mostrarMensagem, setMostrarMensagem] = useState(false);
   const [mostrarAnalise, setMostrarAnalise] = useState(false);
+  const [estudoFinalizado, setEstudoFinalizado] = useState(false);
 
   const modoEstudo = modoSelecionado.toLowerCase() === "estudo";
   const revisaoBloqueada = Boolean(revisao.ciclo?.bloqueado);
@@ -39,6 +41,10 @@ export default function Simulado() {
   const questao = questoes[questaoAtual - 1];
   const questaoPendente = revisao.pendentes.includes(questao?.id);
   const indiceNoCase = questoes.filter((item) => item.caseStudy?.id === questao?.caseStudy?.id).indexOf(questao) + 1;
+  const casesDaSessao = estudoCaseStudy ? agruparCaseStudies(questoes) : [];
+  const indiceCaseAtual = estudoCaseStudy
+    ? casesDaSessao.findIndex((item) => item.id === questao?.caseStudy?.id) + 1
+    : 0;
 
   useEffect(() => {
     let ativo = true;
@@ -48,12 +54,12 @@ export default function Simulado() {
         if (ativo) {
           if (fluxoRevisao) {
             const porId = new Map(questoesCarregadas.map((item) => [item.id, item]));
-            setQuestoes(idsRevisao.map((id) => porId.get(id)).filter(Boolean));
+            setQuestoes(idsRevisao.map((id) => porId.get(id)).filter(Boolean).map(embaralharAlternativas));
           } else if (estudoCaseStudy) {
             const casesEmbaralhados = embaralharQuestoes(agruparCaseStudies(questoesCarregadas));
-            setQuestoes(casesEmbaralhados.flatMap((caseStudy) => caseStudy.questoes));
+            setQuestoes(casesEmbaralhados.flatMap((caseStudy) => caseStudy.questoes).map(embaralharAlternativas));
           } else {
-            setQuestoes(embaralharQuestoes(questoesCarregadas).slice(0, quantidadeEfetiva));
+            setQuestoes(embaralharQuestoes(questoesCarregadas).slice(0, quantidadeEfetiva).map(embaralharAlternativas));
           }
         }
       })
@@ -189,7 +195,9 @@ export default function Simulado() {
       questaoAtual < TOTAL_QUESTOES &&
       respostasEstaoCompletas(respostas[questaoAtual], questao)
     ) {
-      setQuestaoAtual(questaoAtual + 1);
+      const proximaQuestao = questaoAtual + 1;
+      setQuestaoAtual(proximaQuestao);
+      setMaiorQuestaoAcessada((maiorAtual) => Math.max(maiorAtual, proximaQuestao));
     }
   }
 
@@ -201,11 +209,12 @@ export default function Simulado() {
   }
 
   function finalizar() {
-    if (window.confirm("Deseja realmente finalizar o simulado?")) {
+    const nomeSessao = modoEstudo ? "estudo" : "simulado";
+    if (window.confirm(`Deseja realmente finalizar o ${nomeSessao}?`)) {
       if (fluxoRevisao) {
         navigate("/favoritas");
       } else if (modoEstudo) {
-        navigate("/dashboard");
+        setEstudoFinalizado(true);
       } else {
         navigate("/relatorio-exame", { state: { resultado: calcularResultadoExame() } });
       }
@@ -246,9 +255,35 @@ export default function Simulado() {
         onVoltar={() => setMostrarAnalise(false)}
         onProxima={() => {
           setMostrarAnalise(false);
-          setQuestaoAtual(questaoAtual + 1);
+          const proximaQuestao = questaoAtual + 1;
+          setQuestaoAtual(proximaQuestao);
+          setMaiorQuestaoAcessada((maiorAtual) => Math.max(maiorAtual, proximaQuestao));
         }}
       />
+    );
+  }
+
+  if (estudoFinalizado && modoEstudo) {
+    const acertos = calcularAcertos();
+    const percentual = TOTAL_QUESTOES ? Math.round((acertos / TOTAL_QUESTOES) * 100) : 0;
+    return (
+      <div className="analisePage">
+        <header className="headerAnalise"><h1>RESULTADO DO ESTUDO</h1></header>
+        <main className="analiseCard">
+          <section className="analiseResultado">
+            <div><span>Acertos</span><strong>{acertos} de {TOTAL_QUESTOES}</strong></div>
+            <div><span>Aproveitamento</span><strong>{percentual}%</strong></div>
+          </section>
+          <section className="analiseSecao">
+            <h2>Estudo concluído</h2>
+            <p>Você pode voltar às questões para consultar a análise das respostas ou retornar à tela principal.</p>
+          </section>
+          <footer className="acoesAnalise">
+            <button className="btnAnterior" type="button" onClick={() => setEstudoFinalizado(false)}>◀ Voltar às questões</button>
+            <button className="btnProxima" type="button" onClick={() => navigate("/dashboard")}>Voltar à Tela Principal</button>
+          </footer>
+        </main>
+      </div>
     );
   }
 
@@ -260,7 +295,9 @@ export default function Simulado() {
 
           <span>
             {rotinaTeste ? "TESTE TEMPORÁRIO — " : ""}
-            {estudoCaseStudy ? `Questão ${indiceNoCase} de ${questao.caseStudy.quantidadeQuestoes}` : `Questão ${questaoAtual} de ${TOTAL_QUESTOES}`}
+            {estudoCaseStudy
+              ? `Case Study ${indiceCaseAtual} de ${casesDaSessao.length} — Questão ${indiceNoCase} de ${questao.caseStudy.quantidadeQuestoes}`
+              : `Questão ${questaoAtual} de ${TOTAL_QUESTOES}`}
           </span>
         </div>
 
@@ -283,9 +320,9 @@ export default function Simulado() {
       </div>
 
       <div className="conteudoSimulado">
-        <div className="questaoCard">
+        <div className={questao.caseStudy ? "questaoCard questaoCaseStudy" : "questaoCard"}>
 
-          {estudoCaseStudy && (
+          {questao.caseStudy && (
             <section className="contextoCaseStudy">
               <h2>CASE STUDY</h2>
               <p>{questao.caseStudy.contexto}</p>
@@ -393,7 +430,7 @@ export default function Simulado() {
               className="btnFinalizar"
               onClick={finalizar}
             >
-              {fluxoRevisao ? "Voltar à Revisão" : "Finalizar Exame"}
+              {fluxoRevisao ? "Voltar à Revisão" : modoEstudo ? "Finalizar Estudo" : "Finalizar Exame"}
             </button>
 
           </div>
@@ -426,6 +463,7 @@ export default function Simulado() {
                 <button
                   key={numero}
                   className={classe}
+                  disabled={estudoCaseStudy && numero > maiorQuestaoAcessada}
                   onClick={() => {
                     setMostrarMensagem(false);
                     setQuestaoAtual(numero);

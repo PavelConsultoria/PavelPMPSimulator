@@ -25,12 +25,7 @@ export default function Sidebar() {
           <span>Dashboard</span>
         </NavLink>
 
-        <NavLink to="/simulado">
-          🎯
-          <span>Novo Simulado</span>
-        </NavLink>
-
-        <NavLink to="/questoes">
+        <NavLink to="/banco-questoes">
           📚
           <span>Banco de Questões</span>
         </NavLink>

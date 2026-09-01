@@ -177,3 +177,30 @@ export function embaralharQuestoes(questoes) {
 
   return questoesEmbaralhadas;
 }
+
+export function embaralharAlternativas(questao) {
+  const alternativas = questao.alternativas.map((texto, indiceOriginal) => ({
+    texto,
+    justificativa: questao.justificativas?.[indiceOriginal],
+    indiceOriginal,
+  }));
+
+  for (let indice = alternativas.length - 1; indice > 0; indice -= 1) {
+    const indiceAleatorio = Math.floor(Math.random() * (indice + 1));
+    [alternativas[indice], alternativas[indiceAleatorio]] = [
+      alternativas[indiceAleatorio],
+      alternativas[indice],
+    ];
+  }
+
+  return {
+    ...questao,
+    alternativas: alternativas.map((alternativa) => alternativa.texto),
+    justificativas: alternativas.map((alternativa) => alternativa.justificativa),
+    corretas: alternativas
+      .map((alternativa, indiceAtual) => (
+        questao.corretas.includes(alternativa.indiceOriginal) ? indiceAtual : null
+      ))
+      .filter((indice) => indice !== null),
+  };
+}

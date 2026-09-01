@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { carregarQuestoesExcel } from "../data/carregarQuestoesExcel";
 
 export default function BancoQuestoes() {
   const navigate = useNavigate();
@@ -7,30 +8,35 @@ export default function BancoQuestoes() {
   const [busca, setBusca] = useState("");
   const [dominio, setDominio] = useState("Todos");
   const [dificuldade, setDificuldade] = useState("Todas");
+  const [questoes, setQuestoes] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState(null);
 
-  const questoes = [
-    {
-      id: 1,
-      dominio: "Processo",
-      dificuldade: "Média",
-      enunciado:
-        "Um gerente de projeto está liderando um projeto preditivo. Durante a execução, um dos principais interessados solicita uma mudança importante que impactará significativamente o escopo, o custo e o cronograma. O que o gerente de projeto deve fazer PRIMEIRO?",
-    },
-    {
-      id: 2,
-      dominio: "Pessoas",
-      dificuldade: "Fácil",
-      enunciado:
-        "Um membro da equipe apresenta uma dificuldade que pode afetar o andamento do projeto. Qual deve ser a primeira ação do gerente de projeto?",
-    },
-    {
-      id: 3,
-      dominio: "Negócio",
-      dificuldade: "Difícil",
-      enunciado:
-        "Durante a execução do projeto, uma mudança no ambiente organizacional pode afetar os benefícios esperados. O que o gerente de projeto deve fazer?",
-    },
-  ];
+  useEffect(() => {
+    let ativo = true;
+
+    carregarQuestoesExcel()
+      .then((questoesCarregadas) => {
+        if (ativo) setQuestoes(questoesCarregadas);
+      })
+      .catch((erroCarregamento) => {
+        if (ativo) setErro(erroCarregamento);
+      })
+      .finally(() => {
+        if (ativo) setCarregando(false);
+      });
+
+    return () => { ativo = false; };
+  }, []);
+
+  const dominios = useMemo(
+    () => [...new Set(questoes.map((questao) => questao.dominio).filter(Boolean))].sort(),
+    [questoes],
+  );
+  const dificuldades = useMemo(
+    () => [...new Set(questoes.map((questao) => questao.dificuldade).filter(Boolean))].sort(),
+    [questoes],
+  );
 
   const questoesFiltradas = questoes.filter((questao) => {
     const correspondeBusca =
@@ -247,9 +253,7 @@ export default function BancoQuestoes() {
               }}
             >
               <option>Todos</option>
-              <option>Pessoas</option>
-              <option>Processo</option>
-              <option>Negócio</option>
+              {dominios.map((valor) => <option key={valor}>{valor}</option>)}
             </select>
 
             <select
@@ -265,9 +269,7 @@ export default function BancoQuestoes() {
               }}
             >
               <option>Todas</option>
-              <option>Fácil</option>
-              <option>Média</option>
-              <option>Difícil</option>
+              {dificuldades.map((valor) => <option key={valor}>{valor}</option>)}
             </select>
           </div>
 
@@ -289,19 +291,21 @@ export default function BancoQuestoes() {
             <div style={{ textAlign: "center" }}>
               <strong style={{ color: "#bbb" }}>Área:</strong>
               <br />
-              Pessoas, Processo ou Negócio
+              Valores disponíveis no banco publicado
             </div>
 
             <div style={{ textAlign: "center" }}>
               <strong style={{ color: "#bbb" }}>Dificuldade:</strong>
               <br />
-              Fácil, Média ou Difícil
+              Valores disponíveis no banco publicado
             </div>
           </div>
         </div>
 
         {/* LISTA DE QUESTÕES */}
         <div>
+          {carregando && <div style={{ padding: "40px", textAlign: "center", color: "#aaa" }}>Carregando questões...</div>}
+          {erro && <div style={{ padding: "40px", textAlign: "center", color: "#f87171" }}>Não foi possível carregar o banco de questões.</div>}
           {questoesFiltradas.map((questao) => (
             <div
               key={questao.id}
@@ -327,7 +331,7 @@ export default function BancoQuestoes() {
                     fontSize: "20px",
                   }}
                 >
-                  Questão {questao.id}
+                  {questao.caseStudy ? `CASE STUDY — Questão ${questao.id}` : `Questão ${questao.id}`}
                 </strong>
 
                 <div
@@ -375,7 +379,7 @@ export default function BancoQuestoes() {
             </div>
           ))}
 
-          {questoesFiltradas.length === 0 && (
+          {!carregando && !erro && questoesFiltradas.length === 0 && (
             <div
               style={{
                 background: "#171717",
