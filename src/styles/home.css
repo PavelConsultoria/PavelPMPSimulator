@@ -126,8 +126,12 @@ a{
 }
 
 .btnSair .btnSairIcon{
-    flex:0 0 auto;
-    font-size:22px;
+    flex:0 0 22px;
+    width:22px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
     line-height:1;
 }
 
