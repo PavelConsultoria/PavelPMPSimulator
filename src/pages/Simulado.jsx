@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./Simulado.css";
 import { agruparCaseStudies, carregarQuestoesExcel, embaralharAlternativas, embaralharQuestoes } from "../data/carregarQuestoesExcel";
 import AnaliseRespostas from "./AnaliseRespostas";
 import { carregarRevisao, concluirQuestaoRevisao, LIMITE_REVISAO, salvarRevisao } from "./Favoritas";
+import { salvarSessao } from "../data/progresso";
 
 const IDS_REVISAO_VAZIOS = [];
 
@@ -33,6 +34,7 @@ export default function Simulado() {
   const [mostrarMensagem, setMostrarMensagem] = useState(false);
   const [mostrarAnalise, setMostrarAnalise] = useState(false);
   const [estudoFinalizado, setEstudoFinalizado] = useState(false);
+  const sessaoRegistrada = useRef(false);
 
   const modoEstudo = modoSelecionado.toLowerCase() === "estudo";
   const revisaoBloqueada = Boolean(revisao.ciclo?.bloqueado);
@@ -136,6 +138,29 @@ export default function Simulado() {
     return { percentual: Math.round((calcularAcertos() / TOTAL_QUESTOES) * 100), porDominio };
   }
 
+  function registrarSessaoConcluida() {
+    if (sessaoRegistrada.current) return;
+    const respondidas = questoes.filter((item, indice) => respostasEstaoCompletas(respostas[indice + 1], item)).length;
+    const acertos = calcularAcertos();
+    const porDominio = ["People", "Process", "Business Environment"].reduce((resultado, dominio) => {
+      const itens = questoes.map((item, indice) => ({ item, resposta: respostas[indice + 1] })).filter(({ item, resposta }) => item.dominio === dominio && respostasEstaoCompletas(resposta, item));
+      resultado[dominio] = { questoes: itens.length, acertos: itens.filter(({ item, resposta }) => respostaEstaCorreta(resposta, item)).length };
+      return resultado;
+    }, {});
+    salvarSessao({
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      data: new Date().toISOString(),
+      modo: modoEstudo ? "Estudo" : "Exame",
+      questoes: TOTAL_QUESTOES,
+      respondidas,
+      acertos,
+      percentual: respondidas ? Math.round((acertos / respondidas) * 100) : 0,
+      tempoSegundos: TEMPO_TOTAL - tempoRestante,
+      porDominio,
+    });
+    sessaoRegistrada.current = true;
+  }
+
   function selecionarResposta(indice) {
     const respostasAtuais = respostas[questaoAtual] || [];
     let novasRespostas;
@@ -214,8 +239,10 @@ export default function Simulado() {
       if (fluxoRevisao) {
         navigate("/favoritas");
       } else if (modoEstudo) {
+        registrarSessaoConcluida();
         setEstudoFinalizado(true);
       } else {
+        registrarSessaoConcluida();
         navigate("/relatorio-exame", { state: { resultado: calcularResultadoExame() } });
       }
     }
