@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "./NovoSimulado.css";
-import logo from "../assets/images/logo.png";
+import PavelLayout from "../components/PavelLayout";
 
 export default function NovoSimulado() {
   const navigate = useNavigate();
@@ -45,52 +45,7 @@ export default function NovoSimulado() {
   }
 
   return (
-    <div className="novoSimuladoPage">
-      <aside className="novoSimuladoSidebar">
-        <div className="sidebarLogo">
-          <img src={logo} alt="Pavel PMP Simulator" />
-        </div>
-
-        <nav className="sidebarNav">
-          <button className="navItem" type="button" onClick={() => navigate("/simulados")}>
-            <span className="navIcon">📊</span>
-            <span>Simulados Realizados</span>
-          </button>
-
-          <button className="navItem" type="button" onClick={() => navigate("/desempenho")}>
-            <span className="navIcon">📈</span>
-            <span>Desempenho</span>
-          </button>
-
-          <button className="navItem" type="button" onClick={() => navigate("/favoritas")}>
-            <span className="navIcon">⭐</span>
-            <span>Revisão</span>
-          </button>
-
-          <button className="navItem" type="button" onClick={() => navigate("/historico")}>
-            <span className="navIcon">↩</span>
-            <span>Histórico</span>
-          </button>
-
-          <div className="sidebarDivider" />
-
-          <button className="navItem" type="button" onClick={() => navigate("/ajuda")}>
-            <span className="navIcon">❓</span>
-            <span>Ajuda</span>
-          </button>
-
-        </nav>
-
-        <div className="sidebarPromo">
-          <div className="promoIcon">♜</div>
-          <strong>500 QUESTÕES +<br />CASE STUDIES</strong>
-          <span>Questões autorais + 20 estudos de caso</span>
-          <span>100 questões contextualizadas</span>
-          <div className="promoStars">★ ★ ★ ★ ★</div>
-        </div>
-      </aside>
-
-      <main className="novoSimuladoMain">
+    <PavelLayout shellClassName="novoSimuladoPage" contentClassName="novoSimuladoMain" hideHeader>
         <header className="novoSimuladoTopbar">
           <div className="novoSimuladoTitle">
             <h1>Novo Simulado</h1>
@@ -375,7 +330,6 @@ export default function NovoSimulado() {
           <span>♧ &nbsp;500 questões autorais + 20 Case Studies</span>
           <span>◈ &nbsp;Atualizações constantes conforme ECO 2026</span>
         </footer>
-      </main>
-    </div>
+    </PavelLayout>
   );
 }
