@@ -29,11 +29,6 @@ export default function Home() {
             <span>Início</span>
           </Link>
 
-          <Link to="/novo-simulado" className="menu">
-            🎯
-            <span>Novo Simulado</span>
-          </Link>
-
           <Link to="/favoritas" className="menu">
             ⭐
             <span>Revisão</span>

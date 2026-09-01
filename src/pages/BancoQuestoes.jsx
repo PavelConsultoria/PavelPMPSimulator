@@ -2,6 +2,9 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { carregarQuestoesExcel } from "../data/carregarQuestoesExcel";
 
+const DOMINIOS_VALIDOS = ["Business Environment", "People", "Process"];
+const ORDEM_DIFICULDADES = ["Fácil", "Média", "Difícil", "Muito Difícil"];
+
 export default function BancoQuestoes() {
   const navigate = useNavigate();
 
@@ -30,11 +33,17 @@ export default function BancoQuestoes() {
   }, []);
 
   const dominios = useMemo(
-    () => [...new Set(questoes.map((questao) => questao.dominio).filter(Boolean))].sort(),
+    () => {
+      const dominiosDoBanco = new Set(questoes.map((questao) => questao.dominio));
+      return DOMINIOS_VALIDOS.filter((valor) => dominiosDoBanco.has(valor));
+    },
     [questoes],
   );
   const dificuldades = useMemo(
-    () => [...new Set(questoes.map((questao) => questao.dificuldade).filter(Boolean))].sort(),
+    () => {
+      const dificuldadesDoBanco = new Set(questoes.map((questao) => questao.dificuldade));
+      return ORDEM_DIFICULDADES.filter((valor) => dificuldadesDoBanco.has(valor));
+    },
     [questoes],
   );
 

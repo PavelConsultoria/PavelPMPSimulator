@@ -52,11 +52,6 @@ export default function NovoSimulado() {
         </div>
 
         <nav className="sidebarNav">
-          <button className="navItem active" type="button">
-            <span className="navIcon">🎯</span>
-            <span>Novo Simulado</span>
-          </button>
-
           <button className="navItem" type="button" onClick={() => navigate("/simulados")}>
             <span className="navIcon">📊</span>
             <span>Simulados Realizados</span>
@@ -88,9 +83,9 @@ export default function NovoSimulado() {
 
         <div className="sidebarPromo">
           <div className="promoIcon">♜</div>
-          <strong>500 QUESTÕES</strong>
-          <span>Autorais e sem repetição</span>
-          <span>Alinhadas ao PMP 2026</span>
+          <strong>500 QUESTÕES +<br />CASE STUDIES</strong>
+          <span>Questões autorais + 20 estudos de caso</span>
+          <span>100 questões contextualizadas</span>
           <div className="promoStars">★ ★ ★ ★ ★</div>
         </div>
       </aside>
@@ -377,7 +372,7 @@ export default function NovoSimulado() {
           <span>
             ⚒ &nbsp;Baseado no ECO PMP® 2026 e no PMBOK® Guide – 8ª Edição
           </span>
-          <span>♧ &nbsp;500 questões autorais e sem repetição</span>
+          <span>♧ &nbsp;500 questões autorais + 20 Case Studies</span>
           <span>◈ &nbsp;Atualizações constantes conforme ECO 2026</span>
         </footer>
       </main>
