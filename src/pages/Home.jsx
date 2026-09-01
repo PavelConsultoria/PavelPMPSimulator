@@ -64,7 +64,7 @@ export default function Home() {
             className="btnSair"
             onClick={handleLogout}
           >
-            ⎋
+            <span className="btnSairIcon" aria-hidden="true">⎋</span>
             <span>Sair</span>
           </button>
 

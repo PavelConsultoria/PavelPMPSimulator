@@ -125,6 +125,12 @@ a{
     flex:1;
 }
 
+.btnSair .btnSairIcon{
+    flex:0 0 auto;
+    font-size:22px;
+    line-height:1;
+}
+
 .btnSair:hover{
     background:#1f2937;
 }
