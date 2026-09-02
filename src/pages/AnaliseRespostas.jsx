@@ -24,6 +24,7 @@ export default function AnaliseRespostas({ questao, respostaAluno, numero, total
           return <article className="justificativa" key={indice}><h3 className={correta ? "correta" : "incorreta"}>{String.fromCharCode(65 + indice)} — {correta ? "CORRETA" : "INCORRETA"}</h3><p>{justificativa}</p></article>;
         })}
       </div></section>
+      {disponivel(questao.explicacao) && <section className="analiseSecao destaqueAnalise"><h2>Explicação</h2><p>{questao.explicacao}</p></section>}
       {disponivel(questao.comoPMIPensa) && <section className="analiseSecao destaqueAnalise"><h2>Como pensa o PMI</h2><p>{questao.comoPMIPensa}</p></section>}
       {disponivel(questao.pegadinha) && <section className="analiseSecao destaqueAnalise pegadinhaAnalise"><h2>Pegadinha</h2><p>{questao.pegadinha}</p></section>}
       {classificacoes.length > 0 && <section className="analiseSecao"><h2>Classificação da questão</h2><div className="classificacaoGrid">{classificacoes.map(([rotulo, valor]) => <div key={rotulo}><span>{rotulo}</span><strong>{valor}</strong></div>)}</div></section>}

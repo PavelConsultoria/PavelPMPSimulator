@@ -4,34 +4,45 @@ import "./Simulado.css";
 import { agruparCaseStudies, carregarQuestoesExcel, embaralharAlternativas, embaralharQuestoes } from "../data/carregarQuestoesExcel";
 import AnaliseRespostas from "./AnaliseRespostas";
 import { carregarRevisao, concluirQuestaoRevisao, LIMITE_REVISAO, salvarRevisao } from "./Favoritas";
-import { salvarSessao } from "../data/progresso";
+import { carregarSessoes, salvarSessao } from "../data/progresso";
 
 const IDS_REVISAO_VAZIOS = [];
+const FILTROS_PADRAO = {
+  dominio: "Todos", dificuldade: "Todas", tipoResposta: "Todos os tipos",
+  abordagem: "Todas", areaConhecimento: "Todas", modoTreinamento: "Todas as questões",
+};
+
+function questaoAtendeFiltros(questao, filtros, idsTreinamento) {
+  if (filtros.dominio !== "Todos" && questao.dominio !== filtros.dominio) return false;
+  if (filtros.dificuldade !== "Todas" && questao.dificuldade !== filtros.dificuldade) return false;
+  if (filtros.tipoResposta !== "Todos os tipos" && questao.tipoResposta !== filtros.tipoResposta) return false;
+  if (filtros.abordagem !== "Todas" && questao.abordagem !== filtros.abordagem) return false;
+  if (filtros.areaConhecimento !== "Todas" && questao.areaConhecimento !== filtros.areaConhecimento) return false;
+  return !idsTreinamento || idsTreinamento.has(questao.id);
+}
 
 export default function Simulado() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [mostrarContato, setMostrarContato] = useState(false);
-
   const TEMPO_TOTAL = 230 * 60;
   const quantidadeSelecionada = location.state?.quantidade || 180;
   const modoSelecionado = location.state?.modo || "Exame";
   const fluxoRevisao = location.state?.fluxoRevisao === true;
   const idsRevisao = location.state?.idsRevisao || IDS_REVISAO_VAZIOS;
-  // ROTINA TEMPORÁRIA: ativada exclusivamente por /novo-simulado?teste=1.
-  const rotinaTeste = location.state?.rotinaTeste === true;
-  const quantidadeEfetiva = rotinaTeste ? 5 : quantidadeSelecionada;
+  const idsQuestoes = location.state?.idsQuestoes || IDS_REVISAO_VAZIOS;
+  const origem = location.state?.origem || "/dashboard";
+  const filtros = location.state?.filtros || FILTROS_PADRAO;
   const estudoCaseStudy = !fluxoRevisao && modoSelecionado === "Estudo" && quantidadeSelecionada === "Case Study";
 
   const [questoes, setQuestoes] = useState([]);
   const [erroCarregamento, setErroCarregamento] = useState(null);
+  const [avisoQuantidade, setAvisoQuantidade] = useState("");
   const [tempoRestante, setTempoRestante] = useState(TEMPO_TOTAL);
   const [questaoAtual, setQuestaoAtual] = useState(1);
   const [maiorQuestaoAcessada, setMaiorQuestaoAcessada] = useState(1);
   const [respostas, setRespostas] = useState({});
   const [revisao, setRevisao] = useState(carregarRevisao);
   const [revisadasNestaSessao, setRevisadasNestaSessao] = useState([]);
-  const [mostrarMensagem, setMostrarMensagem] = useState(false);
   const [mostrarAnalise, setMostrarAnalise] = useState(false);
   const [estudoFinalizado, setEstudoFinalizado] = useState(false);
   const sessaoRegistrada = useRef(false);
@@ -57,11 +68,27 @@ export default function Simulado() {
           if (fluxoRevisao) {
             const porId = new Map(questoesCarregadas.map((item) => [item.id, item]));
             setQuestoes(idsRevisao.map((id) => porId.get(id)).filter(Boolean).map(embaralharAlternativas));
+          } else if (idsQuestoes.length) {
+            const porId = new Map(questoesCarregadas.map((item) => [item.id, item]));
+            setQuestoes(idsQuestoes.map((id) => porId.get(id)).filter(Boolean).map(embaralharAlternativas));
           } else if (estudoCaseStudy) {
-            const casesEmbaralhados = embaralharQuestoes(agruparCaseStudies(questoesCarregadas));
+            const idsTreinamento = obterIdsTreinamento(filtros.modoTreinamento);
+            const casesElegiveis = agruparCaseStudies(questoesCarregadas).filter((caseStudy) =>
+              caseStudy.questoes.every((item) => questaoAtendeFiltros(item, filtros, idsTreinamento)),
+            );
+            const casesEmbaralhados = embaralharQuestoes(casesElegiveis);
+            if (!casesElegiveis.length) {
+              setAvisoQuantidade("Não há Case Studies completos que atendam simultaneamente a todos os filtros selecionados.");
+            }
             setQuestoes(casesEmbaralhados.flatMap((caseStudy) => caseStudy.questoes).map(embaralharAlternativas));
           } else {
-            setQuestoes(embaralharQuestoes(questoesCarregadas).slice(0, quantidadeEfetiva).map(embaralharAlternativas));
+            const idsTreinamento = obterIdsTreinamento(filtros.modoTreinamento);
+            const elegiveis = questoesCarregadas.filter((item) => questaoAtendeFiltros(item, filtros, idsTreinamento));
+            const quantidadeSolicitada = Number(quantidadeSelecionada);
+            if (elegiveis.length < quantidadeSolicitada) {
+              setAvisoQuantidade(`Sua combinação de filtros possui ${elegiveis.length} questão(ões) disponível(is). A sessão usará somente essas questões, sem incluir itens fora dos critérios.`);
+            }
+            setQuestoes(embaralharQuestoes(elegiveis).slice(0, quantidadeSolicitada).map(embaralharAlternativas));
           }
         }
       })
@@ -74,7 +101,17 @@ export default function Simulado() {
     return () => {
       ativo = false;
     };
-  }, [fluxoRevisao, idsRevisao, quantidadeEfetiva, estudoCaseStudy]);
+  }, [fluxoRevisao, idsRevisao, idsQuestoes, quantidadeSelecionada, estudoCaseStudy, filtros]);
+
+  function obterIdsTreinamento(modoTreinamento) {
+    if (modoTreinamento === "Revisão") return new Set(carregarRevisao().pendentes);
+    if (modoTreinamento === "Apenas Erro") {
+      return new Set(carregarSessoes().flatMap((sessao) =>
+        (sessao.detalhes || []).filter((item) => item.acertou === false).map((item) => item.id),
+      ));
+    }
+    return null;
+  }
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -157,6 +194,12 @@ export default function Simulado() {
       percentual: respondidas ? Math.round((acertos / respondidas) * 100) : 0,
       tempoSegundos: TEMPO_TOTAL - tempoRestante,
       porDominio,
+      detalhes: questoes.flatMap((item, indice) => {
+        const resposta = respostas[indice + 1];
+        return respostasEstaoCompletas(resposta, item)
+          ? [{ id: item.id, resposta, acertou: respostaEstaCorreta(resposta, item) }]
+          : [];
+      }),
     });
     sessaoRegistrada.current = true;
   }
@@ -191,13 +234,6 @@ export default function Simulado() {
       setRevisadasNestaSessao([...revisadasNestaSessao, questao.id]);
     }
 
-    if (
-      !fluxoRevisao &&
-      questaoAtual === TOTAL_QUESTOES &&
-      respostasEstaoCompletas(novasRespostas, questao)
-    ) {
-      setMostrarMensagem(true);
-    }
   }
 
   function marcarRevisao() {
@@ -228,7 +264,6 @@ export default function Simulado() {
 
   function anterior() {
     if (questaoAtual > 1) {
-      setMostrarMensagem(false);
       setQuestaoAtual(questaoAtual - 1);
     }
   }
@@ -263,6 +298,17 @@ export default function Simulado() {
   }
 
   if (!questao) {
+    if (avisoQuantidade) {
+      return (
+        <div className="simuladoPage">
+          <main className="questaoCard" style={{ maxWidth: "720px", margin: "80px auto" }}>
+            <h1>Nenhuma questão disponível</h1>
+            <p>{avisoQuantidade}</p>
+            <button className="btnMenuPrincipal" type="button" onClick={() => navigate("/novo-simulado")}>Voltar aos filtros</button>
+          </main>
+        </div>
+      );
+    }
     return (
       <div className="simuladoPage">
         <main className="questaoCard" style={{ maxWidth: "720px", margin: "80px auto" }}>
@@ -272,7 +318,7 @@ export default function Simulado() {
     );
   }
 
-  if (mostrarAnalise && modoEstudo) {
+  if (mostrarAnalise && (modoEstudo || fluxoRevisao)) {
     return (
       <AnaliseRespostas
         questao={questao}
@@ -321,7 +367,6 @@ export default function Simulado() {
           <h1>{estudoCaseStudy ? "CASE STUDY" : `MODO ${modoSelecionado.toUpperCase()}`}</h1>
 
           <span>
-            {rotinaTeste ? "TESTE TEMPORÁRIO — " : ""}
             {estudoCaseStudy
               ? `Case Study ${indiceCaseAtual} de ${casesDaSessao.length} — Questão ${indiceNoCase} de ${questao.caseStudy.quantidadeQuestoes}`
               : `Questão ${questaoAtual} de ${TOTAL_QUESTOES}`}
@@ -338,6 +383,8 @@ export default function Simulado() {
           Limite de 180 questões para revisão atingido. Revise algumas questões para liberar novas marcações.
         </p>
       )}
+
+      {avisoQuantidade && <p className="mensagemQuantidade">{avisoQuantidade}</p>}
 
       <div className="barra">
         <div
@@ -420,9 +467,9 @@ export default function Simulado() {
 
             <button
               className="btnMenuPrincipal"
-              onClick={() => navigate("/dashboard")}
+              onClick={() => navigate(origem)}
             >
-              Voltar à Tela Principal
+                {origem === "/banco-questoes" ? "Voltar ao Banco de Questões" : "Voltar à Tela Principal"}
             </button>
 
             <button
@@ -433,13 +480,13 @@ export default function Simulado() {
               Questões Revisadas
             </button>
 
-            {modoEstudo && (
+            {(modoEstudo || fluxoRevisao) && (
               <button
                 className="btnAnalise"
                 onClick={() => setMostrarAnalise(true)}
                 disabled={!respostasEstaoCompletas(respostas[questaoAtual], questao)}
               >
-                Análise das Respostas
+                Ver Resposta e Explicação
               </button>
             )}
 
@@ -492,7 +539,6 @@ export default function Simulado() {
                   className={classe}
                   disabled={estudoCaseStudy && numero > maiorQuestaoAcessada}
                   onClick={() => {
-                    setMostrarMensagem(false);
                     setQuestaoAtual(numero);
                   }}
                 >
@@ -504,224 +550,6 @@ export default function Simulado() {
         </aside>
       </div>
 
-      {mostrarMensagem && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.82)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 9999,
-            padding: "20px",
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "#1f2937",
-              border: "1px solid #374151",
-              borderRadius: "16px",
-              padding: "40px",
-              maxWidth: "700px",
-              width: "100%",
-              textAlign: "center",
-              boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
-            }}
-          >
-            <div
-              style={{
-                fontSize: "48px",
-                marginBottom: "15px",
-              }}
-            >
-              🎯
-            </div>
-
-            <h2
-              style={{
-                color: "#22c55e",
-                fontSize: "28px",
-                marginBottom: "20px",
-              }}
-            >
-              Você concluiu a demonstração!
-            </h2>
-
-            <p
-              style={{
-                color: "#fff",
-                fontSize: "18px",
-                lineHeight: "1.7",
-                marginBottom: "15px",
-              }}
-            >
-              Estas 3 questões foram apenas uma amostra do
-              <strong> Simulador® Pavel PMP</strong>.
-            </p>
-
-            <p
-              style={{
-                color: "#ddd",
-                fontSize: "17px",
-                lineHeight: "1.7",
-                marginBottom: "15px",
-              }}
-            >
-              Na versão completa, você terá acesso ao banco de
-              questões para continuar sua preparação para a
-              certificação PMP, com questões organizadas por
-              <strong> área, processo e nível de dificuldade</strong>.
-            </p>
-
-            <p
-              style={{
-                color: "#22c55e",
-                fontSize: "19px",
-                fontWeight: "bold",
-                lineHeight: "1.5",
-                marginBottom: "25px",
-              }}
-            >
-              🚀 Continue sua preparação e avance rumo à
-              certificação PMP!
-            </p>
-
-            <button
-              style={{
-                backgroundColor: "#22c55e",
-                color: "#000",
-                border: "none",
-                borderRadius: "8px",
-                padding: "14px 28px",
-                fontSize: "17px",
-                fontWeight: "bold",
-                cursor: "pointer",
-                marginBottom: "12px",
-              }}
-             onClick={() => setMostrarContato(true)}
-            >
-              QUERO CONHECER A VERSÃO COMPLETA
-            </button>
-
-            <br />
-
-            <button
-              style={{
-                backgroundColor: "transparent",
-                color: "#aaa",
-                border: "none",
-                padding: "10px 20px",
-                fontSize: "15px",
-                cursor: "pointer",
-              }}
-              onClick={() => setMostrarMensagem(false)}
-            >
-              Continuar
-            </button>
-          </div>
-        </div>
-      )}
-      {mostrarContato && (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: "rgba(0, 0, 0, 0.85)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        zIndex: 10000,
-        padding: "20px",
-      }}
-    >
-      <div
-        style={{
-          backgroundColor: "#1f2937",
-          border: "1px solid #374151",
-          borderRadius: "16px",
-          padding: "40px",
-          maxWidth: "600px",
-          width: "100%",
-          textAlign: "center",
-          boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
-        }}
-      >
-        <h2
-          style={{
-            color: "#22c55e",
-            fontSize: "28px",
-            marginBottom: "25px",
-          }}
-        >
-          Pavel Consultoria
-        </h2>
-
-        <p
-          style={{
-            color: "#fff",
-            fontSize: "20px",
-            fontWeight: "bold",
-            marginBottom: "8px",
-          }}
-        >
-          Karolina Poznyakov, MSc
-        </p>
-
-        <p
-          style={{
-            color: "#ddd",
-            fontSize: "18px",
-            marginBottom: "30px",
-          }}
-        >
-          📱 WhatsApp: (21) 99571-6270
-        </p>
-
-        <a
-          href="https://wa.me/5521995716270"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            display: "inline-block",
-            backgroundColor: "#22c55e",
-            color: "#000",
-            textDecoration: "none",
-            borderRadius: "8px",
-            padding: "14px 28px",
-            fontSize: "17px",
-            fontWeight: "bold",
-            marginBottom: "20px",
-          }}
-        >
-          FALAR PELO WHATSAPP
-        </a>
-
-        <br />
-
-        <button
-          onClick={() => navigate("/dashboard")}
-          style={{
-            backgroundColor: "#374151",
-            color: "#fff",
-            border: "none",
-            borderRadius: "8px",
-            padding: "12px 24px",
-            fontSize: "15px",
-            cursor: "pointer",
-          }}
-        >
-          VOLTAR À TELA PRINCIPAL
-        </button>
-      </div>
-    </div>
-  )}
 
     </div>
   );

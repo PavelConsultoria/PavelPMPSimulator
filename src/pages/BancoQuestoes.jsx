@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { carregarQuestoesExcel } from "../data/carregarQuestoesExcel";
+import PavelLayout from "../components/PavelLayout";
 
 const DOMINIOS_VALIDOS = ["Business Environment", "People", "Process"];
 const ORDEM_DIFICULDADES = ["Fácil", "Média", "Difícil", "Muito Difícil"];
 
 export default function BancoQuestoes() {
   const navigate = useNavigate();
-
   const [busca, setBusca] = useState("");
   const [dominio, setDominio] = useState("Todos");
   const [dificuldade, setDificuldade] = useState("Todas");
@@ -65,12 +65,10 @@ export default function BancoQuestoes() {
   });
 
   return (
+    <PavelLayout titulo="Banco de Questões" subtitulo="Consulte, pesquise e responda individualmente as questões disponíveis.">
     <div
       style={{
-        minHeight: "100vh",
-        background: "#000",
         color: "#fff",
-        padding: "30px",
         boxSizing: "border-box",
       }}
     >
@@ -80,54 +78,6 @@ export default function BancoQuestoes() {
           margin: "0 auto",
         }}
       >
-        {/* CABEÇALHO */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "30px",
-            borderBottom: "1px solid #333",
-            paddingBottom: "20px",
-          }}
-        >
-          <div>
-            <h1
-              style={{
-                margin: 0,
-                color: "#22c55e",
-                fontSize: "32px",
-              }}
-            >
-              📚 Banco de Questões
-            </h1>
-
-            <p
-              style={{
-                marginTop: "8px",
-                color: "#aaa",
-              }}
-            >
-              Consulte e pesquise as questões disponíveis no simulador.
-            </p>
-          </div>
-
-          <button
-            onClick={() => navigate("/dashboard")}
-            style={{
-              padding: "12px 22px",
-              borderRadius: "8px",
-              border: "1px solid #444",
-              background: "#202938",
-              color: "#fff",
-              cursor: "pointer",
-              fontSize: "15px",
-            }}
-          >
-            Voltar
-          </button>
-        </div>
-
         {/* RESUMO */}
         <div
           style={{
@@ -385,6 +335,14 @@ export default function BancoQuestoes() {
               >
                 {questao.enunciado}
               </p>
+              <button
+                type="button"
+                className="reportAction"
+                style={{ marginTop: "16px" }}
+                onClick={() => navigate("/simulado", { state: { modo: "Estudo", idsQuestoes: [questao.id], origem: "/banco-questoes" } })}
+              >
+                Responder questão
+              </button>
             </div>
           ))}
 
@@ -417,5 +375,6 @@ export default function BancoQuestoes() {
         </div>
       </div>
     </div>
+    </PavelLayout>
   );
 }

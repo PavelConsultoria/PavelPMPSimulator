@@ -68,6 +68,14 @@ export default function Configuracoes() {
           </div>
         </header>
 
+        <section className="settingsNotices" aria-labelledby="avisos-orientacoes">
+          <h2 id="avisos-orientacoes">AVISOS E ORIENTAÇÕES</h2>
+          <article>
+            <h3>Desabilite a tradução automática</h3>
+            <p>Durante o uso do Pavel PMP Simulator, recomendamos desabilitar a tradução automática da página no navegador. Esse recurso pode modificar termos técnicos, enunciados ou alternativas das questões.</p>
+          </article>
+        </section>
+
         <section
           style={{
             display: "flex",

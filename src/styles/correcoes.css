@@ -1,0 +1,17 @@
+.referenceNote { margin: -8px 0 18px; }
+.achievement { color: #f4c84a; }
+.settingsNotices { max-width: 900px; margin: 24px auto; padding: 24px; border: 1px solid #277943; border-radius: 14px; background: rgba(34,197,94,.09); }
+.settingsNotices h2 { margin: 0 0 16px; color: #31d66b; font-size: 20px; }
+.settingsNotices article { padding: 18px; border-radius: 10px; background: #111713; }
+.settingsNotices h3 { margin: 0 0 8px; }
+.settingsNotices p { margin: 0; color: #c2cec6; line-height: 1.6; }
+.chartLayout { display: grid; grid-template-columns: 22px 44px 1fr; gap: 8px; align-items: stretch; }
+.chartYAxis { writing-mode: vertical-rl; transform: rotate(180deg); align-self: center; color: #94a39a; font-size: 12px; }
+.chartScale { display: flex; flex-direction: column; justify-content: space-between; padding: 18px 0 22px; color: #86938b; font-size: 10px; text-align: right; }
+.chartBar > strong { position: absolute; top: -18px; width: 100%; color: #b9c7be; font-size: 10px; text-align: center; }
+.chartXAxis { margin: 10px 0 0 74px; color: #94a39a; font-size: 12px; text-align: center; }
+.legacyReportNote { margin-top: 24px; }
+.reportCorrect { color: #15803d; font-weight: 700; }
+.reportIncorrect { color: #c82333; font-weight: 700; }
+.mensagemQuantidade { width: 100%; max-width: 1180px; margin: -8px auto 12px; padding: 10px 14px; border-radius: 10px; background: #fff4c2; color: #7a5b00; font-size: 14px; font-weight: 600; }
+@media print { .reportPrintPage { padding: 0; background: #fff; } .reportPrintPage .headerAnalise, .reportPrintPage .analiseCard { box-shadow: none; } .reportActions { display: none; } }

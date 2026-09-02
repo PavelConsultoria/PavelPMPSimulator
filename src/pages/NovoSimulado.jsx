@@ -1,13 +1,10 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "./NovoSimulado.css";
 import PavelLayout from "../components/PavelLayout";
 
 export default function NovoSimulado() {
   const navigate = useNavigate();
-  const location = useLocation();
-  // ROTINA TEMPORÁRIA: remover após a validação pré-publicação.
-  const rotinaTeste = new URLSearchParams(location.search).get("teste") === "1";
 
   const [quantidade, setQuantidade] = useState(180);
   const [dominio, setDominio] = useState("Todos");
@@ -26,22 +23,23 @@ export default function NovoSimulado() {
 
     if (novoModo === "Exame") {
       setQuantidade(180);
+      setDominio("Todos");
+      setDificuldade("Todas");
+      setTipoResposta("Todos os tipos");
+      setAbordagem("Todas");
+      setAreaConhecimento("Todas");
+      setModoTreinamento("Todas as questões");
     }
   }
 
   function iniciarSimulado() {
-    console.log({
-      quantidade,
-      dominio,
-      dificuldade,
-      modo,
-      tipoResposta,
-      abordagem,
-      areaConhecimento,
-      modoTreinamento,
+    navigate("/simulado", {
+      state: {
+        quantidade,
+        modo,
+        filtros: { dominio, dificuldade, tipoResposta, abordagem, areaConhecimento, modoTreinamento },
+      },
     });
-
-    navigate("/simulado", { state: { quantidade, modo, rotinaTeste } });
   }
 
   return (
@@ -164,13 +162,13 @@ export default function NovoSimulado() {
               >
                 <option>Todas</option>
                 <option>Fácil</option>
-                <option>Moderada</option>
+                <option>Média</option>
                 <option>Difícil</option>
                 <option>Muito Difícil</option>
               </select>
 
               <small>
-                Fácil, Moderada, Difícil,
+                 Fácil, Média, Difícil,
                 <br />
                 Muito Difícil.
               </small>
@@ -189,8 +187,8 @@ export default function NovoSimulado() {
                 disabled={modoExame}
               >
                 <option>Todos os tipos</option>
-                <option>Resposta única</option>
-                <option>Multiple-response</option>
+                <option value="Single Response">Resposta única</option>
+                <option value="Multiple Response">Resposta múltipla</option>
               </select>
 
               <small>
@@ -215,13 +213,14 @@ export default function NovoSimulado() {
                 <option>Todas</option>
                 <option>Preditiva</option>
                 <option>Adaptativa</option>
-                <option>Híbrida</option>
+                <option>Hibrida</option>
+                <option>Ágil</option>
               </select>
 
               <small>
                 Preditiva, Adaptativa
                 <br />
-                e Híbrida.
+                 Hibrida e Ágil.
               </small>
             </div>
 
@@ -238,15 +237,12 @@ export default function NovoSimulado() {
                 disabled={modoExame}
               >
                 <option>Todas</option>
-                <option>Integração</option>
-                <option>Escopo</option>
-                <option>Cronograma</option>
-                <option>Custos</option>
-                <option>Qualidade</option>
-                <option>Recursos</option>
-                <option>Comunicações</option>
-                <option>Riscos</option>
-                <option>Aquisições</option>
+                <option value="Finance">Finanças</option>
+                <option value="Governance">Governança</option>
+                <option value="Resources">Recursos</option>
+                <option value="Risk">Riscos</option>
+                <option value="Schedule">Cronograma</option>
+                <option value="Scope">Escopo</option>
                 <option>Stakeholders</option>
               </select>
 
