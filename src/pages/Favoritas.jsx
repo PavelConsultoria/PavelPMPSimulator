@@ -1,9 +1,9 @@
 /* eslint-disable react/only-export-components */
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../styles/home.css";
-import logo from "../assets/images/logo.png";
 import { carregarQuestoesExcel } from "../data/carregarQuestoesExcel";
+import PavelLayout from "../components/PavelLayout";
 
 export const CHAVE_REVISAO = "pavel-revisao";
 export const LIMITE_REVISAO = 180;
@@ -71,20 +71,7 @@ export default function Favoritas() {
   const totalCiclo = revisao.ciclo?.totalInicial || revisao.pendentes.length + revisadas;
 
   return (
-    <div className="home-container">
-      <aside className="sidebar">
-        <div className="logo-area"><img src={logo} alt="Pavel" className="logo-sidebar" /></div>
-        <nav>
-          <Link to="/dashboard" className="menu">🏠<span>Início</span></Link>
-          <Link to="/favoritas" className="menu active">⭐<span>Revisão</span></Link>
-          <Link to="/relatorios" className="menu">📑<span>Relatórios</span></Link>
-          <Link to="/configuracoes" className="menu">⚙<span>Configurações</span></Link>
-          <Link to="/ajuda" className="menu">❓<span>Ajuda</span></Link>
-          <button type="button" className="btnSair" onClick={() => { localStorage.removeItem("usuario"); navigate("/"); }}>⎋<span>Sair</span></button>
-        </nav>
-      </aside>
-
-      <main className="content">
+    <PavelLayout contentClassName="content" hideHeader>
         <header className="topbar"><div><h1>Questões Revisadas</h1><p>Refaça as questões pendentes para consolidar seu aprendizado.</p></div></header>
         <section style={{ maxWidth: "1000px", margin: "24px auto" }}>
           <div style={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "16px", padding: "28px", boxShadow: "0 10px 25px rgba(0,0,0,0.25)" }}>
@@ -94,11 +81,10 @@ export default function Favoritas() {
 
             {revisao.pendentes.length > 0 ? <>
               <button type="button" onClick={() => navigate("/simulado", { state: { modo: "Revisão", fluxoRevisao: true, idsRevisao: revisao.pendentes } })} style={{ backgroundColor: "#22c55e", color: "#000", border: "none", borderRadius: "8px", padding: "14px 28px", fontSize: "16px", fontWeight: "bold", cursor: "pointer", marginBottom: "22px" }}>INICIAR REVISÃO</button>
-              <div style={{ display: "grid", gap: "10px" }}>{questoes.map((questao) => <div key={questao.id} style={{ padding: "14px 16px", border: "1px solid #374151", borderRadius: "10px", color: "#d1d5db" }}><strong style={{ color: "#22c55e" }}>Questão {questao.id}</strong><p style={{ margin: "6px 0 0" }}>{questao.enunciado}</p></div>)}</div>
+              <div style={{ display: "grid", gap: "10px" }}>{questoes.map((questao) => <div key={questao.id} style={{ padding: "14px 16px", border: "1px solid #374151", borderRadius: "10px", color: "#d1d5db" }}><strong style={{ color: "#22c55e" }}>{questao.caseStudy ? "CASE STUDY" : `Questão ${questao.id}`}</strong><p style={{ margin: "6px 0 0" }}>{questao.enunciado}</p></div>)}</div>
             </> : <p style={{ margin: 0, color: "#d1d5db" }}>Não há questões pendentes para revisão.</p>}
           </div>
         </section>
-      </main>
-    </div>
+    </PavelLayout>
   );
 }
