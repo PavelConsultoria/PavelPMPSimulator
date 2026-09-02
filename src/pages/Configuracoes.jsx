@@ -1,65 +1,12 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../styles/home.css";
-import logo from "../assets/images/logo.png";
+import PavelLayout from "../components/PavelLayout";
 
 export default function Configuracoes() {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    localStorage.removeItem("usuario");
-    navigate("/");
-  };
-
   return (
-    <div className="home-container">
-
-      <aside className="sidebar">
-
-        <div className="logo-area">
-          <img src={logo} alt="Pavel" className="logo-sidebar" />
-        </div>
-
-        <nav>
-
-          <Link to="/dashboard" className="menu">
-            🏠
-            <span>Início</span>
-          </Link>
-
-          <Link to="/favoritas" className="menu">
-            ⭐
-            <span>Revisão</span>
-          </Link>
-
-          <Link to="/relatorios" className="menu">
-            📑
-            <span>Relatórios</span>
-          </Link>
-
-          <Link to="/configuracoes" className="menu active">
-            ⚙
-            <span>Configurações</span>
-          </Link>
-
-          <Link to="/ajuda" className="menu">
-            ❓
-            <span>Ajuda</span>
-          </Link>
-
-          <button
-            type="button"
-            className="btnSair"
-            onClick={handleLogout}
-          >
-            ⎋
-            <span>Sair</span>
-          </button>
-
-        </nav>
-
-      </aside>
-
-      <main className="content">
+    <PavelLayout contentClassName="content" hideHeader>
 
         <header className="topbar">
           <div>
@@ -169,8 +116,6 @@ export default function Configuracoes() {
 
         </section>
 
-      </main>
-
-    </div>
+    </PavelLayout>
   );
 }
