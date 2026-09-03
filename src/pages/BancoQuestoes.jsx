@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { carregarQuestoesExcel } from "../data/carregarQuestoesExcel";
 import PavelLayout from "../components/PavelLayout";
+import ConteudoProtegido from "../components/ConteudoProtegido";
 
 const DOMINIOS_VALIDOS = ["Business Environment", "People", "Process"];
 const ORDEM_DIFICULDADES = ["Fácil", "Média", "Difícil", "Muito Difícil"];
@@ -325,16 +326,18 @@ export default function BancoQuestoes() {
                 </div>
               </div>
 
-              <p
-                style={{
-                  color: "#eee",
-                  lineHeight: "1.6",
-                  margin: 0,
-                  fontSize: "16px",
-                }}
-              >
-                {questao.enunciado}
-              </p>
+              <ConteudoProtegido>
+                <p
+                  style={{
+                    color: "#eee",
+                    lineHeight: "1.6",
+                    margin: 0,
+                    fontSize: "16px",
+                  }}
+                >
+                  {questao.enunciado}
+                </p>
+              </ConteudoProtegido>
               <button
                 type="button"
                 className="reportAction"
