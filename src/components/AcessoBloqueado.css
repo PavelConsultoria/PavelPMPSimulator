@@ -1,0 +1,56 @@
+.acessoBloqueadoPage {
+  min-height: 100vh;
+  background: #000000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.acessoBloqueadoCard {
+  width: min(520px, 100%);
+  background: #1e293b;
+  padding: 50px;
+  border-radius: 22px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55);
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.acessoBloqueadoLogo {
+  width: 160px;
+  max-width: 100%;
+  margin-bottom: 25px;
+}
+
+.acessoBloqueadoCard h1 {
+  color: #ffffff;
+  font-size: 30px;
+  line-height: 1.2;
+  margin: 10px 0;
+}
+
+.acessoBloqueadoMensagem {
+  color: #cbd5e1;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 24px 0 0;
+}
+
+.acessoBloqueadoRodape {
+  margin-top: 35px;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+@media (max-width: 600px) {
+  .acessoBloqueadoCard {
+    padding: 36px 24px;
+  }
+
+  .acessoBloqueadoLogo {
+    width: 140px;
+  }
+}
