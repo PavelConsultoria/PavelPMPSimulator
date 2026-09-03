@@ -12,6 +12,7 @@ const itens = [
   ["/relatorios", "▧", "Relatórios"],
   ["/configuracoes", "⚙", "Configurações"],
   ["/ajuda", "?", "Ajuda"],
+  ["/sobre-simulador", "ⓘ", "Sobre o Simulador"],
   ["/sobre-pavel", "ⓘ", "Sobre a Pavel"],
 ];
 

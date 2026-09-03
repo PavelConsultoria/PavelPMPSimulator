@@ -11,6 +11,7 @@ import Relatorios from "./pages/Relatorios";
 import Favoritas from "./pages/Favoritas";
 import Configuracoes from "./pages/Configuracoes";
 import Ajuda from "./pages/Ajuda";
+import SobreSimulador from "./pages/SobreSimulador";
 import SobrePavel from "./pages/SobrePavel";
 import RelatorioExame from "./pages/RelatorioExame";
 
@@ -44,6 +45,8 @@ export default function App() {
         <Route path="/configuracoes" element={<Configuracoes />} />
 
         <Route path="/ajuda" element={<Ajuda />} />
+
+        <Route path="/sobre-simulador" element={<SobreSimulador />} />
 
         <Route path="/sobre-pavel" element={<SobrePavel />} />
 

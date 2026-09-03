@@ -457,11 +457,11 @@
   min-height: 38px;
 
   display: grid;
-  grid-template-columns: auto minmax(0, auto) minmax(0, 1fr);
-  align-items: center;
-  gap: 6px;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: center;
+  gap: 2px;
 
-  padding: 7px 10px;
+  padding: 4px 10px;
 
   background: #1f2937;
   border: 1px solid #374151;
@@ -473,26 +473,20 @@
 .itemResumo span {
   margin-bottom: 0;
   color: #9ca3af;
-  font-size: 12px;
-  line-height: 1.2;
-}
-
-.itemResumo span:not(.resumoIcon)::after {
-  content: ":";
+  font-size: 11px;
+  line-height: 1;
 }
 
 .itemResumo .resumoIcon {
-  color: #22c55e;
-  font-size: 12px;
+  display: none;
 }
 
 .itemResumo strong {
-  overflow: hidden;
   color: #22c55e;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
-  line-height: 1.2;
-  text-overflow: ellipsis;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
 }
 
 
