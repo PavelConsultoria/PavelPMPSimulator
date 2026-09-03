@@ -16,6 +16,7 @@ import SobrePavel from "./pages/SobrePavel";
 import RelatorioExame from "./pages/RelatorioExame";
 import AcessoBloqueado from "./components/AcessoBloqueado";
 import { MENSAGENS_BLOQUEIO } from "./components/mensagensBloqueio";
+import RotaProtegida from "./components/RotaProtegida";
 
 export default function App() {
   return (
@@ -26,31 +27,31 @@ export default function App() {
 
         <Route path="/login" element={<Login />} />
 
-        <Route path="/dashboard" element={<Home />} />
+        <Route path="/dashboard" element={<RotaProtegida><Home /></RotaProtegida>} />
 
-        <Route path="/novo-simulado" element={<NovoSimulado />} />
+        <Route path="/novo-simulado" element={<RotaProtegida><NovoSimulado /></RotaProtegida>} />
 
-        <Route path="/simulado" element={<Simulado />} />
+        <Route path="/simulado" element={<RotaProtegida><Simulado /></RotaProtegida>} />
 
-        <Route path="/relatorio-exame" element={<RelatorioExame />} />
+        <Route path="/relatorio-exame" element={<RotaProtegida><RelatorioExame /></RotaProtegida>} />
 
-        <Route path="/banco-questoes" element={<BancoQuestoes />} />
+        <Route path="/banco-questoes" element={<RotaProtegida><BancoQuestoes /></RotaProtegida>} />
 
-        <Route path="/estatisticas" element={<Estatisticas />} />
+        <Route path="/estatisticas" element={<RotaProtegida><Estatisticas /></RotaProtegida>} />
 
-        <Route path="/desempenho" element={<Desempenho />} />
+        <Route path="/desempenho" element={<RotaProtegida><Desempenho /></RotaProtegida>} />
 
-        <Route path="/relatorios" element={<Relatorios />} />
+        <Route path="/relatorios" element={<RotaProtegida><Relatorios /></RotaProtegida>} />
 
-        <Route path="/favoritas" element={<Favoritas />} />
+        <Route path="/favoritas" element={<RotaProtegida><Favoritas /></RotaProtegida>} />
 
-        <Route path="/configuracoes" element={<Configuracoes />} />
+        <Route path="/configuracoes" element={<RotaProtegida><Configuracoes /></RotaProtegida>} />
 
-        <Route path="/ajuda" element={<Ajuda />} />
+        <Route path="/ajuda" element={<RotaProtegida><Ajuda /></RotaProtegida>} />
 
-        <Route path="/sobre-simulador" element={<SobreSimulador />} />
+        <Route path="/sobre-simulador" element={<RotaProtegida><SobreSimulador /></RotaProtegida>} />
 
-        <Route path="/sobre-pavel" element={<SobrePavel />} />
+        <Route path="/sobre-pavel" element={<RotaProtegida><SobrePavel /></RotaProtegida>} />
 
         <Route
           path="/acesso-expirado"
