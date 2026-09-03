@@ -14,6 +14,7 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [nomeExibicao, setNomeExibicao] = useState("");
 
   async function negarAcesso(rota) {
     localStorage.removeItem("usuario");
@@ -55,8 +56,8 @@ export default function Login() {
         return;
       }
 
-      if (licenca.status === "ativa" && typeof licenca.nome === "string" && licenca.nome.trim()) {
-        localStorage.setItem("usuario", licenca.nome.trim());
+      if (licenca.status === "ativa") {
+        localStorage.setItem("usuario", nomeExibicao.trim() || "Usuário");
         navigate("/dashboard");
         return;
       }
@@ -95,6 +96,13 @@ export default function Login() {
         <p className="loginSubtitulo">
           Plataforma Inteligente para Certificação PMP®
         </p>
+
+        <input
+          type="text"
+          placeholder="Como você quer ser chamado?"
+          value={nomeExibicao}
+          onChange={(e) => setNomeExibicao(e.target.value)}
+        />
 
         <input
           type="email"
