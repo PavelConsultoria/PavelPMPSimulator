@@ -19,10 +19,12 @@
   box-sizing: border-box;
 }
 
-.acessoBloqueadoLogo {
-  width: 160px;
-  max-width: 100%;
-  margin-bottom: 25px;
+.acessoBloqueadoInstitucional {
+  color: #22c55e;
+  font-size: 28px;
+  line-height: 1.2;
+  text-align: center;
+  margin: 0 0 25px;
 }
 
 .acessoBloqueadoCard h1 {
@@ -48,9 +50,5 @@
 @media (max-width: 600px) {
   .acessoBloqueadoCard {
     padding: 36px 24px;
-  }
-
-  .acessoBloqueadoLogo {
-    width: 140px;
   }
 }

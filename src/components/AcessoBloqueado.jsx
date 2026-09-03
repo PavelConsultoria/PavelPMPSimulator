@@ -1,15 +1,10 @@
-import logo from "../assets/images/logo.png";
 import "./AcessoBloqueado.css";
 
 export default function AcessoBloqueado({ mensagem }) {
   return (
     <main className="acessoBloqueadoPage">
       <section className="acessoBloqueadoCard" aria-labelledby="acesso-bloqueado-titulo">
-        <img
-          src={logo}
-          alt="Pavel Consultoria"
-          className="acessoBloqueadoLogo"
-        />
+        <h2 className="acessoBloqueadoInstitucional">Pavel Consultoria</h2>
 
         <h1 id="acesso-bloqueado-titulo">Acesso bloqueado</h1>
 
