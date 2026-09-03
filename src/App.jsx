@@ -14,6 +14,8 @@ import Ajuda from "./pages/Ajuda";
 import SobreSimulador from "./pages/SobreSimulador";
 import SobrePavel from "./pages/SobrePavel";
 import RelatorioExame from "./pages/RelatorioExame";
+import AcessoBloqueado from "./components/AcessoBloqueado";
+import { MENSAGENS_BLOQUEIO } from "./components/mensagensBloqueio";
 
 export default function App() {
   return (
@@ -49,6 +51,24 @@ export default function App() {
         <Route path="/sobre-simulador" element={<SobreSimulador />} />
 
         <Route path="/sobre-pavel" element={<SobrePavel />} />
+
+        <Route
+          path="/preview-acesso-expirado"
+          element={
+            <AcessoBloqueado
+              mensagem={MENSAGENS_BLOQUEIO.LICENCA_EXPIRADA}
+            />
+          }
+        />
+
+        <Route
+          path="/preview-acesso-nao-autorizado"
+          element={
+            <AcessoBloqueado
+              mensagem={MENSAGENS_BLOQUEIO.ACESSO_NAO_AUTORIZADO}
+            />
+          }
+        />
 
       </Routes>
     </HashRouter>
