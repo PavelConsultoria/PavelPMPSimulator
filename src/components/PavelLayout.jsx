@@ -1,5 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import logo from "../assets/images/logo.png";
+import { supabase } from "../lib/supabase";
 import "../styles/pavel-dashboard.css";
 
 const itens = [
@@ -25,6 +26,16 @@ function LogoutIcon() {
 
 export default function PavelLayout({ titulo, subtitulo, children, shellClassName = "", contentClassName = "pavelMain", hideHeader = false }) {
   const navigate = useNavigate();
+
+  async function sair() {
+    try {
+      await supabase.auth.signOut();
+    } finally {
+      localStorage.removeItem("usuario");
+      navigate("/login");
+    }
+  }
+
   return <div className={`pavelShell ${shellClassName}`.trim()}>
     <aside className="pavelSidebar">
       <img src={logo} alt="Pavel PMP Simulator" />
@@ -32,7 +43,7 @@ export default function PavelLayout({ titulo, subtitulo, children, shellClassNam
         {itens.map(([rota, icone, texto]) => <NavLink key={rota} to={rota} className={({ isActive }) => `pavelMenu${isActive ? " active" : ""}`}>
           <span aria-hidden="true">{icone}</span>{texto}
         </NavLink>)}
-        <button type="button" className="pavelMenu" onClick={() => { localStorage.removeItem("usuario"); navigate("/"); }}><span aria-hidden="true"><LogoutIcon /></span>Sair</button>
+        <button type="button" className="pavelMenu" onClick={sair}><span aria-hidden="true"><LogoutIcon /></span>Sair</button>
       </nav>
     </aside>
     <main className={contentClassName}>
