@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "./Simulado.css";
 import { agruparCaseStudies, carregarQuestoesExcel, embaralharAlternativas, embaralharQuestoes } from "../data/carregarQuestoesExcel";
 import AnaliseRespostas from "./AnaliseRespostas";
+import ConteudoProtegido from "../components/ConteudoProtegido";
 import { carregarRevisao, concluirQuestaoRevisao, LIMITE_REVISAO, salvarRevisao } from "./Favoritas";
 import { carregarSessoes, salvarSessao } from "../data/progresso";
 
@@ -396,13 +397,6 @@ export default function Simulado() {
       <div className="conteudoSimulado">
         <div className={questao.caseStudy ? "questaoCard questaoCaseStudy" : "questaoCard"}>
 
-          {questao.caseStudy && (
-            <section className="contextoCaseStudy">
-              <h2>CASE STUDY</h2>
-              <p>{questao.caseStudy.contexto}</p>
-            </section>
-          )}
-
           <div className="cabecalhoQuestao">
             <div className="tituloQuestao">
               <h2>
@@ -427,33 +421,42 @@ export default function Simulado() {
             </button>
           </div>
 
-          <div className="conteudoQuestao">
-            <p className="enunciado">
-              {questao.enunciado}
-            </p>
+          <ConteudoProtegido>
+            {questao.caseStudy && (
+              <section className="contextoCaseStudy">
+                <h2>CASE STUDY</h2>
+                <p>{questao.caseStudy.contexto}</p>
+              </section>
+            )}
 
-            <div className="alternativas">
-            {questao.alternativas.map((alt, indice) => (
-              <button
-                key={indice}
-                className={
-                  respostas[questaoAtual]?.includes(indice)
-                    ? "alternativa selecionada"
-                    : "alternativa"
-                }
-                onClick={() => selecionarResposta(indice)}
-              >
-                <span className="letra">
-                  {String.fromCharCode(65 + indice)}
-                </span>
+            <div className="conteudoQuestao">
+              <p className="enunciado">
+                {questao.enunciado}
+              </p>
 
-                <span className="textoAlternativa">
-                  {alt}
-                </span>
-              </button>
-            ))}
+              <div className="alternativas">
+              {questao.alternativas.map((alt, indice) => (
+                <button
+                  key={indice}
+                  className={
+                    respostas[questaoAtual]?.includes(indice)
+                      ? "alternativa selecionada"
+                      : "alternativa"
+                  }
+                  onClick={() => selecionarResposta(indice)}
+                >
+                  <span className="letra">
+                    {String.fromCharCode(65 + indice)}
+                  </span>
+
+                  <span className="textoAlternativa">
+                    {alt}
+                  </span>
+                </button>
+              ))}
+              </div>
             </div>
-          </div>
+          </ConteudoProtegido>
 
           <div className={modoEstudo ? "acoes acoesEstudo" : "acoes"}>
 

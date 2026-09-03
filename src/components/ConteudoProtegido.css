@@ -1,0 +1,46 @@
+.conteudoProtegido {
+  position: relative;
+  isolation: isolate;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.conteudoProtegido::before {
+  content: attr(data-watermark);
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  width: 82%;
+  transform: translate(-50%, -50%) rotate(-18deg);
+  color: currentColor;
+  font-size: clamp(13px, 1.5vw, 18px);
+  font-weight: 700;
+  letter-spacing: .04em;
+  line-height: 1.5;
+  text-align: center;
+  opacity: .045;
+  pointer-events: none;
+}
+
+.conteudoProtegido:focus-visible {
+  outline: 2px solid rgba(23, 105, 232, .35);
+  outline-offset: 4px;
+}
+
+@media print {
+  .conteudoProtegido > * {
+    display: none !important;
+  }
+
+  .conteudoProtegido::before {
+    content: "Conteúdo protegido — Pavel PMP Simulator.";
+    position: static;
+    display: block;
+    width: auto;
+    transform: none;
+    color: #444;
+    font-size: 12pt;
+    opacity: 1;
+  }
+}

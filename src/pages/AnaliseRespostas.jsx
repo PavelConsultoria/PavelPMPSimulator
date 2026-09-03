@@ -1,4 +1,5 @@
 import "./AnaliseRespostas.css";
+import ConteudoProtegido from "../components/ConteudoProtegido";
 
 const disponivel = (valor) => valor !== undefined && valor !== null && String(valor).trim() !== "";
 
@@ -11,6 +12,7 @@ export default function AnaliseRespostas({ questao, respostaAluno, numero, total
   return <div className="analisePage">
     <header className="headerAnalise"><div><h1>ANÁLISE DAS RESPOSTAS</h1><span>Questão {numero} de {total}</span></div></header>
     <main className="analiseCard">
+      <ConteudoProtegido>
       <section className="analiseResultado">
         <div><span>Sua resposta</span><strong>{letrasAluno.join(" e ")}</strong></div>
         <div><span>Resposta correta</span><strong>{letrasCorretas.join(" e ")}</strong></div>
@@ -29,6 +31,7 @@ export default function AnaliseRespostas({ questao, respostaAluno, numero, total
       {disponivel(questao.comoPMIPensa) && <details className="analiseSecao destaqueAnalise"><summary>Como pensa o PMI</summary><p>{questao.comoPMIPensa}</p></details>}
       {disponivel(questao.pegadinha) && <details className="analiseSecao destaqueAnalise pegadinhaAnalise"><summary>Pegadinha</summary><p>{questao.pegadinha}</p></details>}
       {classificacoes.length > 0 && <section className="analiseSecao"><h2>Classificação da questão</h2><div className="classificacaoGrid">{classificacoes.map(([rotulo, valor]) => <div key={rotulo}><span>{rotulo}</span><strong>{valor}</strong></div>)}</div></section>}
+      </ConteudoProtegido>
       <footer className="acoesAnalise"><button className="btnAnterior" type="button" onClick={onVoltar}>◀ Voltar para a questão</button>{numero < total && <button className="btnProxima" type="button" onClick={onProxima}>Próxima questão ▶</button>}</footer>
     </main>
   </div>;
