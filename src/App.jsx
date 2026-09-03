@@ -53,7 +53,7 @@ export default function App() {
         <Route path="/sobre-pavel" element={<SobrePavel />} />
 
         <Route
-          path="/preview-acesso-expirado"
+          path="/acesso-expirado"
           element={
             <AcessoBloqueado
               mensagem={MENSAGENS_BLOQUEIO.LICENCA_EXPIRADA}
@@ -62,7 +62,7 @@ export default function App() {
         />
 
         <Route
-          path="/preview-acesso-nao-autorizado"
+          path="/acesso-nao-autorizado"
           element={
             <AcessoBloqueado
               mensagem={MENSAGENS_BLOQUEIO.ACESSO_NAO_AUTORIZADO}
