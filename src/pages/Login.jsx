@@ -2,6 +2,11 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import logo from "../assets/images/logo.png";
 import { supabase } from "../lib/supabase";
+import {
+  iniciarSessaoAplicacao,
+  limparSessaoAplicacao,
+  salvarSessaoAplicacao,
+} from "../lib/sessaoAplicacao";
 import "../styles/Login.css";
 
 function obterResultado(data) {
@@ -18,9 +23,10 @@ export default function Login() {
 
   async function negarAcesso(rota) {
     localStorage.removeItem("usuario");
+    limparSessaoAplicacao();
 
     try {
-      await supabase.auth.signOut();
+      await supabase.auth.signOut({ scope: "local" });
     } finally {
       navigate(rota);
     }
@@ -57,6 +63,19 @@ export default function Login() {
       }
 
       if (licenca.status === "ativa") {
+        const { data: sessionId, error: erroSessaoAplicacao } =
+          await iniciarSessaoAplicacao();
+
+        if (
+          erroSessaoAplicacao ||
+          typeof sessionId !== "string" ||
+          !sessionId
+        ) {
+          await negarAcesso("/acesso-nao-autorizado");
+          return;
+        }
+
+        salvarSessaoAplicacao(sessionId);
         localStorage.setItem("usuario", nomeExibicao.trim() || "Usuário");
         navigate("/dashboard");
         return;

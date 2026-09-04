@@ -1,6 +1,11 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import logo from "../assets/images/logo.png";
 import { supabase } from "../lib/supabase";
+import {
+  encerrarSessaoAplicacao,
+  limparSessaoAplicacao,
+  obterSessaoAplicacao,
+} from "../lib/sessaoAplicacao";
 import "../styles/pavel-dashboard.css";
 
 const itens = [
@@ -28,11 +33,19 @@ export default function PavelLayout({ titulo, subtitulo, children, shellClassNam
   const navigate = useNavigate();
 
   async function sair() {
+    const sessionId = obterSessaoAplicacao();
+
     try {
-      await supabase.auth.signOut();
+      if (sessionId) await encerrarSessaoAplicacao(sessionId);
     } finally {
+      limparSessaoAplicacao();
       localStorage.removeItem("usuario");
-      navigate("/login");
+
+      try {
+        await supabase.auth.signOut({ scope: "local" });
+      } finally {
+        navigate("/login");
+      }
     }
   }
 
