@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { carregarQuestoesExcel } from "../data/carregarQuestoesExcel";
 import PavelLayout from "../components/PavelLayout";
 import ConteudoProtegido from "../components/ConteudoProtegido";
-import { supabase } from "../lib/supabase";
-import { obterSessaoAplicacao } from "../lib/sessaoAplicacao";
 
 const DOMINIOS_VALIDOS = ["Business Environment", "People", "Process"];
 const ORDEM_DIFICULDADES = ["Fácil", "Média", "Difícil", "Muito Difícil"];
@@ -20,36 +19,16 @@ export default function BancoQuestoes() {
   useEffect(() => {
     let ativo = true;
 
-    async function carregarQuestoes() {
-      try {
-        const sessionId = obterSessaoAplicacao();
-        if (!sessionId) throw new Error("Sessão da aplicação não encontrada.");
-
-        const ids = Array.from({ length: 600 }, (_, indice) => indice + 1);
-        const { data, error } = await supabase.rpc("obter_questoes_seguras", {
-          p_session_id: sessionId,
-          p_ids: ids,
-        });
-
-        if (error) throw error;
-
-        const questoesCarregadas = (Array.isArray(data) ? data : []).map((linha) => ({
-          id: linha.id_questao,
-          enunciado: linha.enunciado,
-          dominio: linha.dominio_eco,
-          dificuldade: linha.dificuldade,
-          caseStudy: linha.case_id ? { id: linha.case_id } : null,
-        }));
-
+    carregarQuestoesExcel()
+      .then((questoesCarregadas) => {
         if (ativo) setQuestoes(questoesCarregadas);
-      } catch (erroCarregamento) {
+      })
+      .catch((erroCarregamento) => {
         if (ativo) setErro(erroCarregamento);
-      } finally {
+      })
+      .finally(() => {
         if (ativo) setCarregando(false);
-      }
-    }
-
-    carregarQuestoes();
+      });
 
     return () => { ativo = false; };
   }, []);
