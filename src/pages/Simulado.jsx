@@ -114,6 +114,7 @@ export default function Simulado() {
   const fluxoRevisao = location.state?.fluxoRevisao === true;
   const idsRevisao = location.state?.idsRevisao || IDS_REVISAO_VAZIOS;
   const idsQuestoes = location.state?.idsQuestoes || IDS_REVISAO_VAZIOS;
+  const questaoCaseStudy = location.state?.questaoCaseStudy === true;
   const origem = location.state?.origem || "/dashboard";
   const filtros = location.state?.filtros || FILTROS_PADRAO;
   const estudoCaseStudy = !fluxoRevisao && modoSelecionado === "Estudo" && quantidadeSelecionada === "Case Study";
@@ -177,7 +178,7 @@ export default function Simulado() {
             p_tipo_resposta: filtros.tipoResposta,
             p_abordagem: filtros.abordagem,
             p_area_conhecimento: filtros.areaConhecimento,
-            p_case_study: estudoCaseStudy,
+            p_case_study: estudoCaseStudy || questaoCaseStudy,
             p_ids_treinamento: idsTreinamento ? [...idsTreinamento] : null,
           },
         );
@@ -238,7 +239,7 @@ export default function Simulado() {
     return () => {
       ativo = false;
     };
-  }, [fluxoRevisao, idsRevisao, idsQuestoes, quantidadeSelecionada, modoSelecionado, estudoCaseStudy, filtros]);
+  }, [fluxoRevisao, idsRevisao, idsQuestoes, quantidadeSelecionada, modoSelecionado, estudoCaseStudy, questaoCaseStudy, filtros]);
 
   function obterIdsTreinamento(modoTreinamento) {
     if (modoTreinamento === "Revisão") return new Set(carregarRevisao().pendentes);
