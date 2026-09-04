@@ -78,7 +78,7 @@ function converterQuestaoSegura(linha) {
     caseStudy: linha.case_id ? {
       id: linha.case_id,
       contexto: linha.contexto,
-      quantidadeQuestoes: linha.quantidade_questoes,
+      quantidadeQuestoes: Number(linha.quantidade_questoes),
       ordemNoCase: linha.ordem_no_case,
     } : null,
   };
