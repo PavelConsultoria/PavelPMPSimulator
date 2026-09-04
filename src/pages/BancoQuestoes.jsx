@@ -363,7 +363,7 @@ export default function BancoQuestoes() {
                 type="button"
                 className="reportAction"
                 style={{ marginTop: "16px" }}
-                onClick={() => navigate("/simulado", { state: { modo: "Estudo", idsQuestoes: [questao.id], questaoCaseStudy: Boolean(questao.caseStudy), origem: "/banco-questoes" } })}
+                onClick={() => navigate("/simulado", { state: { modo: "Estudo", idsQuestoes: [questao.id], origem: "/banco-questoes" } })}
               >
                 Responder questão
               </button>
