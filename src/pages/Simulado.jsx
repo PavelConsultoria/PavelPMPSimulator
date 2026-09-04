@@ -116,7 +116,7 @@ export default function Simulado() {
   const idsQuestoes = location.state?.idsQuestoes || IDS_REVISAO_VAZIOS;
   const origem = location.state?.origem || "/dashboard";
   const filtros = location.state?.filtros || FILTROS_PADRAO;
-  const estudoCaseStudy = !fluxoRevisao && modoSelecionado === "Estudo" && quantidadeSelecionada === "Case Study";
+  const estudoCaseStudy = !fluxoRevisao && idsQuestoes.length === 0 && modoSelecionado === "Estudo" && quantidadeSelecionada === "Case Study";
 
   const [questoes, setQuestoes] = useState([]);
   const [erroCarregamento, setErroCarregamento] = useState(null);
