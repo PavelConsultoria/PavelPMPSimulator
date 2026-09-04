@@ -18,7 +18,7 @@ function obterResultado(data) {
   return Array.isArray(data) ? data[0] : data;
 }
 
-function agruparCaseStudies(questoes) {
+function agruparCaseStudies(questoes, exigirConjuntoCompleto = true) {
   const grupos = new Map();
 
   questoes.forEach((questao) => {
@@ -29,7 +29,7 @@ function agruparCaseStudies(questoes) {
   });
 
   grupos.forEach((grupo) => {
-    if (grupo.questoes.length !== grupo.quantidadeQuestoes) {
+    if (exigirConjuntoCompleto && grupo.questoes.length !== grupo.quantidadeQuestoes) {
       throw new Error(`O Case Study ${grupo.id} possui questões incompletas.`);
     }
   });
@@ -140,7 +140,9 @@ export default function Simulado() {
   const questao = questoes[questaoAtual - 1];
   const questaoPendente = revisao.pendentes.includes(questao?.id);
   const indiceNoCase = questoes.filter((item) => item.caseStudy?.id === questao?.caseStudy?.id).indexOf(questao) + 1;
-  const casesDaSessao = estudoCaseStudy ? agruparCaseStudies(questoes) : [];
+  const casesDaSessao = estudoCaseStudy || origem === "/banco-questoes"
+    ? agruparCaseStudies(questoes, origem !== "/banco-questoes")
+    : [];
   const indiceCaseAtual = estudoCaseStudy
     ? casesDaSessao.findIndex((item) => item.id === questao?.caseStudy?.id) + 1
     : 0;
