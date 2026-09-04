@@ -170,7 +170,7 @@ export default function Simulado() {
           "iniciar_tentativa_segura",
           {
             p_session_id: sessionId,
-            p_modo: modoSelecionado,
+            p_modo: fluxoRevisao ? "Estudo" : modoSelecionado,
             p_quantidade: quantidadeSolicitada,
             p_dominio: filtros.dominio,
             p_dificuldade: filtros.dificuldade,
