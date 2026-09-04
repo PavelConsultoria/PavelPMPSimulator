@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./Simulado.css";
-import { agruparCaseStudies, carregarQuestoesExcel, embaralharAlternativas, embaralharQuestoes } from "../data/carregarQuestoesExcel";
 import AnaliseRespostas from "./AnaliseRespostas";
 import ConteudoProtegido from "../components/ConteudoProtegido";
 import { carregarRevisao, concluirQuestaoRevisao, LIMITE_REVISAO, salvarRevisao } from "./Favoritas";
 import { carregarSessoes, salvarSessao } from "../data/progresso";
+import { supabase } from "../lib/supabase";
+import { obterSessaoAplicacao } from "../lib/sessaoAplicacao";
 
 const IDS_REVISAO_VAZIOS = [];
 const FILTROS_PADRAO = {
@@ -13,13 +14,95 @@ const FILTROS_PADRAO = {
   abordagem: "Todas", areaConhecimento: "Todas", modoTreinamento: "Todas as questões",
 };
 
-function questaoAtendeFiltros(questao, filtros, idsTreinamento) {
-  if (filtros.dominio !== "Todos" && questao.dominio !== filtros.dominio) return false;
-  if (filtros.dificuldade !== "Todas" && questao.dificuldade !== filtros.dificuldade) return false;
-  if (filtros.tipoResposta !== "Todos os tipos" && questao.tipoResposta !== filtros.tipoResposta) return false;
-  if (filtros.abordagem !== "Todas" && questao.abordagem !== filtros.abordagem) return false;
-  if (filtros.areaConhecimento !== "Todas" && questao.areaConhecimento !== filtros.areaConhecimento) return false;
-  return !idsTreinamento || idsTreinamento.has(questao.id);
+function obterResultado(data) {
+  return Array.isArray(data) ? data[0] : data;
+}
+
+function agruparCaseStudies(questoes) {
+  const grupos = new Map();
+
+  questoes.forEach((questao) => {
+    if (!questao.caseStudy) return;
+    const grupo = grupos.get(questao.caseStudy.id) || { ...questao.caseStudy, questoes: [] };
+    grupo.questoes.push(questao);
+    grupos.set(questao.caseStudy.id, grupo);
+  });
+
+  grupos.forEach((grupo) => {
+    if (grupo.questoes.length !== grupo.quantidadeQuestoes) {
+      throw new Error(`O Case Study ${grupo.id} possui questões incompletas.`);
+    }
+  });
+
+  return [...grupos.values()];
+}
+
+function converterQuestaoSegura(linha) {
+  const quantidadeRespostas = Number(linha.quantidade_respostas);
+  if (!Number.isInteger(quantidadeRespostas) || quantidadeRespostas < 1) {
+    throw new Error(`A questão ${linha.id_questao} possui quantidade de respostas inválida.`);
+  }
+
+  const alternativas = [
+    { texto: linha.alternativa_a, letraOriginal: "A" },
+    { texto: linha.alternativa_b, letraOriginal: "B" },
+    { texto: linha.alternativa_c, letraOriginal: "C" },
+    { texto: linha.alternativa_d, letraOriginal: "D" },
+  ];
+
+  for (let indice = alternativas.length - 1; indice > 0; indice -= 1) {
+    const indiceAleatorio = Math.floor(Math.random() * (indice + 1));
+    [alternativas[indice], alternativas[indiceAleatorio]] = [
+      alternativas[indiceAleatorio],
+      alternativas[indice],
+    ];
+  }
+
+  return {
+    id: linha.id_questao,
+    enunciado: linha.enunciado,
+    alternativas: alternativas.map(({ texto }) => texto),
+    letrasOriginais: alternativas.map(({ letraOriginal }) => letraOriginal),
+    quantidadeRespostas,
+    corretas: Array.from({ length: quantidadeRespostas }),
+    tipoResposta: linha.tipo_resposta,
+    instrucao: linha.instrucao,
+    dominio: linha.dominio_eco,
+    dificuldade: linha.dificuldade,
+    areaConhecimento: linha.area_conhecimento,
+    grupoProcesso: linha.grupo_processo,
+    tema: linha.tema,
+    abordagem: linha.abordagem,
+    palavrasChave: linha.palavra_chave,
+    tempoQuestao: linha.tempo_questao,
+    caseStudy: linha.case_id ? {
+      id: linha.case_id,
+      contexto: linha.contexto,
+      quantidadeQuestoes: linha.quantidade_questoes,
+      ordemNoCase: linha.ordem_no_case,
+    } : null,
+  };
+}
+
+function aplicarCorrecao(questao, correcao) {
+  const letrasCorretas = String(correcao.resposta_correta || "").match(/[A-D]/g) || [];
+  const justificativasOriginais = {
+    A: correcao.justificativa_a,
+    B: correcao.justificativa_b,
+    C: correcao.justificativa_c,
+    D: correcao.justificativa_d,
+  };
+
+  return {
+    ...questao,
+    corretas: questao.letrasOriginais
+      .map((letra, indice) => letrasCorretas.includes(letra) ? indice : null)
+      .filter((indice) => indice !== null),
+    explicacao: correcao.explicacao,
+    justificativas: questao.letrasOriginais.map((letra) => justificativasOriginais[letra]),
+    comoPMIPensa: correcao.como_pmi_pensa,
+    pegadinha: correcao.pegadinha,
+  };
 }
 
 export default function Simulado() {
@@ -46,6 +129,8 @@ export default function Simulado() {
   const [revisadasNestaSessao, setRevisadasNestaSessao] = useState([]);
   const [mostrarAnalise, setMostrarAnalise] = useState(false);
   const [estudoFinalizado, setEstudoFinalizado] = useState(false);
+  const [tentativaId, setTentativaId] = useState(null);
+  const [correcaoEmAndamento, setCorrecaoEmAndamento] = useState(false);
   const sessaoRegistrada = useRef(false);
 
   const modoEstudo = modoSelecionado.toLowerCase() === "estudo";
@@ -63,46 +148,97 @@ export default function Simulado() {
   useEffect(() => {
     let ativo = true;
 
-    carregarQuestoesExcel()
-      .then((questoesCarregadas) => {
-        if (ativo) {
-          if (fluxoRevisao) {
-            const porId = new Map(questoesCarregadas.map((item) => [item.id, item]));
-            setQuestoes(idsRevisao.map((id) => porId.get(id)).filter(Boolean).map(embaralharAlternativas));
-          } else if (idsQuestoes.length) {
-            const porId = new Map(questoesCarregadas.map((item) => [item.id, item]));
-            setQuestoes(idsQuestoes.map((id) => porId.get(id)).filter(Boolean).map(embaralharAlternativas));
-          } else if (estudoCaseStudy) {
-            const idsTreinamento = obterIdsTreinamento(filtros.modoTreinamento);
-            const casesElegiveis = agruparCaseStudies(questoesCarregadas).filter((caseStudy) =>
-              caseStudy.questoes.every((item) => questaoAtendeFiltros(item, filtros, idsTreinamento)),
+    async function carregarTentativa() {
+      try {
+        const sessionId = obterSessaoAplicacao();
+        if (!sessionId) throw new Error("Sessão da aplicação não encontrada.");
+
+        const idsTreinamento = fluxoRevisao
+          ? idsRevisao
+          : idsQuestoes.length
+            ? idsQuestoes
+            : obterIdsTreinamento(filtros.modoTreinamento);
+        const quantidadeSolicitada = fluxoRevisao
+          ? idsRevisao.length
+          : idsQuestoes.length
+            ? idsQuestoes.length
+            : estudoCaseStudy
+              ? 100
+              : Number(quantidadeSelecionada);
+
+        const { data: selecao, error: erroSelecao } = await supabase.rpc(
+          "iniciar_tentativa_segura",
+          {
+            p_session_id: sessionId,
+            p_modo: modoSelecionado,
+            p_quantidade: quantidadeSolicitada,
+            p_dominio: filtros.dominio,
+            p_dificuldade: filtros.dificuldade,
+            p_tipo_resposta: filtros.tipoResposta,
+            p_abordagem: filtros.abordagem,
+            p_area_conhecimento: filtros.areaConhecimento,
+            p_case_study: estudoCaseStudy,
+            p_ids_treinamento: idsTreinamento ? [...idsTreinamento] : null,
+          },
+        );
+
+        if (erroSelecao) throw erroSelecao;
+
+        const itensSelecionados = Array.isArray(selecao) ? selecao : [];
+        const idTentativa = itensSelecionados[0]?.tentativa_id;
+        const idsSelecionados = [...itensSelecionados]
+          .sort((a, b) => a.ordem_selecao - b.ordem_selecao)
+          .map((item) => item.id_questao);
+
+        if (!idTentativa || idsSelecionados.length === 0) {
+          if (ativo) {
+            setAvisoQuantidade(
+              estudoCaseStudy
+                ? "Não há Case Studies completos que atendam simultaneamente a todos os filtros selecionados."
+                : `Sua combinação de filtros possui 0 questão(ões) disponível(is). A sessão usará somente essas questões, sem incluir itens fora dos critérios.`,
             );
-            const casesEmbaralhados = embaralharQuestoes(casesElegiveis);
-            if (!casesElegiveis.length) {
-              setAvisoQuantidade("Não há Case Studies completos que atendam simultaneamente a todos os filtros selecionados.");
-            }
-            setQuestoes(casesEmbaralhados.flatMap((caseStudy) => caseStudy.questoes).map(embaralharAlternativas));
-          } else {
-            const idsTreinamento = obterIdsTreinamento(filtros.modoTreinamento);
-            const elegiveis = questoesCarregadas.filter((item) => questaoAtendeFiltros(item, filtros, idsTreinamento));
-            const quantidadeSolicitada = Number(quantidadeSelecionada);
-            if (elegiveis.length < quantidadeSolicitada) {
-              setAvisoQuantidade(`Sua combinação de filtros possui ${elegiveis.length} questão(ões) disponível(is). A sessão usará somente essas questões, sem incluir itens fora dos critérios.`);
-            }
-            setQuestoes(embaralharQuestoes(elegiveis).slice(0, quantidadeSolicitada).map(embaralharAlternativas));
+          }
+          return;
+        }
+
+        const { data: dadosQuestoes, error: erroQuestoes } = await supabase.rpc(
+          "obter_questoes_seguras",
+          { p_session_id: sessionId, p_ids: idsSelecionados },
+        );
+
+        if (erroQuestoes) throw erroQuestoes;
+
+        const linhas = Array.isArray(dadosQuestoes) ? dadosQuestoes : [];
+        const porId = new Map(linhas.map((linha) => [linha.id_questao, linha]));
+        const questoesCarregadas = idsSelecionados
+          .map((id) => porId.get(id))
+          .filter(Boolean)
+          .map(converterQuestaoSegura);
+
+        if (questoesCarregadas.length !== idsSelecionados.length) {
+          throw new Error("A tentativa retornou questões incompletas.");
+        }
+
+        if (ativo) {
+          setTentativaId(idTentativa);
+          setQuestoes(questoesCarregadas);
+          if (!estudoCaseStudy && questoesCarregadas.length < quantidadeSolicitada) {
+            setAvisoQuantidade(`Sua combinação de filtros possui ${questoesCarregadas.length} questão(ões) disponível(is). A sessão usará somente essas questões, sem incluir itens fora dos critérios.`);
           }
         }
-      })
-      .catch((erro) => {
+      } catch (erro) {
         if (ativo) {
           setErroCarregamento(erro);
         }
-      });
+      }
+    }
+
+    carregarTentativa();
 
     return () => {
       ativo = false;
     };
-  }, [fluxoRevisao, idsRevisao, idsQuestoes, quantidadeSelecionada, estudoCaseStudy, filtros]);
+  }, [fluxoRevisao, idsRevisao, idsQuestoes, quantidadeSelecionada, modoSelecionado, estudoCaseStudy, filtros]);
 
   function obterIdsTreinamento(modoTreinamento) {
     if (modoTreinamento === "Revisão") return new Set(carregarRevisao().pendentes);
@@ -144,44 +280,51 @@ export default function Simulado() {
   }
 
   function respostasEstaoCompletas(resposta, questaoRespondida) {
-    return resposta?.length === questaoRespondida.corretas.length;
+    return resposta?.length === questaoRespondida.quantidadeRespostas;
   }
 
   function respostaEstaCorreta(resposta, questaoRespondida) {
+    if (
+      questaoRespondida.respostaCorrigida &&
+      JSON.stringify(resposta) === JSON.stringify(questaoRespondida.respostaCorrigida)
+    ) {
+      return questaoRespondida.acertouServidor;
+    }
+
     return (
       respostasEstaoCompletas(resposta, questaoRespondida) &&
       resposta.every((indice) => questaoRespondida.corretas.includes(indice))
     );
   }
 
-  function calcularAcertos() {
-    return questoes.reduce((total, questaoDoSimulado, indice) => {
+  function calcularAcertos(questoesCorrigidas = questoes) {
+    return questoesCorrigidas.reduce((total, questaoDoSimulado, indice) => {
       return respostaEstaCorreta(respostas[indice + 1], questaoDoSimulado)
         ? total + 1
         : total;
     }, 0);
   }
 
-  function calcularResultadoExame() {
+  function calcularResultadoExame(questoesCorrigidas = questoes) {
     const porDominio = ["People", "Process", "Business Environment"].reduce((resultado, dominio) => {
-      const questoesDominio = questoes.filter((item) => item.dominio === dominio);
+      const questoesDominio = questoesCorrigidas.filter((item) => item.dominio === dominio);
       const acertos = questoesDominio.filter((item) => {
-        const indice = questoes.indexOf(item) + 1;
+        const indice = questoesCorrigidas.indexOf(item) + 1;
         return respostaEstaCorreta(respostas[indice], item);
       }).length;
       resultado[dominio] = questoesDominio.length ? Math.round((acertos / questoesDominio.length) * 100) : 0;
       return resultado;
     }, {});
 
-    return { percentual: Math.round((calcularAcertos() / TOTAL_QUESTOES) * 100), porDominio };
+    return { percentual: Math.round((calcularAcertos(questoesCorrigidas) / TOTAL_QUESTOES) * 100), porDominio };
   }
 
-  function registrarSessaoConcluida() {
+  function registrarSessaoConcluida(questoesCorrigidas = questoes) {
     if (sessaoRegistrada.current) return;
-    const respondidas = questoes.filter((item, indice) => respostasEstaoCompletas(respostas[indice + 1], item)).length;
-    const acertos = calcularAcertos();
+    const respondidas = questoesCorrigidas.filter((item, indice) => respostasEstaoCompletas(respostas[indice + 1], item)).length;
+    const acertos = calcularAcertos(questoesCorrigidas);
     const porDominio = ["People", "Process", "Business Environment"].reduce((resultado, dominio) => {
-      const itens = questoes.map((item, indice) => ({ item, resposta: respostas[indice + 1] })).filter(({ item, resposta }) => item.dominio === dominio && respostasEstaoCompletas(resposta, item));
+      const itens = questoesCorrigidas.map((item, indice) => ({ item, resposta: respostas[indice + 1] })).filter(({ item, resposta }) => item.dominio === dominio && respostasEstaoCompletas(resposta, item));
       resultado[dominio] = { questoes: itens.length, acertos: itens.filter(({ item, resposta }) => respostaEstaCorreta(resposta, item)).length };
       return resultado;
     }, {});
@@ -195,7 +338,7 @@ export default function Simulado() {
       percentual: respondidas ? Math.round((acertos / respondidas) * 100) : 0,
       tempoSegundos: TEMPO_TOTAL - tempoRestante,
       porDominio,
-      detalhes: questoes.flatMap((item, indice) => {
+      detalhes: questoesCorrigidas.flatMap((item, indice) => {
         const resposta = respostas[indice + 1];
         return respostasEstaoCompletas(resposta, item)
           ? [{ id: item.id, resposta, acertou: respostaEstaCorreta(resposta, item) }]
@@ -212,7 +355,7 @@ export default function Simulado() {
     if (questao.tipoResposta === "Multiple Response") {
       if (respostasAtuais.includes(indice)) {
         novasRespostas = respostasAtuais.filter((resposta) => resposta !== indice);
-      } else if (respostasAtuais.length < questao.corretas.length) {
+      } else if (respostasAtuais.length < questao.quantidadeRespostas) {
         novasRespostas = [...respostasAtuais, indice];
       } else {
         novasRespostas = respostasAtuais;
@@ -252,6 +395,74 @@ export default function Simulado() {
     setRevisao(atualizado);
   }
 
+  async function corrigirQuestao(questaoParaCorrigir, resposta) {
+    if (
+      questaoParaCorrigir.corrigida &&
+      JSON.stringify(resposta) === JSON.stringify(questaoParaCorrigir.respostaCorrigida)
+    ) return questaoParaCorrigir;
+
+    const sessionId = obterSessaoAplicacao();
+    if (!sessionId || !tentativaId) throw new Error("Tentativa segura não encontrada.");
+
+    const respostasOriginais = resposta.map(
+      (indice) => questaoParaCorrigir.letrasOriginais[indice],
+    );
+    const { data, error } = await supabase.rpc("corrigir_questao_segura", {
+      p_session_id: sessionId,
+      p_tentativa_id: tentativaId,
+      p_id_questao: questaoParaCorrigir.id,
+      p_respostas: respostasOriginais,
+    });
+
+    if (error) throw error;
+    const correcao = obterResultado(data);
+    if (!correcao || correcao.id_questao !== questaoParaCorrigir.id) {
+      throw new Error("A correção da questão retornou dados inválidos.");
+    }
+
+    return {
+      ...aplicarCorrecao(questaoParaCorrigir, correcao),
+      corrigida: true,
+      respostaCorrigida: [...resposta],
+      acertouServidor: correcao.acertou === true,
+    };
+  }
+
+  async function corrigirRespondidas() {
+    const corrigidas = [...questoes];
+    const pendentes = questoes
+      .map((item, indice) => ({ item, indice, resposta: respostas[indice + 1] }))
+      .filter(({ item, resposta }) => respostasEstaoCompletas(resposta, item));
+    let proxima = 0;
+
+    async function processar() {
+      while (proxima < pendentes.length) {
+        const atual = pendentes[proxima];
+        proxima += 1;
+        corrigidas[atual.indice] = await corrigirQuestao(atual.item, atual.resposta);
+      }
+    }
+
+    await Promise.all(Array.from({ length: Math.min(6, pendentes.length) }, processar));
+    setQuestoes(corrigidas);
+    return corrigidas;
+  }
+
+  async function exibirAnalise() {
+    setCorrecaoEmAndamento(true);
+    try {
+      const questaoCorrigida = await corrigirQuestao(questao, respostas[questaoAtual]);
+      setQuestoes((atuais) => atuais.map((item) =>
+        item.id === questaoCorrigida.id ? questaoCorrigida : item
+      ));
+      setMostrarAnalise(true);
+    } catch (erro) {
+      setErroCarregamento(erro);
+    } finally {
+      setCorrecaoEmAndamento(false);
+    }
+  }
+
   function proxima() {
     if (
       questaoAtual < TOTAL_QUESTOES &&
@@ -269,17 +480,26 @@ export default function Simulado() {
     }
   }
 
-  function finalizar() {
+  async function finalizar() {
     const nomeSessao = modoEstudo ? "estudo" : "simulado";
     if (window.confirm(`Deseja realmente finalizar o ${nomeSessao}?`)) {
       if (fluxoRevisao) {
         navigate("/favoritas");
-      } else if (modoEstudo) {
-        registrarSessaoConcluida();
-        setEstudoFinalizado(true);
       } else {
-        registrarSessaoConcluida();
-        navigate("/relatorio-exame", { state: { resultado: calcularResultadoExame() } });
+        setCorrecaoEmAndamento(true);
+        try {
+          const questoesCorrigidas = await corrigirRespondidas();
+          registrarSessaoConcluida(questoesCorrigidas);
+          if (modoEstudo) {
+            setEstudoFinalizado(true);
+          } else {
+            navigate("/relatorio-exame", { state: { resultado: calcularResultadoExame(questoesCorrigidas) } });
+          }
+        } catch (erro) {
+          setErroCarregamento(erro);
+        } finally {
+          setCorrecaoEmAndamento(false);
+        }
       }
     }
   }
@@ -404,7 +624,7 @@ export default function Simulado() {
               </h2>
               {questao.caseStudy && !estudoCaseStudy && <span className="identificacaoCaseStudy">CASE STUDY</span>}
               <span className="tipoQuestao">
-                {questao.corretas.length > 1 ? "MULTIPLE CHOICE" : "SINGLE CHOICE"}
+                {questao.quantidadeRespostas > 1 ? "MULTIPLE CHOICE" : "SINGLE CHOICE"}
               </span>
             </div>
 
@@ -486,8 +706,8 @@ export default function Simulado() {
             {(modoEstudo || fluxoRevisao) && (
               <button
                 className="btnAnalise"
-                onClick={() => setMostrarAnalise(true)}
-                disabled={!respostasEstaoCompletas(respostas[questaoAtual], questao)}
+                onClick={exibirAnalise}
+                disabled={correcaoEmAndamento || !respostasEstaoCompletas(respostas[questaoAtual], questao)}
               >
                 Ver Resposta e Explicação
               </button>
@@ -506,6 +726,7 @@ export default function Simulado() {
             <button
               className="btnFinalizar"
               onClick={finalizar}
+              disabled={correcaoEmAndamento}
             >
               {fluxoRevisao ? "Voltar à Revisão" : modoEstudo ? "Finalizar Estudo" : "Finalizar Exame"}
             </button>
