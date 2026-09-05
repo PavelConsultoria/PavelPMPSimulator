@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./Simulado.css";
-import { iniciarTentativaSupabase } from "../data/carregarQuestoesSupabase";
 import { agruparCaseStudies, carregarQuestoesExcel, embaralharAlternativas, embaralharQuestoes } from "../data/carregarQuestoesExcel";
 import AnaliseRespostas from "./AnaliseRespostas";
 import ConteudoProtegido from "../components/ConteudoProtegido";
@@ -64,32 +63,7 @@ export default function Simulado() {
   useEffect(() => {
     let ativo = true;
 
-    async function carregarQuestoes() {
-      try {
-        const resultado = await iniciarTentativaSupabase({
-          modo: fluxoRevisao ? "Estudo" : modoSelecionado,
-          quantidade: fluxoRevisao ? idsRevisao.length :
-            idsQuestoes.length ? idsQuestoes.length :
-            estudoCaseStudy ? 100 : Number(quantidadeSelecionada),
-          filtros,
-          caseStudy: estudoCaseStudy,
-          idsTreinamento: fluxoRevisao ? new Set(idsRevisao) :
-            idsQuestoes.length ? new Set(idsQuestoes) :
-            obterIdsTreinamento(filtros.modoTreinamento),
-        });
-
-        if (!ativo) return;
-        if (Array.isArray(resultado?.questoes) && resultado.questoes.length > 0) {
-          setQuestoes(resultado.questoes);
-          return;
-        }
-      } catch {
-        // Mantém o carregamento pelo Excel quando o Supabase falhar.
-      }
-
-      if (!ativo) return;
-
-      return carregarQuestoesExcel()
+    carregarQuestoesExcel()
       .then((questoesCarregadas) => {
         if (ativo) {
           if (fluxoRevisao) {
@@ -125,14 +99,10 @@ export default function Simulado() {
         }
       });
 
-    }
-
-    carregarQuestoes();
-
     return () => {
       ativo = false;
     };
-  }, [fluxoRevisao, idsRevisao, idsQuestoes, quantidadeSelecionada, estudoCaseStudy, filtros, modoSelecionado]);
+  }, [fluxoRevisao, idsRevisao, idsQuestoes, quantidadeSelecionada, estudoCaseStudy, filtros]);
 
   function obterIdsTreinamento(modoTreinamento) {
     if (modoTreinamento === "Revisão") return new Set(carregarRevisao().pendentes);
